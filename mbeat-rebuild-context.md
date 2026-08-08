@@ -37,6 +37,39 @@ The previous build (flat, module-by-module CRUD app) doesn't fit the new directi
 - Reactions fit the content: "will attend janazah" / dua response (also serves as a headcount signal for the family) — not generic likes.
 - A "share to WhatsApp" button is the intended growth loop: post on mbeat first, share the link into existing WhatsApp groups, let the better experience pull people back to the app over time. (Reading/importing WhatsApp messages into the app is not possible — no API for personal WhatsApp/group content, and unofficial scraping is against ToS and a privacy problem. Push-out via share link is the sanctioned path.)
 
+### Lifecycle status — separate from moderation status
+- Every post type needs to be **status-showable**: not just visible/hidden (moderation status), but tracking *what's currently true about the real-world situation* — e.g. a death announcement moves through `upcoming_janazah` → `janazah_in_progress` → `completed` (becomes historical record); a blood request moves through `open` → `fulfilled`/`expired`.
+- These are two distinct concepts, driven by different people: **moderation status** (`pending | published | flagged | hidden`) is about trust/spam; **lifecycle status** is about the unfolding real-world event, updated by the author/verified announcer.
+- Lifecycle states are **type-specific** — each post type defines its own vocabulary and valid transitions (death announcement states ≠ blood request states ≠ job posting states). Not a single generic enum shared across all types.
+- Schema: `posts.lifecycle_status` (text, meaning depends on `type`) + `posts.lifecycle_updated_at`, plus a `lifecycle_status_history` audit table (`post_id, old_status, new_status, changed_by, changed_at`) — fits the same accountability principle as the reputation/trust system.
+- Status changes should propagate live via Supabase Realtime (e.g. "Janazah completed" updates on-screen without refresh) — a more meaningful early use of Realtime than just reaction counts.
+- Feed ordering (`useFeed()`) must account for lifecycle status, not just `created_at` — an active/urgent post (e.g. `upcoming_janazah`) should rank above older but still-active posts, and historical/closed posts should fall away from prominence regardless of how "new" they are.
+- **Auto-expiry deferred**: for now, all lifecycle status changes are manual (author/announcer updates it themselves). Scheduled auto-expiry (e.g. blood request auto-closing after N hours via a cron/Edge Function) goes into the Icebox for later — avoids pulling in scheduled-job infrastructure before it's actually needed.
+
+### Folder structure — Post-based, not module-based
+- Organized by **function**, not by old module names (no `src/CommunityInfo/`, `src/StudentHub/` islands) — reflects that every post type flows through one shared feed engine, one `useFeed()` hook, one reaction/flag/reputation system.
+- Each post type gets its **own subfolder under `features/`** (e.g. `features/deathAnnouncement/`, later `features/job/`, `features/bloodRequest/`) — scales cleanly as each type's form/schema/status logic grows in complexity.
+- Structure:
+```
+src/
+  components/
+    posts/        -- PostCard.jsx (generic shell), PostCard.<type>.jsx (type-specific rendering),
+                      StatusBadge.jsx, ReactionBar.jsx, FlagButton.jsx
+    ui/            -- generic, content-agnostic (Button, Modal, FAB)
+  features/
+    feed/          -- useFeed.js + feedApi.js — the decoupled feed-fetching seam (Redis-swap point later)
+    deathAnnouncement/  -- Form, schema, and lifecycle-status config for this type only
+    auth/           -- AuthContext, ProtectedRoute, ProfileCompletion (mandatory onboarding)
+  lib/
+    supabaseClient.js
+  hooks/
+    useReputation.js
+  pages/
+    FeedPage.jsx, PostDetailPage.jsx
+```
+- `features/feed/` is deliberately the smallest, most isolated folder — it's the seam that keeps a future Redis/dedicated feed service swap cheap.
+- `components/ui/` must stay content-blind (no post/feature-specific logic) to avoid the tangled-mess problem from the previous build.
+
 ### Auth strategy
 - Combine: offer Google login **and/or phone+OTP** (Supabase-native) for low-friction signup — phone+OTP likely fits Melapalayam's habits better than email.
 - Mandatory one-time profile completion step right after first login (real name, phone, locality) before posting is allowed — this feeds the reputation/trust system regardless of which login method was used, and avoids relying on a Google display name as the "real" identity.
@@ -51,5 +84,16 @@ The previous build (flat, module-by-module CRUD app) doesn't fit the new directi
 - Git workflow: feature branch → PR → merge to `develop`, branch cleanup after. Repo `mbeat`, public, on GitHub. Windows/PowerShell, VS Code, Python 3.14, Node.js v25, project at `C:\Projects\mbeat`.
 - Idea management: new feature ideas go into GitHub Projects Icebox first.
 
+## Progress log — repo/project skeleton (in progress)
+- Old repo archived as `mbeat-v1-archive` (GitHub, renamed + archived); old local folder renamed to `mbeat-v1-archive-local`
+- Fresh `mbeat` repo created (public), local folder re-initialized with clean git history, connected to `https://github.com/sssyed15081977/mbeat.git`
+- Branch protection ruleset created; refined to target `main` only (PR-required) — `develop` left open for direct pushes to keep day-to-day scaffolding friction-free; full feature-branch → PR flow reserved for actual module work, not tooling setup
+- `main` and `develop` branches created and pushed
+- Vite + React scaffolded successfully; default starter CSS removed
+- Tailwind CSS v4 installed and configured CSS-first (`@import "tailwindcss"` + `@theme` block in `src/index.css`, not the old `tailwind.config.js` JS-based approach); verified working via a green/bold test render
+- ESLint chosen as linter (over Oxlint)
+- `vite-plugin-pwa` installed and configured in `vite.config.js` (manifest: name "mbeat", theme_color `#16a34a`, `display: standalone`, `registerType: autoUpdate`); placeholder PWA icons (green square, "M" mark, 192x192 + 512x512) generated and added to `public/`; `npm run build` verified working
+- Folder structure created reflecting Post-based architecture (see above) — `components/posts/`, `components/ui/`, `features/feed/`, `features/deathAnnouncement/`, `features/auth/`, `lib/`, `hooks/`, `pages/`
+
 ## Immediate next step
-Set up the fresh repo/project skeleton (new or reset `mbeat` repo, Vite + React + Tailwind v4 PWA scaffold, fresh Supabase project/schema baseline) before designing the death-announcement Post schema in detail.
+Create the fresh Supabase project (Postgres + Auth + Storage + Realtime, Singapore region) and connect it to the app (`lib/supabaseClient.js` + env vars), then design the death-announcement Post schema in detail — starting with the `posts` table, `death_announcement`-specific fields, and lifecycle status states (`upcoming_janazah` → `janazah_in_progress` → `completed`).
