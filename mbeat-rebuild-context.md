@@ -89,11 +89,21 @@ src/
 - Fresh `mbeat` repo created (public), local folder re-initialized with clean git history, connected to `https://github.com/sssyed15081977/mbeat.git`
 - Branch protection ruleset created; refined to target `main` only (PR-required) — `develop` left open for direct pushes to keep day-to-day scaffolding friction-free; full feature-branch → PR flow reserved for actual module work, not tooling setup
 - `main` and `develop` branches created and pushed
-- Vite + React scaffolded successfully; default starter CSS removed
+- Vite + React scaffolded successfully; default starter CSS and unused scaffold assets (`App.css`, `react.svg`, `vite.svg`, `hero.png`) later removed once found still lingering
 - Tailwind CSS v4 installed and configured CSS-first (`@import "tailwindcss"` + `@theme` block in `src/index.css`, not the old `tailwind.config.js` JS-based approach); verified working via a green/bold test render
 - ESLint chosen as linter (over Oxlint)
 - `vite-plugin-pwa` installed and configured in `vite.config.js` (manifest: name "mbeat", theme_color `#16a34a`, `display: standalone`, `registerType: autoUpdate`); placeholder PWA icons (green square, "M" mark, 192x192 + 512x512) generated and added to `public/`; `npm run build` verified working
-- Folder structure created reflecting Post-based architecture (see above) — `components/posts/`, `components/ui/`, `features/feed/`, `features/deathAnnouncement/`, `features/auth/`, `lib/`, `hooks/`, `pages/`
+- Folder structure created reflecting Post-based architecture (see above) — `components/posts/`, `components/ui/`, `features/feed/`, `features/deathAnnouncement/`, `features/auth/`, `lib/`, `hooks/`, `pages/` (folders exist but are still empty pending actual module work)
+- Fresh Supabase project created (Postgres + Auth + Storage + Realtime, Singapore region — confirmed)
+- `@supabase/supabase-js` installed; `src/lib/supabaseClient.js` created reading `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` from env
+- `.env` (gitignored, real credentials) + `.env.example` (committed, placeholder values) set up; anon key is in Supabase's newer `sb_publishable_...` key format
+- Connection verified end-to-end with a throwaway smoke-test script calling `supabase.auth.getSession()` — confirmed reachable, not just "builds without error" (nothing imports `supabaseClient.js` yet, so a plain build wouldn't have caught a bad URL/key)
+- All of the above committed to `develop` and pushed to `origin/develop` (through commit `7ce2d12`)
 
 ## Immediate next step
-Create the fresh Supabase project (Postgres + Auth + Storage + Realtime, Singapore region) and connect it to the app (`lib/supabaseClient.js` + env vars), then design the death-announcement Post schema in detail — starting with the `posts` table, `death_announcement`-specific fields, and lifecycle status states (`upcoming_janazah` → `janazah_in_progress` → `completed`).
+Design the death-announcement Post schema in detail — starting with the base `posts` table (shared columns: `type` enum, moderation status, lifecycle status + `lifecycle_updated_at`, author, timestamps), then `death_announcement`-specific fields (`janazah_datetime`, `janazah_location`, etc.), then the lifecycle status states (`upcoming_janazah` → `janazah_in_progress` → `completed`) and the `lifecycle_status_history` audit table. Nothing has been created in Supabase yet (no tables/migrations) — this is schema design + first migration from scratch.
+
+## Notes for whoever picks this up next
+- Working in this session: `develop` branch, repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`.
+- Before trusting this doc's "already done" claims, spot-check the actual repo state (folders can exist but be empty, files can exist but be wrong — e.g. we once found `VITE_SUPABASE_URL` had `/rest/v1/` wrongly appended) rather than assuming the doc is authoritative.
+- Syed prefers step-by-step confirmation before executing, narrated plans, and one file at a time when debugging — see "Working style / preferences" above.
