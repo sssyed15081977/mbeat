@@ -81,7 +81,7 @@ src/
 - Wants to genuinely understand the codebase this time — **narrate the plan before executing, explain what was built and why**, not just deliver a working diff.
 - Step-by-step with confirmation at each stage; one file at a time when debugging.
 - Muslim; appreciates Islamic-perspective framing where genuinely relevant to a design decision (not forced everywhere).
-- Git workflow: feature branch → PR → merge to `develop`, branch cleanup after. Repo `mbeat`, public, on GitHub. Windows/PowerShell, VS Code, Python 3.14, Node.js v25, project at `C:\Projects\mbeat`.
+- Git workflow: feature branch → PR → merge to `develop`, branch cleanup after. Repo `mbeat`, public, on GitHub. Windows/PowerShell, VS Code, Python 3.14, Node.js v25 — repo cloned locally on whichever machine Syed is working from (path varies, he works across multiple systems).
 - Idea management: new feature ideas go into GitHub Projects Icebox first.
 
 ## Progress log — repo/project skeleton (in progress)
