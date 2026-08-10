@@ -74,6 +74,22 @@ src/
 - Combine: offer Google login **and/or phone+OTP** (Supabase-native) for low-friction signup — phone+OTP likely fits Melapalayam's habits better than email.
 - Mandatory one-time profile completion step right after first login (real name, phone, locality) before posting is allowed — this feeds the reputation/trust system regardless of which login method was used, and avoids relying on a Google display name as the "real" identity.
 
+## Domain terminology protocol (locked)
+
+Naming mistakes are expensive here because a name isn't just a label — it propagates into DB tables/columns, UI text, routes, and variable names all at once. Syed often describes a concept in his own words rather than the exact domain/community term, and previous work on another project showed Claude Code silently picking a name from the description that didn't match what domain experts/the community would actually call it, causing rework later. To prevent that in mbeat:
+
+1. **Before creating any new page, report, table type, or field name from a description (not an explicit name Syed gave), state the proposed name and ask for confirmation** — do not silently pick a name and proceed.
+2. **If a more standard/community term might exist for the concept, say so and propose it as an alternative**, rather than defaulting to Syed's phrasing or silently substituting a "better" term. Let Syed decide.
+3. **Once a name is confirmed, it's locked.** Do not rename it later (DB columns/tables, UI labels, routes, variables) without an explicit rename instruction — and treat a rename as a deliberate refactor (flag what it touches: schema, RLS policies, components, etc.) rather than a casual correction.
+4. **Glossary** — record confirmed terms here as they're locked in, so future sessions don't reopen settled naming:
+
+| Working description | Confirmed term | Used in |
+|---|---|---|
+| Death notice / funeral post | Death Announcement (`type = 'death_announcement'`) | `posts.type`, folder `features/deathAnnouncement/` |
+| Funeral prayer | Janazah | `janazah_datetime`, `janazah_location`, post title pattern |
+| Who's posting on whose behalf | Announcer relation | `death_announcement.announcer_relation` |
+| Pull/Search tab (shows people/entities with live status: available/busy/closed) | Find Now | Bottom nav tab label, `pages/FindNowPage.jsx` (future), `features/findNow/` (future) |
+
 ## Working style / preferences (for Claude Code to follow)
 - Syed's background: ~10 years Google Apps Script, prior ASP.NET, Python as primary language, still learning React/modern web frameworks.
 - Prefers Python where relevant; analogies are effective for learning new concepts.
@@ -99,6 +115,67 @@ src/
 - `.env` (gitignored, real credentials) + `.env.example` (committed, placeholder values) set up; anon key is in Supabase's newer `sb_publishable_...` key format
 - Connection verified end-to-end with a throwaway smoke-test script calling `supabase.auth.getSession()` — confirmed reachable, not just "builds without error" (nothing imports `supabaseClient.js` yet, so a plain build wouldn't have caught a bad URL/key)
 - All of the above committed to `develop` and pushed to `origin/develop` (through commit `7ce2d12`)
+
+## Push vs Pull — a second core architectural split (locked)
+
+Alongside the Feed (push — content published for others to discover), the app needs Search (pull — a user actively looking for help from a person or entity). These are treated as two distinct, parallel systems from the schema level up, not one forced into the other.
+
+### Full-text search on `posts` (locked, applies starting with the first table)
+- Every post type carries a generic `title text` + `description text` in the base `posts` table, alongside its type-specific structured fields. Structured fields (e.g. `janazah_datetime`, `janazah_location`) drive app logic (display, filtering, sorting); `title`/`description` exist so posts can be searched consistently regardless of type.
+- `search_vector` is a `GENERATED ALWAYS AS ... STORED` tsvector column on `posts`, built from `title` + `description`, using the `'simple'` text search config (not `'english'`) — `'simple'` avoids English-specific stemming behaving oddly on mixed Tamil/Arabic/English content. Indexed with GIN.
+- Applies to `profiles` and `entities` too (see below) — same pattern, own `search_vector` column each.
+
+### People & Entities — NOT derived from `posts` (locked)
+Doctors, tutors, and other individuals, plus entities like clinics, schools, pharmacies, are conceptually a **directory** (Yellow Pages — searched on demand, persistent, no lifecycle/expiry), not a **feed** (newspaper — pushed, event-like, lifecycle-driven). Forcing them into the `posts` table would give every profile a meaningless `lifecycle_status` and pollute the chronological feed. They get their own tables instead:
+
+- **`profiles`** — 1:1 with `auth.users`, opt-in. Holds `profession`, `bio`, `status` (`available`/`busy`/`unavailable`), `moderation_status`, and its own `search_vector`.
+- **`entities`** — clinics, schools, pharmacies, etc. Holds `name`, `category`, `description`, `address`, `lat`/`lng`, `moderation_status`, `search_vector`.
+- **`entity_members`** — many-to-many join (`entity_id`, `user_id`, `role`) — lets one user (e.g. a doctor) be associated with more than one entity (his clinic, a pharmacy), and lets search cross-reference: searching "doctor" hits `profiles`, searching a clinic name hits `entities`, and `entity_members` links the two in results.
+
+### Shared comment engine (locked)
+Rather than making `profiles`/`entities` pretend to be posts just to be commentable, a single polymorphic `comments` table serves all three:
+
+```sql
+create table comments (
+  id uuid primary key default gen_random_uuid(),
+  author_id uuid not null references auth.users(id),
+  body text not null,
+  commentable_type text not null check (commentable_type in ('post', 'profile', 'entity')),
+  commentable_id uuid not null,
+  created_at timestamptz not null default now()
+);
+create index comments_commentable_idx on comments (commentable_type, commentable_id);
+```
+
+Reactions could follow the same polymorphic pattern later if profile endorsements are wanted (conceptually closer to *tazkiyah* / trustworthy testimony than a generic star rating — worth keeping in mind when reactions-on-profiles are actually designed).
+
+### UI placement (locked)
+Feed-style UIs don't have a natural home for search/pull results — they're a different interaction (query in, filtered list out) from a continuous scroll. Pull gets its own primary navigation destination, not a search bar bolted onto the feed screen — mirrors the Feed/Search split seen in apps like Instagram or Twitter, and keeps the push/pull split visible at the navigation level, not just the database level.
+
+- **Tab name: "Find Now"** (confirmed) — reflects that results show live status (available/busy/closed), not just static listings.
+- Results use their own card design (`ProfileCard`, `EntityCard`) — not reused `PostCard`s — since a directory listing (status badge, quick-action, category) is a different shape from a feed post (timestamp-driven, lifecycle-driven).
+- Suggested folder additions (future, not built yet):
+```
+components/
+  findNow/       -- ProfileCard.jsx, EntityCard.jsx
+features/
+  findNow/       -- useFindNow.js (pull-side sibling to useFeed.js)
+pages/
+  FindNowPage.jsx
+```
+
+### Status quo
+This whole section is a **locked plan for later** — Donor-Seeker Connect and Social Work are future modules. Nothing here has been created in Supabase yet. Only the `posts.search_vector` pattern is relevant to current work, since it applies starting with the death announcement table already being built.
+
+## Database choice: Postgres/Supabase confirmed, NoSQL rejected (locked)
+
+Considered switching to NoSQL given many post/profile/entity types are planned over time — decided **against** it, staying on Postgres/Supabase.
+
+**Reasoning:**
+- "Many types" ≠ "unpredictable structure." Every new post type is deliberately designed by Syed with a known, fixed field set, module by module — a relational pattern, not a schemaless one.
+- Adding a new post type under the current design is low-cost and non-disruptive: add one value to the `type` CHECK list + create one small extension table (like `death_announcement`). Doesn't touch the base `posts` table or existing types.
+- Switching to NoSQL would undo several already-locked, working decisions: RLS as the security layer (no clean NoSQL equivalent in Supabase), foreign key integrity (`lifecycle_status_history.post_id`, `entity_members`, `comments.commentable_id`), the `tsvector`/GIN full-text search already built, and Supabase Realtime (Postgres-native) — likely forcing a second full platform rebuild right after just completing one.
+- **Escape hatch if per-type flexibility is ever genuinely needed**: a `type_data jsonb` column on `posts` for low-stakes/rarely-queried types, while types needing indexed structured fields (like `janazah_datetime`) keep their own proper extension table. Postgres supports both without abandoning the relational model.
 
 ## Immediate next step
 Design the death-announcement Post schema in detail — starting with the base `posts` table (shared columns: `type` enum, moderation status, lifecycle status + `lifecycle_updated_at`, author, timestamps), then `death_announcement`-specific fields (`janazah_datetime`, `janazah_location`, etc.), then the lifecycle status states (`upcoming_janazah` → `janazah_in_progress` → `completed`) and the `lifecycle_status_history` audit table. Nothing has been created in Supabase yet (no tables/migrations) — this is schema design + first migration from scratch.
