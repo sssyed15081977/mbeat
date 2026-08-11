@@ -164,6 +164,50 @@ pages/
   FindNowPage.jsx
 ```
 
+### Volunteer / capability model — amendment to `profiles` (locked)
+Earlier draft gave `profiles` a single `profession text` field — too narrow. A person can hold multiple roles at once (e.g. a doctor who is *also* a blood donor and a general community-service volunteer), and role-specific data (like a blood donor's blood group) doesn't belong on a generic profile. This **replaces** the single-`profession` idea with a multi-role model, following the same base + type-specific-extension pattern already used for `posts`:
+
+```sql
+-- One row per role a person takes on — a person can have several
+create table volunteer_roles (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id),
+  role_type text not null check (role_type in ('doctor', 'blood_donor', 'community_service', 'tutor')),
+  status text default 'available' check (status in ('available', 'busy', 'unavailable')),
+  moderation_status text not null default 'pending'
+    check (moderation_status in ('pending','published','flagged','hidden')),
+  created_at timestamptz not null default now(),
+  unique (user_id, role_type)
+);
+
+-- Role-specific structured fields, e.g. for blood donors
+create table blood_donor_role (
+  role_id uuid primary key references volunteer_roles(id) on delete cascade,
+  blood_group text check (blood_group in ('A+','A-','B+','B-','AB+','AB-','O+','O-')),
+  last_donation_date date
+);
+
+-- Append-only contribution ledger, with a confirmation/trust mechanism
+create table service_history (
+  id uuid primary key default gen_random_uuid(),
+  role_id uuid not null references volunteer_roles(id),
+  related_post_id uuid references posts(id),   -- optional: links to the blood_request post this fulfilled
+
+  source text not null default 'self_reported'
+    check (source in ('self_reported', 'org_confirmed')),
+  confirmed_by uuid references auth.users(id),
+  confirmed_at timestamptz,
+
+  performed_at timestamptz not null default now(),
+  logged_by uuid not null references auth.users(id),
+  created_at timestamptz not null default now()
+);
+```
+
+- **Who can log a `service_history` entry (decided): either the donor (self-reported) or the requester/org who received help — but org-confirmed entries carry more trust weight.** A self-reported entry starts with `source = 'self_reported'`; if later confirmed by the requester/org, the *same row* is updated (`source` → `'org_confirmed'`, `confirmed_by`/`confirmed_at` set) rather than creating a duplicate — one real-world event stays one row, with an upgradeable trust level.
+- Actual reputation-score weighting logic (how much more an `org_confirmed` entry counts) is deferred to when the reputation system itself is built — this only locks the data model needed to support that later.
+- Extends cleanly to future role types (`community_service`, `tutor`, etc.) the same low-cost way new post types are added: new `role_type` value + optional role-specific extension table if that type needs structured fields (a `community_service` role, for instance, might need no extension table at all if there's nothing beyond the generic role fields).
+
 ### Status quo
 This whole section is a **locked plan for later** — Donor-Seeker Connect and Social Work are future modules. Nothing here has been created in Supabase yet. Only the `posts.search_vector` pattern is relevant to current work, since it applies starting with the death announcement table already being built.
 
@@ -177,10 +221,21 @@ Considered switching to NoSQL given many post/profile/entity types are planned o
 - Switching to NoSQL would undo several already-locked, working decisions: RLS as the security layer (no clean NoSQL equivalent in Supabase), foreign key integrity (`lifecycle_status_history.post_id`, `entity_members`, `comments.commentable_id`), the `tsvector`/GIN full-text search already built, and Supabase Realtime (Postgres-native) — likely forcing a second full platform rebuild right after just completing one.
 - **Escape hatch if per-type flexibility is ever genuinely needed**: a `type_data jsonb` column on `posts` for low-stakes/rarely-queried types, while types needing indexed structured fields (like `janazah_datetime`) keep their own proper extension table. Postgres supports both without abandoning the relational model.
 
+## Progress log — first migration: posts + death_announcement schema (done)
+- Work done on feature branch `feature/death-announcement-schema` (off `develop`), per the module-work branching rule.
+- `supabase init` run locally — created `supabase/config.toml` and `supabase/migrations/`. CLI authenticated via `supabase login`; project linked via `supabase link --project-ref slalnatjabrcnjxngqoo`.
+- First migration written and pushed: `supabase/migrations/20260811083220_create_posts_death_announcement_schema.sql`, creating three tables:
+  - **`posts`** (base table) — `id`, `type` (checked enum), `author_id`, `title`, `description`, `moderation_status` (checked enum, default `pending`), `lifecycle_status` + `lifecycle_updated_at`, generated `search_vector` (`'simple'` config, GIN-indexed), `created_at`/`updated_at`. Indexes on `type` and `moderation_status`.
+  - **`death_announcement`** (extension table, 1:1 via `post_id`) — `deceased_name` (not null), `deceased_age`, `deceased_gender` (checked `male`/`female`, nullable), `announcer_relation`, `janazah_datetime`, `janazah_location`, `burial_location` (nullable — UI treats null as same as `janazah_location`), `photo_url`.
+  - **`lifecycle_status_history`** (shared audit table) — `post_id`, `old_status`, `new_status`, `changed_by`, `changed_at`. Indexed on `post_id`.
+- **RLS enabled on all three tables, but no policies written yet** — this is a deliberate safe default (locks tables to service-role-only access for now), not an oversight. Policy design is real remaining work before the app can read/write these tables from the client.
+- Verified via `supabase migration list` — local and remote migration timestamps match.
+- Not yet done: RLS policies, the `deathAnnouncement` form/schema/UI in `features/deathAnnouncement/`, `useFeed()`, wiring lifecycle transitions to write `lifecycle_status_history` rows.
+
 ## Immediate next step
-Design the death-announcement Post schema in detail — starting with the base `posts` table (shared columns: `type` enum, moderation status, lifecycle status + `lifecycle_updated_at`, author, timestamps), then `death_announcement`-specific fields (`janazah_datetime`, `janazah_location`, etc.), then the lifecycle status states (`upcoming_janazah` → `janazah_in_progress` → `completed`) and the `lifecycle_status_history` audit table. Nothing has been created in Supabase yet (no tables/migrations) — this is schema design + first migration from scratch.
+Design and write RLS policies for `posts`, `death_announcement`, and `lifecycle_status_history` (who can read/insert/update, tied into `moderation_status` and the not-yet-built reputation/trust system), then start the `features/deathAnnouncement/` form + schema that writes into this new schema.
 
 ## Notes for whoever picks this up next
-- Working in this session: `develop` branch, repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`.
+- Working in this session: branch `feature/death-announcement-schema` off `develop`, repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`.
 - Before trusting this doc's "already done" claims, spot-check the actual repo state (folders can exist but be empty, files can exist but be wrong — e.g. we once found `VITE_SUPABASE_URL` had `/rest/v1/` wrongly appended) rather than assuming the doc is authoritative.
 - Syed prefers step-by-step confirmation before executing, narrated plans, and one file at a time when debugging — see "Working style / preferences" above.
