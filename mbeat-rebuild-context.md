@@ -89,6 +89,7 @@ Naming mistakes are expensive here because a name isn't just a label — it prop
 | Funeral prayer | Janazah | `janazah_datetime`, `janazah_location`, post title pattern |
 | Who's posting on whose behalf | Announcer relation | `death_announcement.announcer_relation` |
 | Pull/Search tab (shows people/entities with live status: available/busy/closed) | Find Now | Bottom nav tab label, `pages/FindNowPage.jsx` (future), `features/findNow/` (future) |
+| Death announcement lifecycle stages | `upcoming_janazah` → `janazah_in_progress` → `completed` | `posts.lifecycle_status` (when `type = 'death_announcement'`), `features/deathAnnouncement/lifecycleStatus.js` |
 
 ## Working style / preferences (for Claude Code to follow)
 - Syed's background: ~10 years Google Apps Script, prior ASP.NET, Python as primary language, still learning React/modern web frameworks.
@@ -254,8 +255,26 @@ Considered switching to NoSQL given many post/profile/entity types are planned o
 - Not yet done / not yet verified this session: phone+OTP login; Google OAuth provider credentials in the Supabase dashboard (assumed configured, not independently re-checked here); `pages/FeedPage.jsx` / `PostDetailPage.jsx`; the `deathAnnouncement` form work is still pending behind this.
 - As of this entry, all of the above was committed in one shot together with this doc update — it had been sitting uncommitted in the working tree before that.
 
+## Progress log — Google OAuth verified end-to-end (done)
+- The Google Cloud project (`mbeat-prod`) had no OAuth client at all yet — created it via the newer "Google Auth Platform" console UI: consent screen configured (External audience, app name `mbeat`), a test user added (Auth Platform still in Testing mode, not yet published to Production), and a Web application OAuth client created with `http://localhost:5173` as an authorized JS origin and the Supabase callback URL (`https://slalnatjabrcnjxngqoo.supabase.co/auth/v1/callback`) as the authorized redirect URI.
+- Client ID/secret pasted into Supabase Dashboard → Authentication → Providers → Google.
+- Verified live end-to-end against the running dev server: Google sign-in → landed on the "Complete your profile" form (correct, since it was a first-time sign-in with no `profiles` row) → submitted → landed on the `FeedPlaceholder` screen. Confirms `AuthContext`, `ProtectedRoute`, and `ProfileCompletion` all work together against real Supabase Auth + the live `profiles` table, not just in isolation.
+- **Phone+OTP login deliberately deferred, not forgotten** — Syed decided to hold off since it needs an SMS provider configured in the Supabase dashboard (a billing/account step), and Google alone is enough to unblock `deathAnnouncement` work now.
+
+## Progress log — deathAnnouncement form + schema (done)
+- New `src/features/deathAnnouncement/`: `lifecycleStatus.js` (the locked `upcoming_janazah` → `janazah_in_progress` → `completed` vocabulary), `deathAnnouncementSchema.js` (field defaults/options mirroring the `death_announcement` table columns), `DeathAnnouncementForm.jsx` (plain controlled-state form, matching `ProfileCompletion.jsx`'s style — no validation library introduced).
+- Submit flow: two sequential client inserts — `posts` (`type: 'death_announcement'`, forced `pending`, `lifecycle_status: 'upcoming_janazah'`) then `death_announcement` keyed off the returned `post.id`. **Deliberately not wrapped in an RPC/transaction** — decided to accept the small orphan-row risk (post created, extension insert fails) rather than add a Postgres function now; revisit only if that actually happens in practice.
+- Verified live: temporarily swapped `DeathAnnouncementForm` into `App.jsx`'s `FeedPlaceholder` route, submitted a real announcement against the live Supabase project, confirmed successful insert, then reverted `App.jsx` back to the placeholder. No permanent route/page wired yet — `DeathAnnouncementForm` exists as a standalone component, not yet reachable from the app's normal navigation.
+- New locked term: death announcement lifecycle stages (see naming table above).
+
+## Progress log — feed engine v1: useFeed() + FeedPage (done)
+- New `src/features/feed/`: `feedApi.js` (`fetchPosts()` — plain `select('*')` ordered by `created_at desc`, no filtering beyond what RLS already enforces) + `useFeed.js` (hook wrapping it: `posts`/`loading`/`error`).
+- New `src/components/posts/PostCard.jsx` — generic shell only (type, moderation_status, title, description). **Type-specific rendering (`PostCard.<type>.jsx`) deliberately deferred** — `feedApi` doesn't join extension-table data (e.g. `death_announcement`'s janazah fields) yet, and building the dispatch mechanism for a single post type would be premature.
+- New `src/pages/FeedPage.jsx`, wired into `App.jsx` as the `/` route content (replacing the old `FeedPlaceholder` function, now deleted).
+- Verified live: refreshed the app, saw the death announcement created in the previous session's test render as a card — confirms `useFeed()` → RLS's "published or own" select policy → `PostCard` all work together, including a client correctly seeing their own `pending` post.
+
 ## Immediate next step
-Finish auth (add phone+OTP alongside Google, confirm OAuth provider setup in the Supabase dashboard), then pick back up `features/deathAnnouncement/` — form + schema that writes into the already-verified `posts`/`death_announcement` schema (title/description + `deceased_name`, `janazah_datetime`, `janazah_location`, etc., landing as a `pending` post per the tested insert policy).
+No route/page renders `DeathAnnouncementForm` yet — it's only reachable by manually wiring it in (as done for the earlier test, since reverted). Feed is now viewable but has no way to create a post from the UI. Next real work: a "create post" route/page so the form has a permanent home — route naming not yet confirmed with Syed (per naming protocol). Phone+OTP login remains deferred until an SMS provider is set up.
 
 ## Notes for whoever picks this up next
 - Working in this session: branch `feature/auth-google-login` (off `develop`), repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`.
