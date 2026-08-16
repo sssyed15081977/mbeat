@@ -3,16 +3,8 @@ import { AuthProvider } from './features/auth/AuthContext'
 import { ProtectedRoute } from './features/auth/ProtectedRoute'
 import { ProfileCompletion } from './features/auth/ProfileCompletion'
 import LoginPage from './pages/LoginPage'
-
-function FeedPlaceholder() {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-green-600 font-bold text-2xl">
-        You're in — mbeat feed goes here.
-      </h1>
-    </div>
-  )
-}
+import FeedPage from './pages/FeedPage'
+import NewDeathAnnouncementPage from './pages/NewDeathAnnouncementPage'
 
 function App() {
   return (
@@ -25,7 +17,15 @@ function App() {
               path="/"
               element={
                 <ProfileCompletion>
-                  <FeedPlaceholder />
+                  <FeedPage />
+                </ProfileCompletion>
+              }
+            />
+            <Route
+              path="/post/new"
+              element={
+                <ProfileCompletion>
+                  <NewDeathAnnouncementPage />
                 </ProfileCompletion>
               }
             />

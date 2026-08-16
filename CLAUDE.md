@@ -86,6 +86,7 @@ Names propagate into DB tables/columns, UI text, routes, and variables all at on
 | Funeral prayer | Janazah | `janazah_datetime`, `janazah_location`, post title pattern |
 | Who's posting on whose behalf | Announcer relation | `death_announcement.announcer_relation` |
 | Pull/Search tab | Find Now | Bottom nav tab label, `pages/FindNowPage.jsx` (future), `features/findNow/` (future) |
+| Death announcement lifecycle stages | `upcoming_janazah` → `janazah_in_progress` → `completed` | `posts.lifecycle_status` (when `type = 'death_announcement'`), `features/deathAnnouncement/lifecycleStatus.js` |
 
 Keep this table in sync with [mbeat-rebuild-context.md](mbeat-rebuild-context.md) as new terms get locked.
 
