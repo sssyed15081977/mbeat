@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { fetchPosts } from './feedApi'
 
 export function useFeed() {
@@ -25,5 +25,15 @@ export function useFeed() {
     }
   }, [])
 
-  return { posts, loading, error }
+  const refetch = useCallback(() => {
+    setLoading(true)
+    setError(null)
+
+    fetchPosts()
+      .then(setPosts)
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false))
+  }, [])
+
+  return { posts, loading, error, refetch }
 }

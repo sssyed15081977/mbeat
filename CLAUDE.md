@@ -25,6 +25,8 @@ React 19 + Vite (PWA via `vite-plugin-pwa`) → Supabase (Postgres + Auth + Stor
 
 Supabase client lives at `src/lib/supabaseClient.js`, reading `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` from env (`.env`, gitignored; `.env.example` has placeholders).
 
+i18n is `react-i18next`, configured at `src/lib/i18n/` (`en.json`/`ta.json` resource files, `setLanguage()` helper). The switcher is `components/ui/LanguageToggle.jsx` — reuse it, don't rebuild it. Preference persists to `localStorage` for guests and to `profiles.preferred_language` once signed in (synced in `AuthContext`/`ProfileCompletion`). See "Every page is mobile-first and bilingual" below — this setup is mandatory for all new UI, not just the login/feed screens it started on.
+
 ## Architecture
 
 The codebase is still an early scaffold (only `App.jsx`, `main.jsx`, `index.css`, `lib/supabaseClient.js` exist so far), but the structure and its rationale are locked. Organize by **function**, not by old per-module names — every post type flows through one shared feed engine, one `useFeed()` hook, one reaction/flag/reputation system.
@@ -90,6 +92,51 @@ Names propagate into DB tables/columns, UI text, routes, and variables all at on
 
 Keep this table in sync with [mbeat-rebuild-context.md](mbeat-rebuild-context.md) as new terms get locked.
 
+## UI/UX guidelines
+
+mbeat uses a social-feed *architecture* but its content is civic-utility, not entertainment (death announcements, blood requests, jobs) — borrow interaction patterns from Instagram/TikTok/Pinterest/WhatsApp selectively, filtered through "does this make sense on a death announcement or blood request," not wholesale. No cloning of another platform's branding or exact layout.
+
+**Core philosophy**
+- Content first, interface second; minimize decisions the user has to make per screen.
+- Prefer direct manipulation over multi-step navigation; avoid dialogs/confirmation screens/intermediate pages unless the action is destructive or hard to reverse.
+- Progressive disclosure: primary actions visible, secondary actions behind `•••` / menus / bottom sheets.
+- Every tap gives immediate visual feedback; prefer optimistic UI over spinners.
+- A user should rarely need to ask "what am I supposed to do here?"
+
+**Visual design**
+- Strong hierarchy via whitespace, typography, and grouping — not by wrapping everything in a bordered card.
+- Consistent spacing scale, corner radius, shadows, and component sizes — centralize as Tailwind `@theme` tokens in `src/index.css` rather than one-off values per component.
+- Lightweight, not enterprise-dashboard-dense. Avoid decorative gradients/animations/shadows with no purpose.
+
+**Mobile-first & touch**
+- Design and check mobile widths first (this is already a standing requirement — see below). Thumb-reachable controls, bottom nav, bottom sheets for secondary actions.
+- Comfortable touch targets, adequate spacing between interactive elements; never rely on top-corner-only placement for frequent actions.
+- Respect safe areas, notches, and the mobile keyboard (composers/inputs shouldn't get covered).
+
+**Navigation**
+- Bottom nav is the primary nav pattern, but mbeat's tabs are **Feed** and **Find Now** (locked, see "Two parallel systems" above) plus whatever else gets confirmed through the naming protocol — do not default to a generic Home/Discover/Create/Messages/Profile layout without confirming names/scope first.
+- User should always know: where they are, where they can go, how to get back, how to do the primary action for that screen.
+- **Every non-root page (any screen reached by navigating forward — create/edit forms, detail views, settings) must render a `BackButton` (`components/ui/BackButton.jsx`) to a known destination.** This is a checklist item when building any new page, not just something to notice after the fact — it was missed once on the death-announcement form page and shouldn't recur.
+
+**Post/feed interactions**
+- Engagement affordances (reactions, save, share, comment) route through the shared `ReactionBar`/`FlagButton`/comment system — don't build type-specific versions.
+- Match the affordance to the content: a like/heart pattern that suits a `discussion` or `fundraiser` post may be tone-deaf on a `death_announcement` or `blood_request` — check with the user before adding "social" mechanics (likes, follows) to a serious-content post type rather than assuming Instagram-style engagement applies uniformly across `posts.type`.
+- Feed should read as continuous scroll, not isolated pages; opening a post's comments should feel like a layer over the feed (bottom sheet / detail overlay), not full navigation-away, where practical.
+
+**Micro-interactions & states**
+- Optimistic updates on reactions/saves; don't wait on the server round-trip to show the new state.
+- Every component that fetches or mutates data needs to account for: loading, empty, error, offline, no-permission, no-results. Skeleton loaders over blank screens or bare spinners.
+- Errors are actionable and in plain language ("Something went wrong — try again"), never raw status codes/stack traces, with a retry path that doesn't force navigating away.
+- Keep animations short, smooth, purposeful; respect `prefers-reduced-motion`.
+
+**Accessibility**
+- Sufficient color contrast, visible focus states, semantic HTML, ARIA labels where native semantics fall short, screen-reader-friendly controls, readable text at larger font sizes.
+
+**Explicitly not adopted from generic social-app UX playbooks:**
+- No TikTok-style autoplay/infinite full-screen content consumption — mismatched for civic posts users are meant to act on (call, donate, attend), not passively consume.
+- No follow/following graph unless a specific feature calls for it and the naming/scope has been confirmed.
+- Bilingual support (see below) is not covered by generic UX guidance and stays a hard requirement layered on top of all of the above — a beautiful screen that skipped `useTranslation()` isn't done.
+
 ## Working style
 
 - Narrate the plan before executing; explain what was built and why — the user is deliberately building understanding of the codebase, not just collecting a working diff.
@@ -97,3 +144,5 @@ Keep this table in sync with [mbeat-rebuild-context.md](mbeat-rebuild-context.md
 - Repo is cloned across multiple machines — never hardcode local paths.
 - Git workflow: feature branch → PR → merge to `main` (protected, PR-required); `develop` is left open for direct pushes for day-to-day scaffolding. Reserve the full feature-branch flow for actual module work.
 - New feature ideas go into GitHub Projects Icebox first, not straight into scope.
+- **Every page is mobile-first and bilingual — standing requirement, not a per-task ask.** Most users are on phones, so build and check layouts at mobile widths first (desktop is a bonus, not the target). Every user-facing string goes through `react-i18next` (`useTranslation()` + a key in both `src/lib/i18n/locales/en.json` and `ta.json`) — never hardcode display text. Reuse `components/ui/LanguageToggle.jsx` and the existing `preferred_language` sync rather than rebuilding language handling per page.
+- Reuse before writing: check for an existing component/hook/util that already does the job (or is close to it) before adding new code, and factor out shared logic when a second page needs what a first page already has, instead of copy-pasting.

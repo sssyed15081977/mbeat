@@ -2,4 +2,13 @@
 
 @theme {
     --font-sans: "Noto Sans", "Noto Sans Tamil", sans-serif;
+    --color-brand: #16a34a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }

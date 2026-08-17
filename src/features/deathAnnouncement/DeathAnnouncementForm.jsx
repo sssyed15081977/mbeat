@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabaseClient'
 import { useAuth } from '../auth/useAuth'
 import { DEATH_ANNOUNCEMENT_GENDERS, initialDeathAnnouncementForm } from './deathAnnouncementSchema'
 
 export function DeathAnnouncementForm({ onSuccess }) {
   const { user } = useAuth()
+  const { t } = useTranslation()
   const [form, setForm] = useState(initialDeathAnnouncementForm)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
@@ -59,88 +61,142 @@ export function DeathAnnouncementForm({ onSuccess }) {
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
-      <h1 className="text-xl font-bold">Post a death announcement</h1>
+      <h1 className="text-xl font-bold">{t('deathAnnouncementForm.heading')}</h1>
 
-      <input
-        type="text"
-        placeholder="Title (e.g. Death Announcement - Name)"
-        required
-        value={form.title}
-        onChange={(event) => updateField('title', event.target.value)}
-        className="w-full border rounded px-3 py-2"
-      />
-      <textarea
-        placeholder="Description (optional)"
-        value={form.description}
-        onChange={(event) => updateField('description', event.target.value)}
-        className="w-full border rounded px-3 py-2"
-      />
+      <div className="space-y-1">
+        <label htmlFor="title" className="text-sm font-medium text-gray-700">
+          {t('deathAnnouncementForm.titleLabel')}
+        </label>
+        <input
+          id="title"
+          type="text"
+          placeholder={t('deathAnnouncementForm.titlePlaceholder')}
+          required
+          value={form.title}
+          onChange={(event) => updateField('title', event.target.value)}
+          className="w-full border rounded px-3 py-2"
+        />
+      </div>
+      <div className="space-y-1">
+        <label htmlFor="description" className="text-sm font-medium text-gray-700">
+          {t('deathAnnouncementForm.descriptionLabel')}
+        </label>
+        <textarea
+          id="description"
+          placeholder={t('deathAnnouncementForm.descriptionPlaceholder')}
+          value={form.description}
+          onChange={(event) => updateField('description', event.target.value)}
+          className="w-full border rounded px-3 py-2"
+        />
+      </div>
 
-      <input
-        type="text"
-        placeholder="Deceased's name"
-        required
-        value={form.deceased_name}
-        onChange={(event) => updateField('deceased_name', event.target.value)}
-        className="w-full border rounded px-3 py-2"
-      />
-      <input
-        type="number"
-        placeholder="Deceased's age (optional)"
-        min="0"
-        value={form.deceased_age}
-        onChange={(event) => updateField('deceased_age', event.target.value)}
-        className="w-full border rounded px-3 py-2"
-      />
-      <select
-        value={form.deceased_gender}
-        onChange={(event) => updateField('deceased_gender', event.target.value)}
-        className="w-full border rounded px-3 py-2"
-      >
-        <option value="">Gender (optional)</option>
-        {DEATH_ANNOUNCEMENT_GENDERS.map((gender) => (
-          <option key={gender.value} value={gender.value}>
-            {gender.label}
-          </option>
-        ))}
-      </select>
-      <input
-        type="text"
-        placeholder="Announcer relation (e.g. Son, Mosque Committee)"
-        value={form.announcer_relation}
-        onChange={(event) => updateField('announcer_relation', event.target.value)}
-        className="w-full border rounded px-3 py-2"
-      />
+      <div className="space-y-1">
+        <label htmlFor="deceased_name" className="text-sm font-medium text-gray-700">
+          {t('deathAnnouncementForm.deceasedNameLabel')}
+        </label>
+        <input
+          id="deceased_name"
+          type="text"
+          placeholder={t('deathAnnouncementForm.deceasedNamePlaceholder')}
+          required
+          value={form.deceased_name}
+          onChange={(event) => updateField('deceased_name', event.target.value)}
+          className="w-full border rounded px-3 py-2"
+        />
+      </div>
+      <div className="space-y-1">
+        <label htmlFor="deceased_age" className="text-sm font-medium text-gray-700">
+          {t('deathAnnouncementForm.deceasedAgeLabel')}
+        </label>
+        <input
+          id="deceased_age"
+          type="number"
+          placeholder={t('deathAnnouncementForm.deceasedAgePlaceholder')}
+          min="0"
+          value={form.deceased_age}
+          onChange={(event) => updateField('deceased_age', event.target.value)}
+          className="w-full border rounded px-3 py-2"
+        />
+      </div>
+      <div className="space-y-1">
+        <label htmlFor="deceased_gender" className="text-sm font-medium text-gray-700">
+          {t('deathAnnouncementForm.genderLabel')}
+        </label>
+        <select
+          id="deceased_gender"
+          value={form.deceased_gender}
+          onChange={(event) => updateField('deceased_gender', event.target.value)}
+          className="w-full border rounded px-3 py-2"
+        >
+          <option value="">{t('deathAnnouncementForm.genderPlaceholder')}</option>
+          {DEATH_ANNOUNCEMENT_GENDERS.map((gender) => (
+            <option key={gender} value={gender}>
+              {t(`gender.${gender}`)}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="space-y-1">
+        <label htmlFor="announcer_relation" className="text-sm font-medium text-gray-700">
+          {t('deathAnnouncementForm.announcerRelationLabel')}
+        </label>
+        <input
+          id="announcer_relation"
+          type="text"
+          placeholder={t('deathAnnouncementForm.announcerRelationPlaceholder')}
+          value={form.announcer_relation}
+          onChange={(event) => updateField('announcer_relation', event.target.value)}
+          className="w-full border rounded px-3 py-2"
+        />
+      </div>
 
-      <input
-        type="datetime-local"
-        value={form.janazah_datetime}
-        onChange={(event) => updateField('janazah_datetime', event.target.value)}
-        className="w-full border rounded px-3 py-2"
-      />
-      <input
-        type="text"
-        placeholder="Janazah location"
-        value={form.janazah_location}
-        onChange={(event) => updateField('janazah_location', event.target.value)}
-        className="w-full border rounded px-3 py-2"
-      />
-      <input
-        type="text"
-        placeholder="Burial location (optional, if different from Janazah location)"
-        value={form.burial_location}
-        onChange={(event) => updateField('burial_location', event.target.value)}
-        className="w-full border rounded px-3 py-2"
-      />
+      <div className="space-y-1">
+        <label htmlFor="janazah_datetime" className="text-sm font-medium text-gray-700">
+          {t('deathAnnouncementForm.janazahDatetimeLabel')}
+        </label>
+        <input
+          id="janazah_datetime"
+          type="datetime-local"
+          value={form.janazah_datetime}
+          onChange={(event) => updateField('janazah_datetime', event.target.value)}
+          className="w-full border rounded px-3 py-2"
+        />
+      </div>
+      <div className="space-y-1">
+        <label htmlFor="janazah_location" className="text-sm font-medium text-gray-700">
+          {t('deathAnnouncementForm.janazahLocationLabel')}
+        </label>
+        <input
+          id="janazah_location"
+          type="text"
+          placeholder={t('deathAnnouncementForm.janazahLocationPlaceholder')}
+          value={form.janazah_location}
+          onChange={(event) => updateField('janazah_location', event.target.value)}
+          className="w-full border rounded px-3 py-2"
+        />
+      </div>
+      <div className="space-y-1">
+        <label htmlFor="burial_location" className="text-sm font-medium text-gray-700">
+          {t('deathAnnouncementForm.burialLocationLabel')}
+        </label>
+        <input
+          id="burial_location"
+          type="text"
+          placeholder={t('deathAnnouncementForm.burialLocationPlaceholder')}
+          value={form.burial_location}
+          onChange={(event) => updateField('burial_location', event.target.value)}
+          className="w-full border rounded px-3 py-2"
+        />
+      </div>
 
       {error && <p className="text-red-600 text-sm">{error}</p>}
 
       <button
         type="submit"
         disabled={submitting}
-        className="w-full bg-green-600 text-white rounded px-3 py-2 font-semibold disabled:opacity-50"
+        className="w-full bg-brand text-white rounded px-3 py-2 font-semibold disabled:opacity-50"
       >
-        {submitting ? 'Posting…' : 'Post announcement'}
+        {submitting ? t('deathAnnouncementForm.posting') : t('deathAnnouncementForm.submit')}
       </button>
     </form>
   )

@@ -1,0 +1,79 @@
+{
+  "common": {
+    "retry": "மீண்டும் முயற்சிக்கவும்",
+    "back": "பின்செல்ல"
+  },
+  "auth": {
+    "tagline": "எம்.பி.எம் ஹெல்ப்லைன் — மேலப்பாளையம் சமூகத் தகவல்கள் அனைத்தும் ஒரே இடத்தில்.",
+    "signInWithGoogle": "Google மூலம் உள்நுழையவும்"
+  },
+  "profileCompletion": {
+    "title": "உங்கள் சுயவிவரத்தை முடிக்கவும்",
+    "subtitle": "mbeat-இல் இடுகை இட உண்மையான பெயர் அவசியம் — இது சமூகப் பொறுப்புணர்வைப் பேணுகிறது.",
+    "fullNameLabel": "முழுப் பெயர்",
+    "fullNamePlaceholder": "முழுப் பெயர்",
+    "phoneLabel": "தொலைபேசி எண்",
+    "phonePlaceholder": "தொலைபேசி எண்",
+    "localityLabel": "இடம்",
+    "localityPlaceholder": "எ.கா. மேலப்பாளையத்தில் உள்ள பகுதி",
+    "saving": "சேமிக்கிறது…",
+    "continue": "தொடரவும்"
+  },
+  "feed": {
+    "newPost": "+ புதியது",
+    "empty": "இதுவரை இடுகைகள் இல்லை.",
+    "emptyCta": "முதலில் ஒரு இடுகையை பகிரவும்.",
+    "loadError": "ஃபீடை ஏற்ற முடியவில்லை."
+  },
+  "postType": {
+    "blood_request": "இரத்தம் தேவை",
+    "death_announcement": "இறப்பு அறிவிப்பு",
+    "job": "வேலைவாய்ப்பு",
+    "dua": "துஆ",
+    "fundraiser": "நிதி திரட்டல்",
+    "discussion": "விவாதம்"
+  },
+  "moderationStatus": {
+    "pending": "நிலுவையில்",
+    "published": "வெளியிடப்பட்டது",
+    "flagged": "புகார் செய்யப்பட்டது",
+    "hidden": "மறைக்கப்பட்டது"
+  },
+  "lifecycleStatus": {
+    "deathAnnouncement": {
+      "upcoming_janazah": "வரவிருக்கும் ஜனாஸா",
+      "janazah_in_progress": "ஜனாஸா நடைபெறுகிறது",
+      "completed": "முடிந்தது"
+    }
+  },
+  "gender": {
+    "male": "ஆண்",
+    "female": "பெண்"
+  },
+  "deathAnnouncementForm": {
+    "heading": "இறப்பு அறிவிப்பை இடுகையிடவும்",
+    "titleLabel": "தலைப்பு",
+    "titlePlaceholder": "எ.கா. இறப்பு அறிவிப்பு - பெயர்",
+    "descriptionLabel": "விவரம்",
+    "descriptionPlaceholder": "விருப்பத்தேர்வு",
+    "deceasedNameLabel": "இறந்தவரின் பெயர்",
+    "deceasedNamePlaceholder": "இறந்தவரின் பெயர்",
+    "deceasedAgeLabel": "இறந்தவரின் வயது",
+    "deceasedAgePlaceholder": "விருப்பத்தேர்வு",
+    "genderLabel": "பாலினம்",
+    "genderPlaceholder": "விருப்பத்தேர்வு",
+    "announcerRelationLabel": "அறிவிப்பாளர் உறவு",
+    "announcerRelationPlaceholder": "எ.கா. மகன், மசூதி கமிட்டி",
+    "janazahDatetimeLabel": "ஜனாஸா தேதி & நேரம்",
+    "janazahLocationLabel": "ஜனாஸா நடைபெறும் இடம்",
+    "janazahLocationPlaceholder": "ஜனாஸா நடைபெறும் இடம்",
+    "burialLocationLabel": "அடக்கம் செய்யும் இடம்",
+    "burialLocationPlaceholder": "விருப்பத்தேர்வு, ஜனாஸா இடத்திலிருந்து வேறுபட்டால்",
+    "posting": "இடுகையிடுகிறது…",
+    "submit": "அறிவிப்பை இடுகையிடவும்"
+  },
+  "languageToggle": {
+    "english": "EN",
+    "tamil": "TA"
+  }
+}

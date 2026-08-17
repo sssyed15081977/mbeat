@@ -1,0 +1,79 @@
+{
+  "common": {
+    "retry": "Try again",
+    "back": "Back"
+  },
+  "auth": {
+    "tagline": "MPM Helpline — community info for Melapalayam, in one place.",
+    "signInWithGoogle": "Sign in with Google"
+  },
+  "profileCompletion": {
+    "title": "Complete your profile",
+    "subtitle": "Real names are required to post on mbeat — this keeps the community accountable.",
+    "fullNameLabel": "Full name",
+    "fullNamePlaceholder": "Full name",
+    "phoneLabel": "Phone number",
+    "phonePlaceholder": "Phone number",
+    "localityLabel": "Locality",
+    "localityPlaceholder": "e.g. area in Melapalayam",
+    "saving": "Saving…",
+    "continue": "Continue"
+  },
+  "feed": {
+    "newPost": "+ New",
+    "empty": "No posts yet.",
+    "emptyCta": "Be the first to share something.",
+    "loadError": "Couldn't load the feed."
+  },
+  "postType": {
+    "blood_request": "Blood Request",
+    "death_announcement": "Death Announcement",
+    "job": "Job",
+    "dua": "Dua",
+    "fundraiser": "Fundraiser",
+    "discussion": "Discussion"
+  },
+  "moderationStatus": {
+    "pending": "Pending",
+    "published": "Published",
+    "flagged": "Flagged",
+    "hidden": "Hidden"
+  },
+  "lifecycleStatus": {
+    "deathAnnouncement": {
+      "upcoming_janazah": "Upcoming Janazah",
+      "janazah_in_progress": "Janazah in Progress",
+      "completed": "Completed"
+    }
+  },
+  "gender": {
+    "male": "Male",
+    "female": "Female"
+  },
+  "deathAnnouncementForm": {
+    "heading": "Post a death announcement",
+    "titleLabel": "Title",
+    "titlePlaceholder": "e.g. Death Announcement - Name",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Optional",
+    "deceasedNameLabel": "Deceased's name",
+    "deceasedNamePlaceholder": "Deceased's name",
+    "deceasedAgeLabel": "Deceased's age",
+    "deceasedAgePlaceholder": "Optional",
+    "genderLabel": "Gender",
+    "genderPlaceholder": "Optional",
+    "announcerRelationLabel": "Announcer relation",
+    "announcerRelationPlaceholder": "e.g. Son, Mosque Committee",
+    "janazahDatetimeLabel": "Janazah date & time",
+    "janazahLocationLabel": "Janazah location",
+    "janazahLocationPlaceholder": "Janazah location",
+    "burialLocationLabel": "Burial location",
+    "burialLocationPlaceholder": "Optional, if different from Janazah location",
+    "posting": "Posting…",
+    "submit": "Post announcement"
+  },
+  "languageToggle": {
+    "english": "EN",
+    "tamil": "TA"
+  }
+}
