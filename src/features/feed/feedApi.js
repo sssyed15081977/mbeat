@@ -3,7 +3,7 @@ import { supabase } from '../../lib/supabaseClient'
 export async function fetchPosts() {
   const { data, error } = await supabase
     .from('posts')
-    .select('*')
+    .select('*, death_announcement(photo_url)')
     .order('created_at', { ascending: false })
 
   if (error) throw error

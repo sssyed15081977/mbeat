@@ -19,4 +19,8 @@ export const initialDeathAnnouncementForm = {
   janazah_datetime: '',
   janazah_location: '',
   burial_location: '',
+  photo: null,
 }
+
+export const DEATH_ANNOUNCEMENT_PHOTO_MAX_BYTES = 5 * 1024 * 1024
+export const DEATH_ANNOUNCEMENT_PHOTO_ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp']

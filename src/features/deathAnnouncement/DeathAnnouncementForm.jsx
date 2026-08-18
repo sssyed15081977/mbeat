@@ -2,12 +2,18 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabaseClient'
 import { useAuth } from '../auth/useAuth'
-import { DEATH_ANNOUNCEMENT_GENDERS, initialDeathAnnouncementForm } from './deathAnnouncementSchema'
+import {
+  DEATH_ANNOUNCEMENT_GENDERS,
+  DEATH_ANNOUNCEMENT_PHOTO_ACCEPTED_TYPES,
+  DEATH_ANNOUNCEMENT_PHOTO_MAX_BYTES,
+  initialDeathAnnouncementForm,
+} from './deathAnnouncementSchema'
 
 export function DeathAnnouncementForm({ onSuccess }) {
   const { user } = useAuth()
   const { t } = useTranslation()
   const [form, setForm] = useState(initialDeathAnnouncementForm)
+  const [photoPreviewUrl, setPhotoPreviewUrl] = useState(null)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
 
@@ -15,10 +21,57 @@ export function DeathAnnouncementForm({ onSuccess }) {
     setForm((prev) => ({ ...prev, [field]: value }))
   }
 
+  function setPhotoFile(file) {
+    setPhotoPreviewUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev)
+      return file ? URL.createObjectURL(file) : null
+    })
+    updateField('photo', file)
+  }
+
+  function handlePhotoChange(event) {
+    const file = event.target.files?.[0] ?? null
+
+    if (file && !DEATH_ANNOUNCEMENT_PHOTO_ACCEPTED_TYPES.includes(file.type)) {
+      setError(t('deathAnnouncementForm.photoTypeError'))
+      event.target.value = ''
+      return
+    }
+    if (file && file.size > DEATH_ANNOUNCEMENT_PHOTO_MAX_BYTES) {
+      setError(t('deathAnnouncementForm.photoSizeError'))
+      event.target.value = ''
+      return
+    }
+
+    setError(null)
+    setPhotoFile(file)
+  }
+
+  async function uploadPhoto(file) {
+    const extension = file.name.split('.').pop()
+    const path = `${user.id}/${crypto.randomUUID()}.${extension}`
+
+    const { error: uploadError } = await supabase.storage.from('post-photos').upload(path, file)
+    if (uploadError) throw uploadError
+
+    return supabase.storage.from('post-photos').getPublicUrl(path).data.publicUrl
+  }
+
   async function handleSubmit(event) {
     event.preventDefault()
     setSubmitting(true)
     setError(null)
+
+    let photoUrl = null
+    if (form.photo) {
+      try {
+        photoUrl = await uploadPhoto(form.photo)
+      } catch (uploadError) {
+        setSubmitting(false)
+        setError(uploadError.message)
+        return
+      }
+    }
 
     const { data: post, error: postError } = await supabase
       .from('posts')
@@ -48,6 +101,7 @@ export function DeathAnnouncementForm({ onSuccess }) {
       janazah_datetime: form.janazah_datetime || null,
       janazah_location: form.janazah_location || null,
       burial_location: form.burial_location || null,
+      photo_url: photoUrl,
     })
 
     setSubmitting(false)
@@ -56,6 +110,7 @@ export function DeathAnnouncementForm({ onSuccess }) {
       return
     }
 
+    setPhotoFile(null)
     setForm(initialDeathAnnouncementForm)
     onSuccess?.(post)
   }
@@ -136,6 +191,26 @@ export function DeathAnnouncementForm({ onSuccess }) {
             </option>
           ))}
         </select>
+      </div>
+      <div className="space-y-1">
+        <label htmlFor="photo" className="text-sm font-medium text-gray-700">
+          {t('deathAnnouncementForm.photoLabel')}
+        </label>
+        {photoPreviewUrl && (
+          <img
+            src={photoPreviewUrl}
+            alt=""
+            className="w-20 h-20 rounded-lg object-cover mb-1"
+          />
+        )}
+        <input
+          id="photo"
+          type="file"
+          accept={DEATH_ANNOUNCEMENT_PHOTO_ACCEPTED_TYPES.join(',')}
+          onChange={handlePhotoChange}
+          className="w-full text-sm"
+        />
+        <p className="text-xs text-gray-500">{t('deathAnnouncementForm.photoHelp')}</p>
       </div>
       <div className="space-y-1">
         <label htmlFor="announcer_relation" className="text-sm font-medium text-gray-700">

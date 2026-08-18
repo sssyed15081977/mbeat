@@ -1,7 +1,8 @@
 {
   "common": {
     "retry": "மீண்டும் முயற்சிக்கவும்",
-    "back": "பின்செல்ல"
+    "back": "பின்செல்ல",
+    "close": "மூடு"
   },
   "auth": {
     "tagline": "எம்.பி.எம் ஹெல்ப்லைன் — மேலப்பாளையம் சமூகத் தகவல்கள் அனைத்தும் ஒரே இடத்தில்.",
@@ -68,6 +69,10 @@
     "genderPlaceholder": "விருப்பத்தேர்வு",
     "announcerRelationLabel": "அறிவிப்பாளர் உறவு",
     "announcerRelationPlaceholder": "எ.கா. மகன், மசூதி கமிட்டி",
+    "photoLabel": "புகைப்படம் (விருப்பத்தேர்வு)",
+    "photoHelp": "JPG, PNG அல்லது WEBP, 5MB வரை",
+    "photoTypeError": "தயவுசெய்து JPG, PNG அல்லது WEBP படத்தைத் தேர்ந்தெடுக்கவும்.",
+    "photoSizeError": "புகைப்படம் 5MB-க்குள் இருக்க வேண்டும்.",
     "deathDatetimeLabel": "இறந்த தேதி & நேரம்",
     "janazahDatetimeLabel": "ஜனாஸா தேதி & நேரம்",
     "janazahLocationLabel": "ஜனாஸா நடைபெறும் இடம்",
@@ -78,7 +83,8 @@
     "submit": "அறிவிப்பை இடுகையிடவும்"
   },
   "deathAnnouncementDetail": {
-    "janazahGuideLink": "ஜனாஸா தொழுவது எப்படி"
+    "janazahGuideLink": "ஜனாஸா தொழுவது எப்படி",
+    "viewPhoto": "புகைப்படத்தைப் பார்க்க"
   },
   "islamicGuide": {
     "pendingReviewBanner": "ஏதேனும் தவறாகத் தெரிந்தால் தயவுசெய்து எங்களிடம் தெரிவிக்கவும்.",

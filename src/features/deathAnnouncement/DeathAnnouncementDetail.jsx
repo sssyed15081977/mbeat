@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { ImageLightbox } from '../../components/ui/ImageLightbox'
 
 function formatDateTime(value, language) {
   if (!value) return null
@@ -23,6 +25,7 @@ function DetailRow({ label, value }) {
 export function DeathAnnouncementDetail({ post }) {
   const { t, i18n } = useTranslation()
   const details = post.death_announcement
+  const [photoOpen, setPhotoOpen] = useState(false)
 
   return (
     <div className="space-y-4">
@@ -31,13 +34,29 @@ export function DeathAnnouncementDetail({ post }) {
         <span>{t(`moderationStatus.${post.moderation_status}`)}</span>
       </div>
 
-      <div>
-        <h1 className="text-xl font-bold">{post.title}</h1>
-        {post.lifecycle_status && (
-          <p className="text-sm text-brand font-medium mt-1">
-            {t(`lifecycleStatus.deathAnnouncement.${post.lifecycle_status}`)}
-          </p>
+      <div className="flex gap-3 items-start">
+        {details?.photo_url && (
+          <button
+            type="button"
+            onClick={() => setPhotoOpen(true)}
+            aria-label={t('deathAnnouncementDetail.viewPhoto')}
+            className="flex-none"
+          >
+            <img
+              src={details.photo_url}
+              alt=""
+              className="w-20 h-20 rounded-lg object-cover"
+            />
+          </button>
         )}
+        <div>
+          <h1 className="text-xl font-bold">{post.title}</h1>
+          {post.lifecycle_status && (
+            <p className="text-sm text-brand font-medium mt-1">
+              {t(`lifecycleStatus.deathAnnouncement.${post.lifecycle_status}`)}
+            </p>
+          )}
+        </div>
       </div>
 
       {post.description && <p className="text-gray-700">{post.description}</p>}
@@ -70,6 +89,15 @@ export function DeathAnnouncementDetail({ post }) {
       >
         {t('deathAnnouncementDetail.janazahGuideLink')}
       </Link>
+
+      {details?.photo_url && (
+        <ImageLightbox
+          src={details.photo_url}
+          alt={details.deceased_name || ''}
+          open={photoOpen}
+          onClose={() => setPhotoOpen(false)}
+        />
+      )}
     </div>
   )
 }

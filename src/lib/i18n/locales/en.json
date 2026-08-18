@@ -1,7 +1,8 @@
 {
   "common": {
     "retry": "Try again",
-    "back": "Back"
+    "back": "Back",
+    "close": "Close"
   },
   "auth": {
     "tagline": "MPM Helpline — community info for Melapalayam, in one place.",
@@ -68,6 +69,10 @@
     "genderPlaceholder": "Optional",
     "announcerRelationLabel": "Announcer relation",
     "announcerRelationPlaceholder": "e.g. Son, Mosque Committee",
+    "photoLabel": "Photo (optional)",
+    "photoHelp": "JPG, PNG or WEBP, up to 5MB",
+    "photoTypeError": "Please choose a JPG, PNG or WEBP image.",
+    "photoSizeError": "Photo must be under 5MB.",
     "deathDatetimeLabel": "Date & time of death",
     "janazahDatetimeLabel": "Janazah date & time",
     "janazahLocationLabel": "Janazah location",
@@ -78,7 +83,8 @@
     "submit": "Post announcement"
   },
   "deathAnnouncementDetail": {
-    "janazahGuideLink": "How to pray Janazah"
+    "janazahGuideLink": "How to pray Janazah",
+    "viewPhoto": "View photo"
   },
   "islamicGuide": {
     "pendingReviewBanner": "If anything looks off, please let us know.",
