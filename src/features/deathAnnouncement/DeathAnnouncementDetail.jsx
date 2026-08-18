@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useAuth } from '../auth/useAuth'
 import { ImageLightbox } from '../../components/ui/ImageLightbox'
 
 function formatDateTime(value, language) {
@@ -24,40 +25,48 @@ function DetailRow({ label, value }) {
 
 export function DeathAnnouncementDetail({ post }) {
   const { t, i18n } = useTranslation()
+  const { user } = useAuth()
   const details = post.death_announcement
   const [photoOpen, setPhotoOpen] = useState(false)
+  const isOwner = user?.id === post.author_id
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between text-xs text-gray-500">
         <span className="uppercase tracking-wide">{t(`postType.${post.type}`)}</span>
-        <span>{t(`moderationStatus.${post.moderation_status}`)}</span>
-      </div>
-
-      <div className="flex gap-3 items-start">
-        {details?.photo_url && (
-          <button
-            type="button"
-            onClick={() => setPhotoOpen(true)}
-            aria-label={t('deathAnnouncementDetail.viewPhoto')}
-            className="flex-none"
-          >
-            <img
-              src={details.photo_url}
-              alt=""
-              className="w-20 h-20 rounded-lg object-cover"
-            />
-          </button>
-        )}
-        <div>
-          <h1 className="text-xl font-bold">{post.title}</h1>
-          {post.lifecycle_status && (
-            <p className="text-sm text-brand font-medium mt-1">
-              {t(`lifecycleStatus.deathAnnouncement.${post.lifecycle_status}`)}
-            </p>
+        <div className="flex items-center gap-3">
+          <span>{t(`moderationStatus.${post.moderation_status}`)}</span>
+          {isOwner && (
+            <Link to={`/post/${post.id}/edit`} className="text-brand font-medium">
+              {t('deathAnnouncementDetail.editLink')}
+            </Link>
           )}
         </div>
       </div>
+
+      <div>
+        <h1 className="text-xl font-bold">{post.title}</h1>
+        {post.lifecycle_status && (
+          <p className="text-sm text-brand font-medium mt-1">
+            {t(`lifecycleStatus.deathAnnouncement.${post.lifecycle_status}`)}
+          </p>
+        )}
+      </div>
+
+      {details?.photo_url && (
+        <button
+          type="button"
+          onClick={() => setPhotoOpen(true)}
+          aria-label={t('deathAnnouncementDetail.viewPhoto')}
+          className="block w-full"
+        >
+          <img
+            src={details.photo_url}
+            alt=""
+            className="w-full h-auto rounded-lg"
+          />
+        </button>
+      )}
 
       {post.description && <p className="text-gray-700">{post.description}</p>}
 
@@ -74,6 +83,7 @@ export function DeathAnnouncementDetail({ post }) {
             label={t('deathAnnouncementForm.deathDatetimeLabel')}
             value={formatDateTime(details.death_datetime, i18n.language)}
           />
+          <DetailRow label={t('deathAnnouncementForm.bodyLocationLabel')} value={details.body_location} />
           <DetailRow
             label={t('deathAnnouncementForm.janazahDatetimeLabel')}
             value={formatDateTime(details.janazah_datetime, i18n.language)}

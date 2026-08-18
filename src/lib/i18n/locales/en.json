@@ -74,17 +74,25 @@
     "photoTypeError": "Please choose a JPG, PNG or WEBP image.",
     "photoSizeError": "Photo must be under 5MB.",
     "deathDatetimeLabel": "Date & time of death",
+    "bodyLocationLabel": "Body location",
+    "bodyLocationPlaceholder": "e.g. Family home, Hospital name",
+    "bodyLocationHelp": "Where visitors can go to console the family",
     "janazahDatetimeLabel": "Janazah date & time",
-    "janazahLocationLabel": "Janazah location",
-    "janazahLocationPlaceholder": "Janazah location",
+    "janazahLocationLabel": "Prayer location",
+    "janazahLocationPlaceholder": "Prayer location",
     "burialLocationLabel": "Burial location",
-    "burialLocationPlaceholder": "Optional, if different from Janazah location",
+    "burialLocationPlaceholder": "Optional, if different from prayer location",
     "posting": "Posting…",
-    "submit": "Post announcement"
+    "submit": "Post announcement",
+    "editHeading": "Edit death announcement",
+    "savingChanges": "Saving changes…",
+    "saveChanges": "Save changes",
+    "notAuthorized": "You can only edit your own announcements."
   },
   "deathAnnouncementDetail": {
     "janazahGuideLink": "How to pray Janazah",
-    "viewPhoto": "View photo"
+    "viewPhoto": "View photo",
+    "editLink": "Edit"
   },
   "islamicGuide": {
     "pendingReviewBanner": "If anything looks off, please let us know.",

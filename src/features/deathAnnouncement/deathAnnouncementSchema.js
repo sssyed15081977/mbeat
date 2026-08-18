@@ -16,6 +16,7 @@ export const initialDeathAnnouncementForm = {
   deceased_gender: '',
   announcer_relation: '',
   death_datetime: '',
+  body_location: '',
   janazah_datetime: '',
   janazah_location: '',
   burial_location: '',

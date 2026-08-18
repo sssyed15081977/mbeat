@@ -93,6 +93,8 @@ Naming mistakes are expensive here because a name isn't just a label — it prop
 | Static Islamic reference content (dawah-oriented — procedures, duas, hadith excerpts, linked from relevant posts) | Islamic Guide (generic pattern); first instance: "How to Pray Janazah" | `features/islamicContent/` (`ContentGuideDetail.jsx`, `guides/`), route `pages/IslamicGuidePage.jsx` (`/guide/:slug`) |
 | When the person died (distinct from the janazah/funeral time) | `death_datetime`, optional, date+time | `death_announcement.death_datetime` |
 | Photo storage for post types that have one (deceased's photo is the first user) | Shared bucket `post-photos`, paths `<uploader_user_id>/<file>` | Supabase Storage bucket, `death_announcement.photo_url` |
+| Where the body/family can be visited for condolences (distinct from janazah_location, the prayer venue) | Body Location; label shown to users: "Body location" | `death_announcement.body_location` |
+| "Janazah location" display label reworded for clarity (schema/internal name unchanged — still the funeral-prayer venue) | Label: "Prayer location" | UI label only, i18n `deathAnnouncementForm.janazahLocationLabel`; DB column stays `janazah_location` |
 
 ## Working style / preferences (for Claude Code to follow)
 - Syed's background: ~10 years Google Apps Script, prior ASP.NET, Python as primary language, still learning React/modern web frameworks.

@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage'
 import FeedPage from './pages/FeedPage'
 import NewDeathAnnouncementPage from './pages/NewDeathAnnouncementPage'
 import PostDetailPage from './pages/PostDetailPage'
+import EditDeathAnnouncementPage from './pages/EditDeathAnnouncementPage'
 import IslamicGuidePage from './pages/IslamicGuidePage'
 
 function App() {
@@ -36,6 +37,14 @@ function App() {
               element={
                 <ProfileCompletion>
                   <PostDetailPage />
+                </ProfileCompletion>
+              }
+            />
+            <Route
+              path="/post/:id/edit"
+              element={
+                <ProfileCompletion>
+                  <EditDeathAnnouncementPage />
                 </ProfileCompletion>
               }
             />

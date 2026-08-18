@@ -23,22 +23,14 @@ export function PostCard({ post }) {
   const thumbnailUrl = getThumbnailUrl(post)
 
   return (
-    <Link to={`/post/${post.id}`} className="flex gap-3 py-4 hover:bg-gray-50 active:bg-gray-100">
-      {thumbnailUrl && (
-        <img
-          src={thumbnailUrl}
-          alt=""
-          className="w-14 h-14 rounded-lg object-cover shrink-0"
-        />
-      )}
-      <div className="min-w-0 flex-1 space-y-1">
-        <div className="flex items-center justify-between text-xs text-gray-500">
-          <span className="uppercase tracking-wide">{t(`postType.${post.type}`)}</span>
-          <span>{t(`moderationStatus.${post.moderation_status}`)}</span>
-        </div>
-        <h2 className="font-semibold">{post.title}</h2>
-        {post.description && <p className="text-sm text-gray-600">{post.description}</p>}
+    <Link to={`/post/${post.id}`} className="block py-4 space-y-1 hover:bg-gray-50 active:bg-gray-100">
+      <div className="flex items-center justify-between text-xs text-gray-500">
+        <span className="uppercase tracking-wide">{t(`postType.${post.type}`)}</span>
+        <span>{t(`moderationStatus.${post.moderation_status}`)}</span>
       </div>
+      <h2 className="font-semibold">{post.title}</h2>
+      {thumbnailUrl && <img src={thumbnailUrl} alt="" className="w-full h-auto rounded-lg" />}
+      {post.description && <p className="text-sm text-gray-600">{post.description}</p>}
     </Link>
   )
 }

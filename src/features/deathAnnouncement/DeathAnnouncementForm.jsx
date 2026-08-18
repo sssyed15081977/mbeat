@@ -9,10 +9,52 @@ import {
   initialDeathAnnouncementForm,
 } from './deathAnnouncementSchema'
 
-export function DeathAnnouncementForm({ onSuccess }) {
+// datetime-local inputs take/return local wall-clock time with no timezone;
+// timestamptz columns come back as UTC instants — shift by the local offset
+// so an existing death/janazah time round-trips into the input correctly.
+function toDatetimeLocalValue(isoString) {
+  if (!isoString) return ''
+  const date = new Date(isoString)
+  const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+  return local.toISOString().slice(0, 16)
+}
+
+// Mirror of the above: a bare "YYYY-MM-DDTHH:mm" string has no timezone, so
+// Postgres would otherwise interpret it as UTC instead of local wall-clock
+// time. `new Date(...)` parses a timezone-less date-time string as local
+// time, so converting through it and back to ISO captures the correct
+// instant before it's sent to a timestamptz column.
+function fromDatetimeLocalValue(value) {
+  if (!value) return null
+  return new Date(value).toISOString()
+}
+
+function buildInitialForm(editingPost) {
+  if (!editingPost) return initialDeathAnnouncementForm
+
+  const details = editingPost.death_announcement || {}
+  return {
+    title: editingPost.title || '',
+    description: editingPost.description || '',
+    deceased_name: details.deceased_name || '',
+    deceased_age: details.deceased_age ?? '',
+    deceased_gender: details.deceased_gender || '',
+    announcer_relation: details.announcer_relation || '',
+    death_datetime: toDatetimeLocalValue(details.death_datetime),
+    body_location: details.body_location || '',
+    janazah_datetime: toDatetimeLocalValue(details.janazah_datetime),
+    janazah_location: details.janazah_location || '',
+    burial_location: details.burial_location || '',
+    photo: null,
+  }
+}
+
+export function DeathAnnouncementForm({ onSuccess, editingPost }) {
   const { user } = useAuth()
   const { t } = useTranslation()
-  const [form, setForm] = useState(initialDeathAnnouncementForm)
+  const isEditing = Boolean(editingPost)
+  const [form, setForm] = useState(() => buildInitialForm(editingPost))
+  const [existingPhotoUrl] = useState(editingPost?.death_announcement?.photo_url || null)
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState(null)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
@@ -62,7 +104,8 @@ export function DeathAnnouncementForm({ onSuccess }) {
     setSubmitting(true)
     setError(null)
 
-    let photoUrl = null
+    // Keep the existing photo unless the user picked a replacement.
+    let photoUrl = isEditing ? existingPhotoUrl : null
     if (form.photo) {
       try {
         photoUrl = await uploadPhoto(form.photo)
@@ -71,6 +114,46 @@ export function DeathAnnouncementForm({ onSuccess }) {
         setError(uploadError.message)
         return
       }
+    }
+
+    const extensionFields = {
+      deceased_name: form.deceased_name,
+      deceased_age: form.deceased_age ? Number(form.deceased_age) : null,
+      deceased_gender: form.deceased_gender || null,
+      announcer_relation: form.announcer_relation || null,
+      death_datetime: fromDatetimeLocalValue(form.death_datetime),
+      body_location: form.body_location || null,
+      janazah_datetime: fromDatetimeLocalValue(form.janazah_datetime),
+      janazah_location: form.janazah_location || null,
+      burial_location: form.burial_location || null,
+      photo_url: photoUrl,
+    }
+
+    if (isEditing) {
+      const { error: postError } = await supabase
+        .from('posts')
+        .update({ title: form.title, description: form.description || null })
+        .eq('id', editingPost.id)
+
+      if (postError) {
+        setSubmitting(false)
+        setError(postError.message)
+        return
+      }
+
+      const { error: extensionError } = await supabase
+        .from('death_announcement')
+        .update(extensionFields)
+        .eq('post_id', editingPost.id)
+
+      setSubmitting(false)
+      if (extensionError) {
+        setError(extensionError.message)
+        return
+      }
+
+      onSuccess?.(editingPost)
+      return
     }
 
     const { data: post, error: postError } = await supabase
@@ -93,15 +176,7 @@ export function DeathAnnouncementForm({ onSuccess }) {
 
     const { error: extensionError } = await supabase.from('death_announcement').insert({
       post_id: post.id,
-      deceased_name: form.deceased_name,
-      deceased_age: form.deceased_age ? Number(form.deceased_age) : null,
-      deceased_gender: form.deceased_gender || null,
-      announcer_relation: form.announcer_relation || null,
-      death_datetime: form.death_datetime || null,
-      janazah_datetime: form.janazah_datetime || null,
-      janazah_location: form.janazah_location || null,
-      burial_location: form.burial_location || null,
-      photo_url: photoUrl,
+      ...extensionFields,
     })
 
     setSubmitting(false)
@@ -117,7 +192,9 @@ export function DeathAnnouncementForm({ onSuccess }) {
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
-      <h1 className="text-xl font-bold">{t('deathAnnouncementForm.heading')}</h1>
+      <h1 className="text-xl font-bold">
+        {isEditing ? t('deathAnnouncementForm.editHeading') : t('deathAnnouncementForm.heading')}
+      </h1>
 
       <div className="space-y-1">
         <label htmlFor="title" className="text-sm font-medium text-gray-700">
@@ -196,9 +273,9 @@ export function DeathAnnouncementForm({ onSuccess }) {
         <label htmlFor="photo" className="text-sm font-medium text-gray-700">
           {t('deathAnnouncementForm.photoLabel')}
         </label>
-        {photoPreviewUrl && (
+        {(photoPreviewUrl || existingPhotoUrl) && (
           <img
-            src={photoPreviewUrl}
+            src={photoPreviewUrl || existingPhotoUrl}
             alt=""
             className="w-20 h-20 rounded-lg object-cover mb-1"
           />
@@ -237,6 +314,20 @@ export function DeathAnnouncementForm({ onSuccess }) {
           onChange={(event) => updateField('death_datetime', event.target.value)}
           className="w-full border rounded px-3 py-2"
         />
+      </div>
+      <div className="space-y-1">
+        <label htmlFor="body_location" className="text-sm font-medium text-gray-700">
+          {t('deathAnnouncementForm.bodyLocationLabel')}
+        </label>
+        <input
+          id="body_location"
+          type="text"
+          placeholder={t('deathAnnouncementForm.bodyLocationPlaceholder')}
+          value={form.body_location}
+          onChange={(event) => updateField('body_location', event.target.value)}
+          className="w-full border rounded px-3 py-2"
+        />
+        <p className="text-xs text-gray-500">{t('deathAnnouncementForm.bodyLocationHelp')}</p>
       </div>
       <div className="space-y-1">
         <label htmlFor="janazah_datetime" className="text-sm font-medium text-gray-700">
@@ -284,7 +375,13 @@ export function DeathAnnouncementForm({ onSuccess }) {
         disabled={submitting}
         className="w-full bg-brand text-white rounded px-3 py-2 font-semibold disabled:opacity-50"
       >
-        {submitting ? t('deathAnnouncementForm.posting') : t('deathAnnouncementForm.submit')}
+        {isEditing
+          ? submitting
+            ? t('deathAnnouncementForm.savingChanges')
+            : t('deathAnnouncementForm.saveChanges')
+          : submitting
+            ? t('deathAnnouncementForm.posting')
+            : t('deathAnnouncementForm.submit')}
       </button>
     </form>
   )
