@@ -44,6 +44,7 @@ export function DeathAnnouncementForm({ onSuccess }) {
       deceased_age: form.deceased_age ? Number(form.deceased_age) : null,
       deceased_gender: form.deceased_gender || null,
       announcer_relation: form.announcer_relation || null,
+      death_datetime: form.death_datetime || null,
       janazah_datetime: form.janazah_datetime || null,
       janazah_location: form.janazah_location || null,
       burial_location: form.burial_location || null,
@@ -150,6 +151,18 @@ export function DeathAnnouncementForm({ onSuccess }) {
         />
       </div>
 
+      <div className="space-y-1">
+        <label htmlFor="death_datetime" className="text-sm font-medium text-gray-700">
+          {t('deathAnnouncementForm.deathDatetimeLabel')}
+        </label>
+        <input
+          id="death_datetime"
+          type="datetime-local"
+          value={form.death_datetime}
+          onChange={(event) => updateField('death_datetime', event.target.value)}
+          className="w-full border rounded px-3 py-2"
+        />
+      </div>
       <div className="space-y-1">
         <label htmlFor="janazah_datetime" className="text-sm font-medium text-gray-700">
           {t('deathAnnouncementForm.janazahDatetimeLabel')}

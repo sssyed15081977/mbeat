@@ -90,6 +90,8 @@ Naming mistakes are expensive here because a name isn't just a label — it prop
 | Who's posting on whose behalf | Announcer relation | `death_announcement.announcer_relation` |
 | Pull/Search tab (shows people/entities with live status: available/busy/closed) | Find Now | Bottom nav tab label, `pages/FindNowPage.jsx` (future), `features/findNow/` (future) |
 | Death announcement lifecycle stages | `upcoming_janazah` → `janazah_in_progress` → `completed` | `posts.lifecycle_status` (when `type = 'death_announcement'`), `features/deathAnnouncement/lifecycleStatus.js` |
+| Static Islamic reference content (dawah-oriented — procedures, duas, hadith excerpts, linked from relevant posts) | Islamic Guide (generic pattern); first instance: "How to Pray Janazah" | `features/islamicContent/` (`ContentGuideDetail.jsx`, `guides/`), route `pages/IslamicGuidePage.jsx` (`/guide/:slug`) |
+| When the person died (distinct from the janazah/funeral time) | `death_datetime`, optional, date+time | `death_announcement.death_datetime` |
 
 ## Working style / preferences (for Claude Code to follow)
 - Syed's background: ~10 years Google Apps Script, prior ASP.NET, Python as primary language, still learning React/modern web frameworks.

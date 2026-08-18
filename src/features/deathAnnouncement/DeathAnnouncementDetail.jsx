@@ -1,0 +1,75 @@
+import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+
+function formatDateTime(value, language) {
+  if (!value) return null
+  return new Date(value).toLocaleString(language === 'ta' ? 'ta-IN' : 'en-IN', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  })
+}
+
+function DetailRow({ label, value }) {
+  if (!value) return null
+
+  return (
+    <div className="py-2 flex justify-between gap-4 text-sm">
+      <dt className="text-gray-500">{label}</dt>
+      <dd className="text-right font-medium">{value}</dd>
+    </div>
+  )
+}
+
+export function DeathAnnouncementDetail({ post }) {
+  const { t, i18n } = useTranslation()
+  const details = post.death_announcement
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between text-xs text-gray-500">
+        <span className="uppercase tracking-wide">{t(`postType.${post.type}`)}</span>
+        <span>{t(`moderationStatus.${post.moderation_status}`)}</span>
+      </div>
+
+      <div>
+        <h1 className="text-xl font-bold">{post.title}</h1>
+        {post.lifecycle_status && (
+          <p className="text-sm text-brand font-medium mt-1">
+            {t(`lifecycleStatus.deathAnnouncement.${post.lifecycle_status}`)}
+          </p>
+        )}
+      </div>
+
+      {post.description && <p className="text-gray-700">{post.description}</p>}
+
+      {details && (
+        <dl className="border-t border-gray-100 divide-y divide-gray-100">
+          <DetailRow label={t('deathAnnouncementForm.deceasedNameLabel')} value={details.deceased_name} />
+          <DetailRow label={t('deathAnnouncementForm.deceasedAgeLabel')} value={details.deceased_age} />
+          <DetailRow
+            label={t('deathAnnouncementForm.genderLabel')}
+            value={details.deceased_gender ? t(`gender.${details.deceased_gender}`) : null}
+          />
+          <DetailRow label={t('deathAnnouncementForm.announcerRelationLabel')} value={details.announcer_relation} />
+          <DetailRow
+            label={t('deathAnnouncementForm.deathDatetimeLabel')}
+            value={formatDateTime(details.death_datetime, i18n.language)}
+          />
+          <DetailRow
+            label={t('deathAnnouncementForm.janazahDatetimeLabel')}
+            value={formatDateTime(details.janazah_datetime, i18n.language)}
+          />
+          <DetailRow label={t('deathAnnouncementForm.janazahLocationLabel')} value={details.janazah_location} />
+          <DetailRow label={t('deathAnnouncementForm.burialLocationLabel')} value={details.burial_location} />
+        </dl>
+      )}
+
+      <Link
+        to="/guide/janazah-prayer"
+        className="inline-block text-sm text-brand font-medium underline underline-offset-2"
+      >
+        {t('deathAnnouncementDetail.janazahGuideLink')}
+      </Link>
+    </div>
+  )
+}

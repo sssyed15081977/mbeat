@@ -9,3 +9,14 @@ export async function fetchPosts() {
   if (error) throw error
   return data
 }
+
+export async function fetchPostById(id) {
+  const { data, error } = await supabase
+    .from('posts')
+    .select('*, death_announcement(*)')
+    .eq('id', id)
+    .maybeSingle()
+
+  if (error) throw error
+  return data
+}

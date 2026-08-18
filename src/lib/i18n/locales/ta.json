@@ -25,6 +25,10 @@
     "emptyCta": "முதலில் ஒரு இடுகையை பகிரவும்.",
     "loadError": "ஃபீடை ஏற்ற முடியவில்லை."
   },
+  "postDetail": {
+    "loadError": "இந்த இடுகையை ஏற்ற முடியவில்லை.",
+    "notFound": "இந்த இடுகை கிடைக்கவில்லை."
+  },
   "postType": {
     "blood_request": "இரத்தம் தேவை",
     "death_announcement": "இறப்பு அறிவிப்பு",
@@ -64,6 +68,7 @@
     "genderPlaceholder": "விருப்பத்தேர்வு",
     "announcerRelationLabel": "அறிவிப்பாளர் உறவு",
     "announcerRelationPlaceholder": "எ.கா. மகன், மசூதி கமிட்டி",
+    "deathDatetimeLabel": "இறந்த தேதி & நேரம்",
     "janazahDatetimeLabel": "ஜனாஸா தேதி & நேரம்",
     "janazahLocationLabel": "ஜனாஸா நடைபெறும் இடம்",
     "janazahLocationPlaceholder": "ஜனாஸா நடைபெறும் இடம்",
@@ -71,6 +76,13 @@
     "burialLocationPlaceholder": "விருப்பத்தேர்வு, ஜனாஸா இடத்திலிருந்து வேறுபட்டால்",
     "posting": "இடுகையிடுகிறது…",
     "submit": "அறிவிப்பை இடுகையிடவும்"
+  },
+  "deathAnnouncementDetail": {
+    "janazahGuideLink": "ஜனாஸா தொழுவது எப்படி"
+  },
+  "islamicGuide": {
+    "pendingReviewBanner": "ஏதேனும் தவறாகத் தெரிந்தால் தயவுசெய்து எங்களிடம் தெரிவிக்கவும்.",
+    "notFound": "இந்த வழிகாட்டி கிடைக்கவில்லை."
   },
   "languageToggle": {
     "english": "EN",
