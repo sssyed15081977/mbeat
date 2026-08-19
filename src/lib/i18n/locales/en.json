@@ -46,6 +46,8 @@
   },
   "lifecycleStatus": {
     "deathAnnouncement": {
+      "awaiting_body": "Body Not Yet Available",
+      "body_available": "Available for Condolence Visits",
       "upcoming_janazah": "Upcoming Janazah",
       "janazah_in_progress": "Janazah in Progress",
       "completed": "Completed"
@@ -59,6 +61,7 @@
     "heading": "Post a death announcement",
     "titleLabel": "Title",
     "titlePlaceholder": "e.g. Death Announcement - Name",
+    "titleAutoFill": "Death Announcement - {{name}}",
     "descriptionLabel": "Description",
     "descriptionPlaceholder": "Optional",
     "deceasedNameLabel": "Deceased's name",
@@ -74,6 +77,7 @@
     "photoTypeError": "Please choose a JPG, PNG or WEBP image.",
     "photoSizeError": "Photo must be under 5MB.",
     "deathDatetimeLabel": "Date & time of death",
+    "bodyNotYetAvailableLabel": "Body not yet available for visiting (still being brought from elsewhere)",
     "bodyLocationLabel": "Body location",
     "bodyLocationPlaceholder": "e.g. Family home, Hospital name",
     "bodyLocationHelp": "Where visitors can go to console the family",
@@ -92,7 +96,9 @@
   "deathAnnouncementDetail": {
     "janazahGuideLink": "How to pray Janazah",
     "viewPhoto": "View photo",
-    "editLink": "Edit"
+    "editLink": "Edit",
+    "statusControlLabel": "Update status",
+    "statusUpdateError": "Couldn't update the status — try again."
   },
   "islamicGuide": {
     "pendingReviewBanner": "If anything looks off, please let us know.",

@@ -89,7 +89,7 @@ Naming mistakes are expensive here because a name isn't just a label — it prop
 | Funeral prayer | Janazah | `janazah_datetime`, `janazah_location`, post title pattern |
 | Who's posting on whose behalf | Announcer relation | `death_announcement.announcer_relation` |
 | Pull/Search tab (shows people/entities with live status: available/busy/closed) | Find Now | Bottom nav tab label, `pages/FindNowPage.jsx` (future), `features/findNow/` (future) |
-| Death announcement lifecycle stages | `upcoming_janazah` → `janazah_in_progress` → `completed` | `posts.lifecycle_status` (when `type = 'death_announcement'`), `features/deathAnnouncement/lifecycleStatus.js` |
+| Death announcement lifecycle stages | `awaiting_body` → `body_available` → `upcoming_janazah` → `janazah_in_progress` → `completed` | `posts.lifecycle_status` (when `type = 'death_announcement'`), `features/deathAnnouncement/lifecycleStatus.js` |
 | Static Islamic reference content (dawah-oriented — procedures, duas, hadith excerpts, linked from relevant posts) | Islamic Guide (generic pattern); first instance: "How to Pray Janazah" | `features/islamicContent/` (`ContentGuideDetail.jsx`, `guides/`), route `pages/IslamicGuidePage.jsx` (`/guide/:slug`) |
 | When the person died (distinct from the janazah/funeral time) | `death_datetime`, optional, date+time | `death_announcement.death_datetime` |
 | Photo storage for post types that have one (deceased's photo is the first user) | Shared bucket `post-photos`, paths `<uploader_user_id>/<file>` | Supabase Storage bucket, `death_announcement.photo_url` |

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { supabase } from '../lib/supabaseClient'
 import { fetchPostById } from '../features/feed/feedApi'
 import { BackButton } from '../components/ui/BackButton'
 import { Skeleton } from '../components/ui/Skeleton'
@@ -42,6 +43,28 @@ export default function PostDetailPage() {
       .finally(() => setLoading(false))
   }, [id])
 
+  // Optimistic: reflect the new status immediately, revert if the write fails.
+  const handleLifecycleStatusChange = useCallback(
+    async (newStatus) => {
+      let previousStatus
+      setPost((prev) => {
+        previousStatus = prev?.lifecycle_status
+        return prev ? { ...prev, lifecycle_status: newStatus } : prev
+      })
+
+      const { error: updateError } = await supabase
+        .from('posts')
+        .update({ lifecycle_status: newStatus })
+        .eq('id', id)
+
+      if (updateError) {
+        setPost((prev) => (prev ? { ...prev, lifecycle_status: previousStatus } : prev))
+        throw updateError
+      }
+    },
+    [id],
+  )
+
   return (
     <div className="min-h-screen p-4 max-w-sm mx-auto space-y-4">
       <BackButton to="/" />
@@ -74,7 +97,7 @@ export default function PostDetailPage() {
       )}
 
       {!loading && !error && post?.type === 'death_announcement' && (
-        <DeathAnnouncementDetail post={post} />
+        <DeathAnnouncementDetail post={post} onLifecycleStatusChange={handleLifecycleStatusChange} />
       )}
     </div>
   )

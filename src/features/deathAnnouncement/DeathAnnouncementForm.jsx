@@ -29,8 +29,23 @@ function fromDatetimeLocalValue(value) {
   return new Date(value).toISOString()
 }
 
+// body_location being blank does NOT mean the body is unavailable — it's
+// often just at home and the announcer didn't feel the need to name it, so
+// "not available yet" is only ever set from the explicit checkbox, never
+// inferred from an empty field.
+function inferInitialLifecycleStatus(form) {
+  if (form.body_not_yet_available) return 'awaiting_body'
+  if (!form.janazah_datetime) return 'body_available'
+  return 'upcoming_janazah'
+}
+
 function buildInitialForm(editingPost) {
-  if (!editingPost) return initialDeathAnnouncementForm
+  if (!editingPost) {
+    // Sensible default: most announcements are posted shortly after the
+    // death, so pre-fill "now" rather than making every announcer pick a
+    // date/time on a mobile keyboard for the common case.
+    return { ...initialDeathAnnouncementForm, death_datetime: toDatetimeLocalValue(new Date().toISOString()) }
+  }
 
   const details = editingPost.death_announcement || {}
   return {
@@ -54,6 +69,9 @@ export function DeathAnnouncementForm({ onSuccess, editingPost }) {
   const { t } = useTranslation()
   const isEditing = Boolean(editingPost)
   const [form, setForm] = useState(() => buildInitialForm(editingPost))
+  // Once editing, or once the announcer types their own title, stop
+  // overwriting it from deceased_name.
+  const [titleTouched, setTitleTouched] = useState(isEditing)
   const [existingPhotoUrl] = useState(editingPost?.death_announcement?.photo_url || null)
   const [photoPreviewUrl, setPhotoPreviewUrl] = useState(null)
   const [submitting, setSubmitting] = useState(false)
@@ -163,7 +181,7 @@ export function DeathAnnouncementForm({ onSuccess, editingPost }) {
         author_id: user.id,
         title: form.title,
         description: form.description || null,
-        lifecycle_status: 'upcoming_janazah',
+        lifecycle_status: inferInitialLifecycleStatus(form),
       })
       .select()
       .single()
@@ -186,7 +204,8 @@ export function DeathAnnouncementForm({ onSuccess, editingPost }) {
     }
 
     setPhotoFile(null)
-    setForm(initialDeathAnnouncementForm)
+    setTitleTouched(false)
+    setForm(buildInitialForm(null))
     onSuccess?.(post)
   }
 
@@ -206,7 +225,10 @@ export function DeathAnnouncementForm({ onSuccess, editingPost }) {
           placeholder={t('deathAnnouncementForm.titlePlaceholder')}
           required
           value={form.title}
-          onChange={(event) => updateField('title', event.target.value)}
+          onChange={(event) => {
+            setTitleTouched(true)
+            updateField('title', event.target.value)
+          }}
           className="w-full border rounded px-3 py-2"
         />
       </div>
@@ -233,7 +255,19 @@ export function DeathAnnouncementForm({ onSuccess, editingPost }) {
           placeholder={t('deathAnnouncementForm.deceasedNamePlaceholder')}
           required
           value={form.deceased_name}
-          onChange={(event) => updateField('deceased_name', event.target.value)}
+          onChange={(event) => {
+            const name = event.target.value
+            setForm((prev) => ({
+              ...prev,
+              deceased_name: name,
+              title:
+                !isEditing && !titleTouched
+                  ? name
+                    ? t('deathAnnouncementForm.titleAutoFill', { name })
+                    : ''
+                  : prev.title,
+            }))
+          }}
           className="w-full border rounded px-3 py-2"
         />
       </div>
@@ -315,6 +349,20 @@ export function DeathAnnouncementForm({ onSuccess, editingPost }) {
           className="w-full border rounded px-3 py-2"
         />
       </div>
+      {!isEditing && (
+        <div className="flex items-start gap-2">
+          <input
+            id="body_not_yet_available"
+            type="checkbox"
+            checked={form.body_not_yet_available}
+            onChange={(event) => updateField('body_not_yet_available', event.target.checked)}
+            className="mt-1"
+          />
+          <label htmlFor="body_not_yet_available" className="text-sm text-gray-700">
+            {t('deathAnnouncementForm.bodyNotYetAvailableLabel')}
+          </label>
+        </div>
+      )}
       <div className="space-y-1">
         <label htmlFor="body_location" className="text-sm font-medium text-gray-700">
           {t('deathAnnouncementForm.bodyLocationLabel')}
