@@ -1,7 +1,8 @@
 {
   "common": {
     "retry": "Try again",
-    "back": "Back"
+    "back": "Back",
+    "close": "Close"
   },
   "auth": {
     "tagline": "MPM Helpline — community info for Melapalayam, in one place.",
@@ -25,6 +26,10 @@
     "emptyCta": "Be the first to share something.",
     "loadError": "Couldn't load the feed."
   },
+  "postDetail": {
+    "loadError": "Couldn't load this post.",
+    "notFound": "This post isn't available."
+  },
   "postType": {
     "blood_request": "Blood Request",
     "death_announcement": "Death Announcement",
@@ -41,6 +46,8 @@
   },
   "lifecycleStatus": {
     "deathAnnouncement": {
+      "awaiting_body": "Body Not Yet Available",
+      "body_available": "Available for Condolence Visits",
       "upcoming_janazah": "Upcoming Janazah",
       "janazah_in_progress": "Janazah in Progress",
       "completed": "Completed"
@@ -54,6 +61,7 @@
     "heading": "Post a death announcement",
     "titleLabel": "Title",
     "titlePlaceholder": "e.g. Death Announcement - Name",
+    "titleAutoFill": "Death Announcement - {{name}}",
     "descriptionLabel": "Description",
     "descriptionPlaceholder": "Optional",
     "deceasedNameLabel": "Deceased's name",
@@ -64,13 +72,37 @@
     "genderPlaceholder": "Optional",
     "announcerRelationLabel": "Announcer relation",
     "announcerRelationPlaceholder": "e.g. Son, Mosque Committee",
+    "photoLabel": "Photo (optional)",
+    "photoHelp": "JPG, PNG or WEBP, up to 5MB",
+    "photoTypeError": "Please choose a JPG, PNG or WEBP image.",
+    "photoSizeError": "Photo must be under 5MB.",
+    "deathDatetimeLabel": "Date & time of death",
+    "bodyNotYetAvailableLabel": "Body not yet available for visiting (still being brought from elsewhere)",
+    "bodyLocationLabel": "Body location",
+    "bodyLocationPlaceholder": "e.g. Family home, Hospital name",
+    "bodyLocationHelp": "Where visitors can go to console the family",
     "janazahDatetimeLabel": "Janazah date & time",
-    "janazahLocationLabel": "Janazah location",
-    "janazahLocationPlaceholder": "Janazah location",
+    "janazahLocationLabel": "Prayer location",
+    "janazahLocationPlaceholder": "Prayer location",
     "burialLocationLabel": "Burial location",
-    "burialLocationPlaceholder": "Optional, if different from Janazah location",
+    "burialLocationPlaceholder": "Optional, if different from prayer location",
     "posting": "Posting…",
-    "submit": "Post announcement"
+    "submit": "Post announcement",
+    "editHeading": "Edit death announcement",
+    "savingChanges": "Saving changes…",
+    "saveChanges": "Save changes",
+    "notAuthorized": "You can only edit your own announcements."
+  },
+  "deathAnnouncementDetail": {
+    "janazahGuideLink": "How to pray Janazah",
+    "viewPhoto": "View photo",
+    "editLink": "Edit",
+    "statusControlLabel": "Update status",
+    "statusUpdateError": "Couldn't update the status — try again."
+  },
+  "islamicGuide": {
+    "pendingReviewBanner": "If anything looks off, please let us know.",
+    "notFound": "This guide isn't available."
   },
   "languageToggle": {
     "english": "EN",

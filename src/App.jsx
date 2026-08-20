@@ -5,6 +5,9 @@ import { ProfileCompletion } from './features/auth/ProfileCompletion'
 import LoginPage from './pages/LoginPage'
 import FeedPage from './pages/FeedPage'
 import NewDeathAnnouncementPage from './pages/NewDeathAnnouncementPage'
+import PostDetailPage from './pages/PostDetailPage'
+import EditDeathAnnouncementPage from './pages/EditDeathAnnouncementPage'
+import IslamicGuidePage from './pages/IslamicGuidePage'
 
 function App() {
   return (
@@ -26,6 +29,30 @@ function App() {
               element={
                 <ProfileCompletion>
                   <NewDeathAnnouncementPage />
+                </ProfileCompletion>
+              }
+            />
+            <Route
+              path="/post/:id"
+              element={
+                <ProfileCompletion>
+                  <PostDetailPage />
+                </ProfileCompletion>
+              }
+            />
+            <Route
+              path="/post/:id/edit"
+              element={
+                <ProfileCompletion>
+                  <EditDeathAnnouncementPage />
+                </ProfileCompletion>
+              }
+            />
+            <Route
+              path="/guide/:slug"
+              element={
+                <ProfileCompletion>
+                  <IslamicGuidePage />
                 </ProfileCompletion>
               }
             />
