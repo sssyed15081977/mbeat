@@ -18,9 +18,21 @@ function getThumbnailUrl(post) {
   return null
 }
 
+// lifecycle_status is a generic posts column, but its vocabulary and i18n
+// namespace are type-specific (see lifecycleStatus.deathAnnouncement.* in the
+// locale files) — same "add a case per type" pattern as getThumbnailUrl above,
+// deferred from a real dispatch mechanism until a second type needs one.
+function getLifecycleStatusLabel(post, t) {
+  if (post.type === 'death_announcement' && post.lifecycle_status) {
+    return t(`lifecycleStatus.deathAnnouncement.${post.lifecycle_status}`)
+  }
+  return null
+}
+
 export function PostCard({ post }) {
   const { t } = useTranslation()
   const thumbnailUrl = getThumbnailUrl(post)
+  const lifecycleStatusLabel = getLifecycleStatusLabel(post, t)
 
   return (
     <Link to={`/post/${post.id}`} className="block py-4 space-y-1 hover:bg-gray-50 active:bg-gray-100">
@@ -29,6 +41,7 @@ export function PostCard({ post }) {
         <span>{t(`moderationStatus.${post.moderation_status}`)}</span>
       </div>
       <h2 className="font-semibold">{post.title}</h2>
+      {lifecycleStatusLabel && <p className="text-sm text-brand font-medium">{lifecycleStatusLabel}</p>}
       {thumbnailUrl && <img src={thumbnailUrl} alt="" className="w-full h-auto rounded-lg" />}
       {post.description && <p className="text-sm text-gray-600">{post.description}</p>}
     </Link>
