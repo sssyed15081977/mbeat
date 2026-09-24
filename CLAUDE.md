@@ -94,6 +94,13 @@ Names propagate into DB tables/columns, UI text, routes, and variables all at on
 | Photo storage for post types that have one (deceased's photo is the first user) | Shared bucket `post-photos`, paths `<uploader_user_id>/<file>` | Supabase Storage bucket, `death_announcement.photo_url` |
 | Where the body/family can be visited for condolences (distinct from janazah_location, the prayer venue) | Body Location; label shown to users: "Body location" | `death_announcement.body_location` |
 | "Janazah location" display label reworded for clarity (schema/internal name unchanged — still the funeral-prayer venue) | Label: "Prayer location" | UI label only, i18n `deathAnnouncementForm.janazahLocationLabel`; DB column stays `janazah_location` |
+| Place of congregational prayer (chosen over "Mosque") | Masjid | `entities.category = 'masjid'` (future) |
+| Congregation start time at a masjid (chosen over the Arabic "Iqamah") | Jamaat time | `jamaat_time` (future) |
+| Feature/screen for per-masjid prayer schedules | Prayer Times | UI label (future) |
+| Volunteer who keeps a masjid's jamaat times current | Masjid volunteer | `volunteer_roles.role_type = 'masjid_volunteer'` (future) |
+| Call to prayer (chosen over "Azan" / "Baang") | Adhan | `adhan_time` (future); Tamil UI label still to be picked when built (e.g. பாங்கு) |
+| Minutes from adhan to jamaat at a masjid | Jamaat offset | `jamaat_offset_minutes` (future) |
+| Friday congregational prayer (chosen over "Jummah" / "Friday prayer") | Jumu'ah | `jumuah` (future) |
 
 Keep this table in sync with [mbeat-rebuild-context.md](mbeat-rebuild-context.md) as new terms get locked.
 

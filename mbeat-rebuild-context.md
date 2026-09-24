@@ -95,6 +95,13 @@ Naming mistakes are expensive here because a name isn't just a label — it prop
 | Photo storage for post types that have one (deceased's photo is the first user) | Shared bucket `post-photos`, paths `<uploader_user_id>/<file>` | Supabase Storage bucket, `death_announcement.photo_url` |
 | Where the body/family can be visited for condolences (distinct from janazah_location, the prayer venue) | Body Location; label shown to users: "Body location" | `death_announcement.body_location` |
 | "Janazah location" display label reworded for clarity (schema/internal name unchanged — still the funeral-prayer venue) | Label: "Prayer location" | UI label only, i18n `deathAnnouncementForm.janazahLocationLabel`; DB column stays `janazah_location` |
+| Place of congregational prayer (chosen over "Mosque") | Masjid | `entities.category = 'masjid'` (future) |
+| Congregation start time at a masjid (chosen over the Arabic "Iqamah") | Jamaat time | `jamaat_time` (future) |
+| Feature/screen for per-masjid prayer schedules | Prayer Times | UI label (future) |
+| Volunteer who keeps a masjid's jamaat times current | Masjid volunteer | `volunteer_roles.role_type = 'masjid_volunteer'` (future) |
+| Call to prayer (chosen over "Azan" / "Baang") | Adhan | `adhan_time` (future); Tamil UI label still to be picked when built (e.g. பாங்கு) |
+| Minutes from adhan to jamaat at a masjid | Jamaat offset | `jamaat_offset_minutes` (future) |
+| Friday congregational prayer (chosen over "Jummah" / "Friday prayer") | Jumu'ah | `jumuah` (future) |
 
 ## Working style / preferences (for Claude Code to follow)
 - Syed's background: ~10 years Google Apps Script, prior ASP.NET, Python as primary language, still learning React/modern web frameworks.
@@ -313,10 +320,26 @@ Considered switching to NoSQL given many post/profile/entity types are planned o
 - `feature/auth-google-login` was found still lying around (local + `origin`) despite being fully merged into `develop` months earlier (`git merge-base --is-ancestor` confirmed every commit on it is an ancestor of `develop`). Deleted, local + remote — it was leftover branch clutter, not in-progress work.
 - `develop` currently 30 commits ahead of `main`; `main` still sits at the original scaffold commit — no release cut yet. Still believed intentional (pre-launch), still not independently confirmed with Syed.
 
+## Prayer Times — design settled, not built yet
+Chosen as the next module to build, because it gives users (and Syed himself) a **daily** reason to open the app. Death announcements matter but aren't daily, and a volunteer project needs regular use and feedback to keep momentum. Generic prayer apps already show calculated start times, so mbeat's value is the **local, per-masjid jamaat times** that today only live on notice boards and in announcements after salah.
+
+- **Local facts (from Syed):** Melapalayam has ~50 masjids. Times shift with sunrise/sunset. Masjids don't follow any common calculation method: adhan times differ from each other and from astronomical times by several minutes (e.g. sunset 6:20, one masjid's adhan 6:23, another's 6:27). Almost every masjid sets jamaat as a fixed gap after adhan (e.g. "jamaat 10 min after adhan").
+- **Manual adhan times, no astronomical calculation (decided).** Calculated times can't be guaranteed to match a masjid, so volunteers enter each masjid's adhan times by hand, copying the notice board. Automatic sunrise/sunset-based rules were considered and rejected. The update history below keeps them possible later, using real data.
+- **Jamaat derived from adhan.** Each masjid sets a jamaat offset (`jamaat_offset_minutes`) per prayer, once. Jamaat time = adhan time + offset. A prayer can instead use a fixed jamaat time, for masjids that don't follow the offset pattern.
+- **Jumu'ah is in v1**, following the same pattern (adhan time + offset or fixed jamaat time).
+- **Fast volunteer updates:** one screen per masjid with its current adhan times already filled in, so the volunteer only edits what changed. A one-tap "board unchanged" action refreshes "last confirmed" without editing anything.
+- **Freshness is visible to users** ("Confirmed 2 days ago"), with a warning once times are older than about a week.
+- **Update history kept:** each update is a new row with its date, never an overwrite (same audit idea as `lifecycle_status_history`).
+- **Where it fits:** masjids are rows in `entities` (`category = 'masjid'`) in the **Find Now** directory; volunteers are `volunteer_roles.role_type = 'masjid_volunteer'`, linked to their masjid(s) through `entity_members`. Table/column names beyond the confirmed terms still go through the naming protocol at build time.
+- **Pilot:** Syed maintains 3 masjids himself (he is user #1 and maintainer #1). Grow by recruiting a volunteer who already prays daily at each additional masjid, ideally two per masjid, rather than listing all 50 with stale data.
+- **v2 ideas (not in v1):** user confirmations ("✓ time was right" / "⚠ time changed") that alert that masjid's volunteer; AI reading times from a photo of the notice board; linking a death announcement's "after Asr at X masjid" to that masjid's jamaat time.
+
 ## Immediate next step
-Both feature branches are closed out and deleted — `develop` is clean, nothing mid-flight. Two open decisions, not yet made:
-1. **Whether/when to promote to `main`** for the first time (`main` is 30 commits behind `develop`, pre-launch).
-2. **What to build next.** Candidates, none started:
+`develop` is clean, nothing mid-flight. **Prayer Times** is the next module (design above). Suggested order:
+1. **First promotion to `main` + deploy**, so Death Announcement becomes usable by a small group of real users (`main` is 30 commits behind `develop`, pre-launch).
+2. Start a fresh `feature/*` branch off `develop` for Prayer Times v1 (Syed's 3 masjids).
+
+Other candidates, not started (after Prayer Times):
    - **Find Now** (directory/search — `profiles`/`entities`/`entity_members`, its own nav tab) — the other half of the locked push/pull architecture split, currently just a design on paper.
    - **A second post type** (blood request is the most-referenced candidate throughout this doc, and death announcements have already proven out the `posts` + extension-table pattern end to end).
    - **Phone+OTP login** — deferred pending an SMS provider being set up in the Supabase dashboard (a billing step).
