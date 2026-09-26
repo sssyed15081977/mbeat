@@ -95,13 +95,18 @@ Naming mistakes are expensive here because a name isn't just a label — it prop
 | Photo storage for post types that have one (deceased's photo is the first user) | Shared bucket `post-photos`, paths `<uploader_user_id>/<file>` | Supabase Storage bucket, `death_announcement.photo_url` |
 | Where the body/family can be visited for condolences (distinct from janazah_location, the prayer venue) | Body Location; label shown to users: "Body location" | `death_announcement.body_location` |
 | "Janazah location" display label reworded for clarity (schema/internal name unchanged — still the funeral-prayer venue) | Label: "Prayer location" | UI label only, i18n `deathAnnouncementForm.janazahLocationLabel`; DB column stays `janazah_location` |
-| Place of congregational prayer (chosen over "Mosque") | Masjid | `entities.category = 'masjid'` (future) |
-| Congregation start time at a masjid (chosen over the Arabic "Iqamah") | Jamaat time | `jamaat_time` (future) |
-| Feature/screen for per-masjid prayer schedules | Prayer Times | UI label (future) |
-| Volunteer who keeps a masjid's jamaat times current | Masjid volunteer | `volunteer_roles.role_type = 'masjid_volunteer'` (future) |
-| Call to prayer (chosen over "Azan" / "Baang") | Adhan | `adhan_time` (future); Tamil UI label still to be picked when built (e.g. பாங்கு) |
-| Minutes from adhan to jamaat at a masjid | Jamaat offset | `jamaat_offset_minutes` (future) |
-| Friday congregational prayer (chosen over "Jummah" / "Friday prayer") | Jumu'ah | `jumuah` (future) |
+| Place of congregational prayer (chosen over "Mosque") | Masjid | `entities.category = 'masjid'`; 1:1 extension table `masjid` |
+| Congregation start time at a masjid (chosen over the Arabic "Iqamah") | Jamaat time | `masjid_prayer_times.jamaat_time` — the only prayer time stored and shown |
+| Feature/screen for per-masjid prayer schedules | Prayer Times | Bottom nav tab label, folder `features/prayerTimes/`; the app's landing page at route `/` (`/prayer-times` redirects there) |
+| Feed route (moved so Prayer Times can be the landing page, 2026-09-26) | `/feed` | Route; was `/` |
+| Volunteer who keeps a masjid's jamaat times current | Masjid volunteer | `entity_members.role = 'masjid_volunteer'` (per-masjid permission; the `volunteer_roles` table is deferred until blood donors) |
+| Call to prayer (chosen over "Azan" / "Baang") | Adhan | Term only — adhan times are **not stored or shown** (decided 2026-09-26: people hear the adhan; board adhan times can be off). `adhan_time` and `jamaat_offset_minutes` were dropped from the schema before first apply |
+| Friday congregational prayer (chosen over "Jummah" / "Friday prayer") | Jumu'ah | prayer value `jumuah` |
+| The five daily prayers + Jumu'ah as stored values (chosen `dhuhr` over `zuhr` / `luhar`) | `fajr`, `dhuhr`, `asr`, `maghrib`, `isha`, `jumuah` | `masjid_prayer_times.prayer` |
+| A masjid's current jamaat times, and their audit trail | `masjid_prayer_times`, `masjid_prayer_times_history` | Supabase tables |
+| When a masjid's times were last checked against its notice board, and by whom | `times_confirmed_at`, `times_confirmed_by` | `masjid` table |
+| A user's pinned masjids (generic, reusable for other entities later) | My masjids (UI label); table `saved_entities` | `saved_entities (user_id, entity_id)` |
+| Masjid detail / volunteer update screens | Routes `/masjid/:id`, `/masjid/:id/update` | `pages/` + `features/prayerTimes/` |
 
 ## Working style / preferences (for Claude Code to follow)
 - Syed's background: ~10 years Google Apps Script, prior ASP.NET, Python as primary language, still learning React/modern web frameworks.
@@ -324,10 +329,10 @@ Considered switching to NoSQL given many post/profile/entity types are planned o
 Chosen as the next module to build, because it gives users (and Syed himself) a **daily** reason to open the app. Death announcements matter but aren't daily, and a volunteer project needs regular use and feedback to keep momentum. Generic prayer apps already show calculated start times, so mbeat's value is the **local, per-masjid jamaat times** that today only live on notice boards and in announcements after salah.
 
 - **Local facts (from Syed):** Melapalayam has ~50 masjids. Times shift with sunrise/sunset. Masjids don't follow any common calculation method: adhan times differ from each other and from astronomical times by several minutes (e.g. sunset 6:20, one masjid's adhan 6:23, another's 6:27). Almost every masjid sets jamaat as a fixed gap after adhan (e.g. "jamaat 10 min after adhan").
-- **Manual adhan times, no astronomical calculation (decided).** Calculated times can't be guaranteed to match a masjid, so volunteers enter each masjid's adhan times by hand, copying the notice board. Automatic sunrise/sunset-based rules were considered and rejected. The update history below keeps them possible later, using real data.
-- **Jamaat derived from adhan.** Each masjid sets a jamaat offset (`jamaat_offset_minutes`) per prayer, once. Jamaat time = adhan time + offset. A prayer can instead use a fixed jamaat time, for masjids that don't follow the offset pattern.
-- **Jumu'ah is in v1**, following the same pattern (adhan time + offset or fixed jamaat time).
-- **Fast volunteer updates:** one screen per masjid with its current adhan times already filled in, so the volunteer only edits what changed. A one-tap "board unchanged" action refreshes "last confirmed" without editing anything.
+- **Manual times, no astronomical calculation (decided).** Calculated times can't be guaranteed to match a masjid, so volunteers enter each masjid's times by hand, copying the notice board. Automatic sunrise/sunset-based rules were considered and rejected. The update history below keeps them possible later, using real data.
+- **Jamaat times only, no adhan times (decided 2026-09-26, revising the earlier adhan + offset design).** Boards show both, but people already know the adhan by hearing it, and a board's adhan time can be a few minutes off. Jamaat is the one time only the masjid sets and the one residents act on, so each prayer stores a single `jamaat_time`, copied straight from the board. The earlier `adhan_time` + `jamaat_offset_minutes` model was dropped before the migration was ever applied. Full v1 requirements: [specs/prayer-times.md](specs/prayer-times.md).
+- **Jumu'ah is in v1**, same as the daily prayers (one jamaat time).
+- **Fast volunteer updates:** one screen per masjid with its current jamaat times already filled in, so the volunteer only edits what changed. A one-tap "board unchanged" action refreshes "last confirmed" without editing anything.
 - **Freshness is visible to users** ("Confirmed 2 days ago"), with a warning once times are older than about a week.
 - **Update history kept:** each update is a new row with its date, never an overwrite (same audit idea as `lifecycle_status_history`).
 - **Where it fits:** masjids are rows in `entities` (`category = 'masjid'`) in the **Find Now** directory; volunteers are `volunteer_roles.role_type = 'masjid_volunteer'`, linked to their masjid(s) through `entity_members`. Table/column names beyond the confirmed terms still go through the naming protocol at build time.

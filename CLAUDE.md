@@ -94,13 +94,18 @@ Names propagate into DB tables/columns, UI text, routes, and variables all at on
 | Photo storage for post types that have one (deceased's photo is the first user) | Shared bucket `post-photos`, paths `<uploader_user_id>/<file>` | Supabase Storage bucket, `death_announcement.photo_url` |
 | Where the body/family can be visited for condolences (distinct from janazah_location, the prayer venue) | Body Location; label shown to users: "Body location" | `death_announcement.body_location` |
 | "Janazah location" display label reworded for clarity (schema/internal name unchanged — still the funeral-prayer venue) | Label: "Prayer location" | UI label only, i18n `deathAnnouncementForm.janazahLocationLabel`; DB column stays `janazah_location` |
-| Place of congregational prayer (chosen over "Mosque") | Masjid | `entities.category = 'masjid'` (future) |
-| Congregation start time at a masjid (chosen over the Arabic "Iqamah") | Jamaat time | `jamaat_time` (future) |
-| Feature/screen for per-masjid prayer schedules | Prayer Times | UI label (future) |
-| Volunteer who keeps a masjid's jamaat times current | Masjid volunteer | `volunteer_roles.role_type = 'masjid_volunteer'` (future) |
-| Call to prayer (chosen over "Azan" / "Baang") | Adhan | `adhan_time` (future); Tamil UI label still to be picked when built (e.g. பாங்கு) |
-| Minutes from adhan to jamaat at a masjid | Jamaat offset | `jamaat_offset_minutes` (future) |
-| Friday congregational prayer (chosen over "Jummah" / "Friday prayer") | Jumu'ah | `jumuah` (future) |
+| Place of congregational prayer (chosen over "Mosque") | Masjid | `entities.category = 'masjid'`; 1:1 extension table `masjid` |
+| Congregation start time at a masjid (chosen over the Arabic "Iqamah") | Jamaat time | `masjid_prayer_times.jamaat_time` — the only prayer time stored and shown |
+| Feature/screen for per-masjid prayer schedules | Prayer Times | Bottom nav tab label, folder `features/prayerTimes/`; the app's landing page at route `/` (`/prayer-times` redirects there) |
+| Feed route (moved so Prayer Times can be the landing page, 2026-09-26) | `/feed` | Route; was `/` |
+| Volunteer who keeps a masjid's jamaat times current | Masjid volunteer | `entity_members.role = 'masjid_volunteer'` (per-masjid permission; the `volunteer_roles` table is deferred until blood donors) |
+| Call to prayer (chosen over "Azan" / "Baang") | Adhan | Term only — adhan times are **not stored or shown** (decided 2026-09-26: people hear the adhan; board adhan times can be off). `adhan_time` and `jamaat_offset_minutes` were dropped from the schema before first apply |
+| Friday congregational prayer (chosen over "Jummah" / "Friday prayer") | Jumu'ah | prayer value `jumuah` |
+| The five daily prayers + Jumu'ah as stored values (chosen `dhuhr` over `zuhr` / `luhar`) | `fajr`, `dhuhr`, `asr`, `maghrib`, `isha`, `jumuah` | `masjid_prayer_times.prayer` |
+| A masjid's current jamaat times, and their audit trail | `masjid_prayer_times`, `masjid_prayer_times_history` | Supabase tables |
+| When a masjid's times were last checked against its notice board, and by whom | `times_confirmed_at`, `times_confirmed_by` | `masjid` table |
+| A user's pinned masjids (generic, reusable for other entities later) | My masjids (UI label); table `saved_entities` | `saved_entities (user_id, entity_id)` |
+| Masjid detail / volunteer update screens | Routes `/masjid/:id`, `/masjid/:id/update` | `pages/` + `features/prayerTimes/` |
 
 Keep this table in sync with [mbeat-rebuild-context.md](mbeat-rebuild-context.md) as new terms get locked.
 
