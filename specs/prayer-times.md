@@ -166,7 +166,7 @@ All tables, triggers and RLS policies are in the migration linked above. `masjid
 Work top to bottom; each task is small enough for one sitting.
 
 - [x] T1 Review this spec; resolve the open questions in §7. *(Done except the Tamil label check.)*
-- [ ] T2 Commit the migration + naming-table updates; `supabase db push`.
+- [x] T2 Commit the migration + naming-table updates; `supabase db push`. *(Pushed by Syed 2026-09-26.)*
 - [ ] T3 Seed the pilot data from the dashboard: 3 masjids (entities + masjid rows), their jamaat times, and Syed as `masjid_volunteer`.
 - [ ] T4 `prayerTimesApi.js` + pure helpers (next jamaat in Asia/Kolkata, freshness label).
 - [ ] T5 Routing + bottom nav: guest-accessible Prayer Times and masjid routes, the landing route rename (§7 decision 6), the Find Now "Coming soon" tab, and returning to the same page after sign-in.

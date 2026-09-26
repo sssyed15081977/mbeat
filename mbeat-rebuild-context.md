@@ -340,9 +340,13 @@ Chosen as the next module to build, because it gives users (and Syed himself) a 
 - **v2 ideas (not in v1):** user confirmations ("✓ time was right" / "⚠ time changed") that alert that masjid's volunteer; AI reading times from a photo of the notice board; linking a death announcement's "after Asr at X masjid" to that masjid's jamaat time.
 
 ## Immediate next step
-`develop` is clean, nothing mid-flight. **Prayer Times** is the next module (design above). Suggested order:
-1. **First promotion to `main` + deploy**, so Death Announcement becomes usable by a small group of real users (`main` is 30 commits behind `develop`, pre-launch).
-2. Start a fresh `feature/*` branch off `develop` for Prayer Times v1 (Syed's 3 masjids).
+**Prayer Times v1 is in progress on `feature/prayer-times`.** Work from the task checklist in [specs/prayer-times.md](specs/prayer-times.md) §8, the first per-feature spec (spec-driven: acceptance criteria are the definition of done). As of 2026-09-26:
+- Done: T1 (spec reviewed, decisions recorded in §7) and T2 (migration committed and applied to Supabase by Syed).
+- Next: **T3**, seeding the 3 pilot masjids, their jamaat times and Syed as `masjid_volunteer` from the dashboard. Then **T4**, `prayerTimesApi.js` + helpers.
+- Pending: Syed's check of the draft Tamil labels (spec §4.4), needed before T9.
+- Not yet decided: whether to add a CLAUDE.md rule making a spec mandatory before any feature code.
+
+Still outstanding from before: the first promotion of `develop` to `main` + deploy (`main` is still only the scaffold commit).
 
 Other candidates, not started (after Prayer Times):
    - **Find Now** (directory/search — `profiles`/`entities`/`entity_members`, its own nav tab) — the other half of the locked push/pull architecture split, currently just a design on paper.
@@ -351,7 +355,7 @@ Other candidates, not started (after Prayer Times):
    - **Reputation system** (`reactions`, flags/reports, trust scoring) — referenced throughout as the eventual backbone for auto-publish/verified-announcer status, not started.
 
 ## Notes for whoever picks this up next
-- `develop` is the active branch, clean, no open feature branch right now — next module work should start a fresh `feature/*` branch off `develop`, per the branch-scope discipline rule. Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` is well behind `develop` (only the original scaffold commit) — this is believed intentional (pre-launch, nothing promoted yet), not an oversight, but wasn't independently confirmed with Syed.
+- The open feature branch is `feature/prayer-times` (Prayer Times v1 only, per the branch-scope discipline rule). Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` is well behind `develop` (only the original scaffold commit) — this is believed intentional (pre-launch, nothing promoted yet), not an oversight, but wasn't independently confirmed with Syed.
 - A fresh machine/clone needs `npx supabase login` + `npx supabase link --project-ref slalnatjabrcnjxngqoo` before any `supabase db push`/`migration list` command works, and `gh auth login --web` before `gh pr create` works — neither credential persists in the repo (both are gitignored/local-machine state).
 - Before trusting this doc's "already done" claims, spot-check the actual repo state (folders can exist but be empty, files can exist but be wrong — e.g. we once found `VITE_SUPABASE_URL` had `/rest/v1/` wrongly appended) rather than assuming the doc is authoritative. This doc itself went stale once already (progress log sat several commits behind actual repo state, including an inconsistency where the lifecycle-status naming table had already been updated to 5 stages but the prose above it still described the old 3) — re-verify against `git log`/actual files each session rather than trusting the log at face value.
 - Syed prefers step-by-step confirmation before executing, narrated plans, and one file at a time when debugging — see "Working style / preferences" above.
