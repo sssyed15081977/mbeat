@@ -345,7 +345,8 @@ Chosen as the next module to build, because it gives users (and Syed himself) a 
 **Prayer Times v1 is in progress on `feature/prayer-times`.** Work from the task checklist in [specs/prayer-times.md](specs/prayer-times.md) §8, the first per-feature spec (spec-driven: acceptance criteria are the definition of done). As of 2026-09-26:
 - Done: T1 (spec reviewed, decisions recorded in §7) and T2 (migration committed and applied to Supabase by Syed).
 - 2026-09-27: dashboard seeding was replaced by an in-app **Add masjid** screen (`/masjid/new`, spec §4.5, §7 decisions 7–10). Any signed-in user can add a masjid; it starts `pending`, the creator becomes its `masjid_volunteer`, and Syed publishes it from the dashboard. This reverses the first migration's "no client-side path to create a masjid" stance, so it needs a new migration.
-- Next: **T3**, a migration for the all-or-nothing "add masjid" database function (`create_masjid`, name confirmed). Then **T4**, the Add masjid page, then **T5**, adding the 3 pilot masjids through it.
+- Done 2026-09-27: **T3**, migration `20260927120000_add_create_masjid_function.sql` (all-or-nothing `create_masjid` function; requires sign-in + a profile row), applied to Supabase by Syed.
+- Next: **T4**, the Add masjid page, then **T5**, adding the 3 pilot masjids through it.
 - Pending: Syed's check of the draft Tamil labels (spec §4.4), needed before T11.
 - Not yet decided: whether to add a CLAUDE.md rule making a spec mandatory before any feature code.
 

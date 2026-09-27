@@ -196,7 +196,7 @@ Work top to bottom; each task is small enough for one sitting.
 
 - [x] T1 Review this spec; resolve the open questions in §7. *(Done except the Tamil label check.)*
 - [x] T2 Commit the migration + naming-table updates; `supabase db push`. *(Pushed by Syed 2026-09-26.)*
-- [ ] T3 Migration for the "add masjid" database function (§5); `supabase db push`.
+- [x] T3 Migration for the "add masjid" database function (§5); `supabase db push`. *(Pushed by Syed 2026-09-27.)*
 - [ ] T4 Add masjid page (4.5) at `/masjid/new`: the shared jamaat-time inputs (AC30) and `createMasjid()` in a new `features/prayerTimes/prayerTimesApi.js`. Reached by typing the URL until T8 adds the button.
 - [ ] T5 Add the 3 pilot masjids through that page, then publish them from the dashboard. *(Replaces the old dashboard-seeding task.)*
 - [ ] T6 Rest of `prayerTimesApi.js` + pure helpers (next jamaat in Asia/Kolkata, freshness label).
