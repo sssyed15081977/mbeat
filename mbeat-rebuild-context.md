@@ -95,10 +95,11 @@ Naming mistakes are expensive here because a name isn't just a label — it prop
 | Photo storage for post types that have one (deceased's photo is the first user) | Shared bucket `post-photos`, paths `<uploader_user_id>/<file>` | Supabase Storage bucket, `death_announcement.photo_url` |
 | Where the body/family can be visited for condolences (distinct from janazah_location, the prayer venue) | Body Location; label shown to users: "Body location" | `death_announcement.body_location` |
 | "Janazah location" display label reworded for clarity (schema/internal name unchanged — still the funeral-prayer venue) | Label: "Prayer location" | UI label only, i18n `deathAnnouncementForm.janazahLocationLabel`; DB column stays `janazah_location` |
-| Place of congregational prayer (chosen over "Mosque") | Masjid | `entities.category = 'masjid'`; 1:1 extension table `masjid` |
+| Place of congregational prayer (chosen over "Mosque") | Masjid; Tamil UI text is always மஸ்ஜித், never பள்ளிவாசல் (2026-09-27) | `entities.category = 'masjid'`; 1:1 extension table `masjid`; `ta.json` |
 | Congregation start time at a masjid (chosen over the Arabic "Iqamah") | Jamaat time | `masjid_prayer_times.jamaat_time` — the only prayer time stored and shown |
 | Feature/screen for per-masjid prayer schedules | Prayer Times | Bottom nav tab label, folder `features/prayerTimes/`; the app's landing page at route `/` (`/prayer-times` redirects there) |
 | Feed route (moved so Prayer Times can be the landing page, 2026-09-26) | `/feed` | Route; was `/` |
+| Tamil word for "post" / the Feed (chosen over இடுகை and ஃபீட், 2026-09-27) | பதிவு (plural பதிவுகள் = Feed tab; verb பதிவிடு) | `ta.json` only; English keys unchanged |
 | Volunteer who keeps a masjid's jamaat times current | Masjid volunteer | `entity_members.role = 'masjid_volunteer'` (per-masjid permission; the `volunteer_roles` table is deferred until blood donors) |
 | Call to prayer (chosen over "Azan" / "Baang") | Adhan | Term only — adhan times are **not stored or shown** (decided 2026-09-26: people hear the adhan; board adhan times can be off). `adhan_time` and `jamaat_offset_minutes` were dropped from the schema before first apply |
 | Friday congregational prayer (chosen over "Jummah" / "Friday prayer") | Jumu'ah | prayer value `jumuah` |
@@ -107,6 +108,7 @@ Naming mistakes are expensive here because a name isn't just a label — it prop
 | When a masjid's times were last checked against its notice board, and by whom | `times_confirmed_at`, `times_confirmed_by` | `masjid` table |
 | A user's pinned masjids (generic, reusable for other entities later) | My masjids (UI label); table `saved_entities` | `saved_entities (user_id, entity_id)` |
 | Masjid detail / volunteer update screens | Routes `/masjid/:id`, `/masjid/:id/update` | `pages/` + `features/prayerTimes/` |
+| Screen where any signed-in user adds a masjid (it starts `pending`; they become its volunteer) | Add masjid (UI label); route `/masjid/new` | `pages/NewMasjidPage.jsx`; database function `create_masjid` |
 
 ## Working style / preferences (for Claude Code to follow)
 - Syed's background: ~10 years Google Apps Script, prior ASP.NET, Python as primary language, still learning React/modern web frameworks.
@@ -342,8 +344,9 @@ Chosen as the next module to build, because it gives users (and Syed himself) a 
 ## Immediate next step
 **Prayer Times v1 is in progress on `feature/prayer-times`.** Work from the task checklist in [specs/prayer-times.md](specs/prayer-times.md) §8, the first per-feature spec (spec-driven: acceptance criteria are the definition of done). As of 2026-09-26:
 - Done: T1 (spec reviewed, decisions recorded in §7) and T2 (migration committed and applied to Supabase by Syed).
-- Next: **T3**, seeding the 3 pilot masjids, their jamaat times and Syed as `masjid_volunteer` from the dashboard. Then **T4**, `prayerTimesApi.js` + helpers.
-- Pending: Syed's check of the draft Tamil labels (spec §4.4), needed before T9.
+- 2026-09-27: dashboard seeding was replaced by an in-app **Add masjid** screen (`/masjid/new`, spec §4.5, §7 decisions 7–10). Any signed-in user can add a masjid; it starts `pending`, the creator becomes its `masjid_volunteer`, and Syed publishes it from the dashboard. This reverses the first migration's "no client-side path to create a masjid" stance, so it needs a new migration.
+- Next: **T3**, a migration for the all-or-nothing "add masjid" database function (`create_masjid`, name confirmed). Then **T4**, the Add masjid page, then **T5**, adding the 3 pilot masjids through it.
+- Pending: Syed's check of the draft Tamil labels (spec §4.4), needed before T11.
 - Not yet decided: whether to add a CLAUDE.md rule making a spec mandatory before any feature code.
 
 Still outstanding from before: the first promotion of `develop` to `main` + deploy (`main` is still only the scaffold commit).

@@ -10,7 +10,7 @@
   },
   "profileCompletion": {
     "title": "உங்கள் சுயவிவரத்தை முடிக்கவும்",
-    "subtitle": "mbeat-இல் இடுகை இட உண்மையான பெயர் அவசியம் — இது சமூகப் பொறுப்புணர்வைப் பேணுகிறது.",
+    "subtitle": "mbeat-இல் பதிவிட உண்மையான பெயர் அவசியம் — இது சமூகப் பொறுப்புணர்வைப் பேணுகிறது.",
     "fullNameLabel": "முழுப் பெயர்",
     "fullNamePlaceholder": "முழுப் பெயர்",
     "phoneLabel": "தொலைபேசி எண்",
@@ -22,13 +22,13 @@
   },
   "feed": {
     "newPost": "+ புதியது",
-    "empty": "இதுவரை இடுகைகள் இல்லை.",
-    "emptyCta": "முதலில் ஒரு இடுகையை பகிரவும்.",
-    "loadError": "ஃபீடை ஏற்ற முடியவில்லை."
+    "empty": "இதுவரை பதிவுகள் இல்லை.",
+    "emptyCta": "முதலில் ஒரு பதிவைப் பகிரவும்.",
+    "loadError": "பதிவுகளை ஏற்ற முடியவில்லை."
   },
   "postDetail": {
-    "loadError": "இந்த இடுகையை ஏற்ற முடியவில்லை.",
-    "notFound": "இந்த இடுகை கிடைக்கவில்லை."
+    "loadError": "இந்தப் பதிவை ஏற்ற முடியவில்லை.",
+    "notFound": "இந்தப் பதிவு கிடைக்கவில்லை."
   },
   "postType": {
     "blood_request": "இரத்தம் தேவை",
@@ -58,7 +58,7 @@
     "female": "பெண்"
   },
   "deathAnnouncementForm": {
-    "heading": "இறப்பு அறிவிப்பை இடுகையிடவும்",
+    "heading": "இறப்பு அறிவிப்பைப் பதிவிடவும்",
     "titleLabel": "தலைப்பு",
     "titlePlaceholder": "எ.கா. இறப்பு அறிவிப்பு - பெயர்",
     "titleAutoFill": "இறப்பு அறிவிப்பு - {{name}}",
@@ -71,7 +71,7 @@
     "genderLabel": "பாலினம்",
     "genderPlaceholder": "விருப்பத்தேர்வு",
     "announcerRelationLabel": "அறிவிப்பாளர் உறவு",
-    "announcerRelationPlaceholder": "எ.கா. மகன், மசூதி கமிட்டி",
+    "announcerRelationPlaceholder": "எ.கா. மகன், மஸ்ஜித் கமிட்டி",
     "photoLabel": "புகைப்படம் (விருப்பத்தேர்வு)",
     "photoHelp": "JPG, PNG அல்லது WEBP, 5MB வரை",
     "photoTypeError": "தயவுசெய்து JPG, PNG அல்லது WEBP படத்தைத் தேர்ந்தெடுக்கவும்.",
@@ -86,8 +86,8 @@
     "janazahLocationPlaceholder": "தொழுகை நடைபெறும் இடம்",
     "burialLocationLabel": "அடக்கம் செய்யும் இடம்",
     "burialLocationPlaceholder": "விருப்பத்தேர்வு, தொழுகை இடத்திலிருந்து வேறுபட்டால்",
-    "posting": "இடுகையிடுகிறது…",
-    "submit": "அறிவிப்பை இடுகையிடவும்",
+    "posting": "பதிவிடுகிறது…",
+    "submit": "அறிவிப்பைப் பதிவிடவும்",
     "editHeading": "இறப்பு அறிவிப்பைத் திருத்தவும்",
     "savingChanges": "மாற்றங்களைச் சேமிக்கிறது…",
     "saveChanges": "மாற்றங்களைச் சேமிக்கவும்",
