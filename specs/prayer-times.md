@@ -207,7 +207,7 @@ Work top to bottom; each task is small enough for one sitting.
 - [x] T4 Add masjid page (4.5) at `/masjid/new`: the shared jamaat-time inputs (AC30) and `createMasjid()` in a new `features/prayerTimes/prayerTimesApi.js`. Reached by typing the URL until T8 adds the button. *(Tested by Syed 2026-09-28.)*
 - [ ] T5 Add the 3 pilot masjids through that page, then publish them from the dashboard. *(Replaces the old dashboard-seeding task.)*
 - [x] T6 Rest of `prayerTimesApi.js` + pure helpers (next jamaat in Asia/Kolkata, freshness label).
-- [ ] T7 Routing + bottom nav: guest-accessible Prayer Times and masjid routes, the landing route rename (§7 decision 6), the Find Now "Coming soon" tab, and returning to the same page after sign-in.
+- [x] T7 Routing + bottom nav: guest-accessible Prayer Times and masjid routes, the landing route rename (§7 decision 6), the Find Now "Coming soon" tab, and returning to the same page after sign-in.
 - [ ] T8 Prayer Times tab (4.1), incl. optimistic pinning and the "Add masjid" button.
 - [ ] T9 Masjid detail page (4.2).
 - [ ] T10 Volunteer update page (4.3), reusing the jamaat-time inputs from T4.

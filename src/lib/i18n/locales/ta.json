@@ -126,6 +126,17 @@
     "submitted": "நன்றி — சரிபார்த்த பிறகு இந்த மஸ்ஜித் காட்டப்படும்.",
     "done": "முடிந்தது"
   },
+  "prayerTimes": {
+    "heading": "தொழுகை நேரங்கள்"
+  },
+  "nav": {
+    "label": "முதன்மை",
+    "prayerTimes": "தொழுகை நேரங்கள்",
+    "feed": "பதிவுகள்",
+    "findNow": "தேடல்",
+    "comingSoon": "விரைவில்",
+    "findNowComingSoon": "தேடல் விரைவில் வருகிறது."
+  },
   "languageToggle": {
     "english": "EN",
     "tamil": "TA"

@@ -126,6 +126,17 @@
     "submitted": "Thanks — this masjid will appear once it's reviewed.",
     "done": "Done"
   },
+  "prayerTimes": {
+    "heading": "Prayer Times"
+  },
+  "nav": {
+    "label": "Main",
+    "prayerTimes": "Prayer Times",
+    "feed": "Feed",
+    "findNow": "Find Now",
+    "comingSoon": "Coming soon",
+    "findNowComingSoon": "Find Now is coming soon."
+  },
   "languageToggle": {
     "english": "EN",
     "tamil": "TA"

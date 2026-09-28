@@ -1,11 +1,22 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabaseClient'
 import i18n from '../../lib/i18n'
 import { AuthContext } from './AuthContextObject'
+import { takeReturnTo } from './returnTo'
 
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
+
+  // Back from Google sign-in: go to the page the user was on (AC25). The
+  // path is used once, so later sessions aren't redirected again.
+  useEffect(() => {
+    if (!session) return
+    const returnTo = takeReturnTo()
+    if (returnTo) navigate(returnTo, { replace: true })
+  }, [session, navigate])
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {

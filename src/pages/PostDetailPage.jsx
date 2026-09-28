@@ -67,7 +67,7 @@ export default function PostDetailPage() {
 
   return (
     <div className="min-h-screen p-4 max-w-sm mx-auto space-y-4">
-      <BackButton to="/" />
+      <BackButton to="/feed" />
 
       {loading && (
         <div className="space-y-2">
