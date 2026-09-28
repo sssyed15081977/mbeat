@@ -71,7 +71,7 @@
     "genderLabel": "Gender",
     "genderPlaceholder": "Optional",
     "announcerRelationLabel": "Announcer relation",
-    "announcerRelationPlaceholder": "e.g. Son, Mosque Committee",
+    "announcerRelationPlaceholder": "e.g. Son, Masjid Committee",
     "photoLabel": "Photo (optional)",
     "photoHelp": "JPG, PNG or WEBP, up to 5MB",
     "photoTypeError": "Please choose a JPG, PNG or WEBP image.",
@@ -103,6 +103,28 @@
   "islamicGuide": {
     "pendingReviewBanner": "If anything looks off, please let us know.",
     "notFound": "This guide isn't available."
+  },
+  "prayer": {
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha",
+    "jumuah": "Jumu'ah"
+  },
+  "jamaatTimeFields": {
+    "legend": "Jamaat times"
+  },
+  "addMasjid": {
+    "heading": "Add masjid",
+    "nameLabel": "Masjid name",
+    "addressLabel": "Address",
+    "addressPlaceholder": "Optional",
+    "submit": "Add masjid",
+    "submitting": "Adding…",
+    "saveError": "Couldn't save — try again.",
+    "submitted": "Thanks — this masjid will appear once it's reviewed.",
+    "done": "Done"
   },
   "languageToggle": {
     "english": "EN",

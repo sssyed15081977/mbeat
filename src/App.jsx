@@ -8,6 +8,7 @@ import NewDeathAnnouncementPage from './pages/NewDeathAnnouncementPage'
 import PostDetailPage from './pages/PostDetailPage'
 import EditDeathAnnouncementPage from './pages/EditDeathAnnouncementPage'
 import IslamicGuidePage from './pages/IslamicGuidePage'
+import NewMasjidPage from './pages/NewMasjidPage'
 
 function App() {
   return (
@@ -53,6 +54,14 @@ function App() {
               element={
                 <ProfileCompletion>
                   <IslamicGuidePage />
+                </ProfileCompletion>
+              }
+            />
+            <Route
+              path="/masjid/new"
+              element={
+                <ProfileCompletion>
+                  <NewMasjidPage />
                 </ProfileCompletion>
               }
             />

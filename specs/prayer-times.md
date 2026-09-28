@@ -131,12 +131,15 @@ The spellings follow what the app already uses for Islamic terms (ஜனாஸ�
 | Add masjid | மஸ்ஜிதைச் சேர்க்கவும் | |
 | Masjid name | மஸ்ஜித் பெயர் | |
 | Address | முகவரி | |
+| Jamaat times (form heading) | ஜமாஅத் நேரங்கள் | |
+| Adding… | சேர்க்கிறது… | |
+| Done | முடிந்தது | |
 | Thanks — this masjid will appear once it's reviewed | நன்றி — சரிபார்த்த பிறகு இந்த மஸ்ஜித் காட்டப்படும் | |
 
 ### 4.5 Add masjid — `/masjid/new` (`pages/NewMasjidPage.jsx`)
 - **Content:** a `BackButton` (to `/`), a name input, an address input, then the same jamaat-time inputs as 4.3, all empty.
 - **Primary action:** **Add masjid**, disabled until a name is entered.
-- **After saving:** the "will appear once it's reviewed" message (AC29), then back to `/`.
+- **After saving:** the form is replaced by the "will appear once it's reviewed" message (AC29) and a **Done** button that goes to `/`. (Decided 2026-09-27: shown in place rather than handed to the next page, so it works before the Prayer Times tab exists.)
 - **Save error:** see AC31.
 
 ## 5. Data
@@ -197,7 +200,7 @@ Work top to bottom; each task is small enough for one sitting.
 - [x] T1 Review this spec; resolve the open questions in §7. *(Done except the Tamil label check.)*
 - [x] T2 Commit the migration + naming-table updates; `supabase db push`. *(Pushed by Syed 2026-09-26.)*
 - [x] T3 Migration for the "add masjid" database function (§5); `supabase db push`. *(Pushed by Syed 2026-09-27.)*
-- [ ] T4 Add masjid page (4.5) at `/masjid/new`: the shared jamaat-time inputs (AC30) and `createMasjid()` in a new `features/prayerTimes/prayerTimesApi.js`. Reached by typing the URL until T8 adds the button.
+- [x] T4 Add masjid page (4.5) at `/masjid/new`: the shared jamaat-time inputs (AC30) and `createMasjid()` in a new `features/prayerTimes/prayerTimesApi.js`. Reached by typing the URL until T8 adds the button. *(Tested by Syed 2026-09-28.)*
 - [ ] T5 Add the 3 pilot masjids through that page, then publish them from the dashboard. *(Replaces the old dashboard-seeding task.)*
 - [ ] T6 Rest of `prayerTimesApi.js` + pure helpers (next jamaat in Asia/Kolkata, freshness label).
 - [ ] T7 Routing + bottom nav: guest-accessible Prayer Times and masjid routes, the landing route rename (§7 decision 6), the Find Now "Coming soon" tab, and returning to the same page after sign-in.
