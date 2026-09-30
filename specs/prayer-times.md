@@ -1,6 +1,6 @@
 # Spec: Prayer Times v1
 
-**Status:** Draft — awaiting Syed's review
+**Status:** v1 complete — all acceptance criteria passed (2026-09-30)
 **Branch:** `feature/prayer-times`
 **Design rationale:** [mbeat-rebuild-context.md → "Prayer Times — design settled"](../mbeat-rebuild-context.md)
 **Schema:** [20260925023357_create_prayer_times_schema.sql](../supabase/migrations/20260925023357_create_prayer_times_schema.sql)
@@ -35,45 +35,45 @@ Give Melapalayam residents a **daily** reason to open mbeat: the current **jamaa
 v1 is done when every box is ticked. Each criterion should be checkable by hand at a **mobile width (360px)** in **both English and Tamil**.
 
 ### Viewing (residents)
-- [ ] **AC1** The Prayer Times tab lists "My masjids" first, then the other published masjids.
-- [ ] **AC2** Each masjid in the list shows its name, the **next jamaat** (prayer name + time) and its freshness.
-- [ ] **AC3** "Next jamaat" is worked out in **Asia/Kolkata** time, not the device's time zone. After Isha jamaat has passed, it shows tomorrow's Fajr.
-- [ ] **AC4** On Fridays, Jumu'ah replaces Dhuhr as the next and highlighted prayer. On other days Jumu'ah is not shown in "next jamaat".
-- [ ] **AC5** The masjid detail page lists the jamaat time for every prayer (Fajr → Isha, then Jumu'ah). The next jamaat is highlighted. No adhan times appear anywhere.
-- [ ] **AC6** Freshness reads "Confirmed today", "Confirmed yesterday" or "Confirmed N days ago", from `masjid.times_confirmed_at`.
-- [ ] **AC7** Once times are **more than 7 days** old, freshness shows as a warning ("Times may be out of date"). When `times_confirmed_at` is null, it reads "Not yet confirmed".
-- [ ] **AC8** A resident can pin or unpin a masjid from the list and from the detail page. The change shows **optimistically** (no spinner) and rolls back if the write fails.
-- [ ] **AC9** A masjid with no row for a prayer simply omits that prayer, whether it's Jumu'ah or a daily prayer. It is never shown as an error.
+- [x] **AC1** The Prayer Times tab lists "My masjids" first, then the other published masjids.
+- [x] **AC2** Each masjid in the list shows its name, the **next jamaat** (prayer name + time) and its freshness.
+- [x] **AC3** "Next jamaat" is worked out in **Asia/Kolkata** time, not the device's time zone. After Isha jamaat has passed, it shows tomorrow's Fajr.
+- [x] **AC4** On Fridays, Jumu'ah replaces Dhuhr as the next and highlighted prayer. On other days Jumu'ah is not shown in "next jamaat".
+- [x] **AC5** The masjid detail page lists the jamaat time for every prayer (Fajr → Isha, then Jumu'ah). The next jamaat is highlighted. No adhan times appear anywhere.
+- [x] **AC6** Freshness reads "Confirmed today", "Confirmed yesterday" or "Confirmed N days ago", from `masjid.times_confirmed_at`.
+- [x] **AC7** Once times are **more than 7 days** old, freshness shows as a warning ("Times may be out of date"). When `times_confirmed_at` is null, it reads "Not yet confirmed".
+- [x] **AC8** A resident can pin or unpin a masjid from the list and from the detail page. The change shows **optimistically** (no spinner) and rolls back if the write fails.
+- [x] **AC9** A masjid with no row for a prayer simply omits that prayer, whether it's Jumu'ah or a daily prayer. It is never shown as an error.
 
 ### Updating (masjid volunteers)
-- [ ] **AC10** The "Update times" button appears on the detail page **only** for that masjid's volunteers (checked via `entity_members`).
-- [ ] **AC11** The update screen opens **pre-filled** with the current jamaat time for each prayer.
-- [ ] **AC12** Saving writes **only the prayers that changed**. Unchanged prayers are not written, so they don't create history rows.
-- [ ] **AC13** Saving any change updates the freshness to "Confirmed today". The trigger does this; the client never sends `times_confirmed_at`.
-- [ ] **AC14** "Board unchanged" is one tap, needs no confirmation dialog, and updates the freshness to "Confirmed today".
-- [ ] **AC15** Every saved change appears as a new row in `masjid_prayer_times_history` (check this in the dashboard).
-- [ ] **AC16** A non-volunteer who opens `/masjid/:id/update` directly sees a plain "You can't update this masjid's times" message and can't save. RLS enforces this too.
+- [x] **AC10** The "Update times" button appears on the detail page **only** for that masjid's volunteers (checked via `entity_members`).
+- [x] **AC11** The update screen opens **pre-filled** with the current jamaat time for each prayer.
+- [x] **AC12** Saving writes **only the prayers that changed**. Unchanged prayers are not written, so they don't create history rows.
+- [x] **AC13** Saving any change updates the freshness to "Confirmed today". The trigger does this; the client never sends `times_confirmed_at`.
+- [x] **AC14** "Board unchanged" is one tap, needs no confirmation dialog, and updates the freshness to "Confirmed today".
+- [x] **AC15** Every saved change appears as a new row in `masjid_prayer_times_history` (check this in the dashboard).
+- [x] **AC16** A non-volunteer who opens `/masjid/:id/update` directly sees a plain "You can't update this masjid's times" message and can't save. RLS enforces this too.
 
 ### Adding a masjid (signed-in users)
-- [ ] **AC26** The Prayer Times tab has an "Add masjid" button that opens `/masjid/new`. For guests it asks them to sign in instead (same pattern as AC24). The page is gated like `/post/new`: sign-in plus a completed profile.
-- [ ] **AC27** The form asks for the masjid's name (required), its address (optional) and a jamaat time for each prayer (Fajr → Isha, then Jumu'ah). Each time is optional; a prayer left blank simply gets no row (same as AC9).
-- [ ] **AC28** Saving creates, **in one step** (all or nothing): the `entities` row (`category = 'masjid'`, `moderation_status = 'pending'`), its `masjid` row, a `masjid_prayer_times` row per filled-in prayer, and an `entity_members` row making the creator its `masjid_volunteer`. The client can't choose the moderation status or make anyone else the volunteer.
-- [ ] **AC29** After saving, the user sees "Thanks — this masjid will appear once it's reviewed" and returns to the Prayer Times tab. The new masjid doesn't appear in anyone's list until Syed sets it to `published` from the dashboard.
-- [ ] **AC30** The jamaat-time inputs are the same component on this form and on the volunteer update screen (4.3), not two copies.
-- [ ] **AC31** Save error: the form keeps what was typed and shows "Couldn't save — try again".
+- [x] **AC26** The Prayer Times tab has an "Add masjid" button that opens `/masjid/new`. For guests it asks them to sign in instead (same pattern as AC24). The page is gated like `/post/new`: sign-in plus a completed profile.
+- [x] **AC27** The form asks for the masjid's name (required), its address (optional) and a jamaat time for each prayer (Fajr → Isha, then Jumu'ah). Each time is optional; a prayer left blank simply gets no row (same as AC9).
+- [x] **AC28** Saving creates, **in one step** (all or nothing): the `entities` row (`category = 'masjid'`, `moderation_status = 'pending'`), its `masjid` row, a `masjid_prayer_times` row per filled-in prayer, and an `entity_members` row making the creator its `masjid_volunteer`. The client can't choose the moderation status or make anyone else the volunteer.
+- [x] **AC29** After saving, the user sees "Thanks — this masjid will appear once it's reviewed" and returns to the Prayer Times tab. The new masjid doesn't appear in anyone's list until Syed sets it to `published` from the dashboard.
+- [x] **AC30** The jamaat-time inputs are the same component on this form and on the volunteer update screen (4.3), not two copies.
+- [x] **AC31** Save error: the form keeps what was typed and shows "Couldn't save — try again".
 
 ### Navigation and access
-- [ ] **AC21** A bottom nav shows three tabs in this order: **Prayer Times · Feed · Find Now**. The current tab is visibly marked.
-- [ ] **AC22** The Find Now tab carries a "Coming soon" badge. Tapping it shows a short "Coming soon" message and doesn't navigate anywhere.
-- [ ] **AC23** Opening the app lands on Prayer Times, both from the home-screen PWA icon and from the bare URL.
-- [ ] **AC24** Guests (not signed in) can use the Prayer Times tab and the masjid detail page. The pin toggle, the Feed tab and the update page ask a guest to sign in instead.
-- [ ] **AC25** After signing in from one of those prompts, the user returns to the page they were on, not to a default page.
+- [x] **AC21** A bottom nav shows three tabs in this order: **Prayer Times · Feed · Find Now**. The current tab is visibly marked.
+- [x] **AC22** The Find Now tab carries a "Coming soon" badge. Tapping it shows a short "Coming soon" message and doesn't navigate anywhere.
+- [x] **AC23** Opening the app lands on Prayer Times, both from the home-screen PWA icon and from the bare URL.
+- [x] **AC24** Guests (not signed in) can use the Prayer Times tab and the masjid detail page. The pin toggle, the Feed tab and the update page ask a guest to sign in instead.
+- [x] **AC25** After signing in from one of those prompts, the user returns to the page they were on, not to a default page.
 
 ### Cross-cutting (standing requirements)
-- [ ] **AC17** Every string goes through `useTranslation()`, with keys in both `en.json` and `ta.json`.
-- [ ] **AC18** All non-root pages (`/masjid/:id`, `/masjid/:id/update`, `/masjid/new`) render a `BackButton`.
-- [ ] **AC19** Every screen handles loading (with a skeleton), empty, error (plain-language message + retry) and offline.
-- [ ] **AC20** Touch targets are comfortable and the update form isn't covered by the mobile keyboard.
+- [x] **AC17** Every string goes through `useTranslation()`, with keys in both `en.json` and `ta.json`.
+- [x] **AC18** All non-root pages (`/masjid/:id`, `/masjid/:id/update`, `/masjid/new`) render a `BackButton`.
+- [x] **AC19** Every screen handles loading (with a skeleton), empty, error (plain-language message + retry) and offline.
+- [x] **AC20** Touch targets are comfortable and the update form isn't covered by the mobile keyboard.
 
 ## 4. Screens
 
@@ -221,5 +221,5 @@ Work top to bottom; each task is small enough for one sitting.
 - [x] T9 Masjid detail page (4.2). *(Tested by Syed 2026-09-30.)*
 - [x] T10 Volunteer update page (4.3), reusing the jamaat-time inputs from T4. *(Tested by Syed 2026-09-30.)*
 - [x] T11 i18n pass: every key in `en.json` + `ta.json`. *(2026-09-30: English and Tamil keys match exactly, every key the code uses exists in both, and there's no hardcoded display text in the Prayer Times screens.)*
-- [ ] T12 Walk through AC1–AC31 on a phone in both languages; tick the boxes above.
+- [x] T12 Walk through AC1–AC31 on a phone in both languages; tick the boxes above. *(All passed, Syed 2026-09-30.)*
 - [ ] T13 PR `feature/prayer-times` → `develop`, with the PR description linking this spec.

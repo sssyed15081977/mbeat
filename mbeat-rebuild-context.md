@@ -348,7 +348,8 @@ Chosen as the next module to build, because it gives users (and Syed himself) a 
 - Done 2026-09-27: **T3**, migration `20260927120000_add_create_masjid_function.sql` (all-or-nothing `create_masjid` function; requires sign-in + a profile row), applied to Supabase by Syed.
 - Done 2026-09-28 to 2026-09-30: **T4–T10**. All four screens are built and tested by Syed: Add masjid (`/masjid/new`), the Prayer Times tab (`/`), masjid detail (`/masjid/:id`) and volunteer update (`/masjid/:id/update`). The 3 pilot masjids are live (T5).
 - Done 2026-09-30: **T11**. Tamil labels confirmed as drafted (spec §4.4, §7 decision 13), and the English and Tamil key sets match.
-- Next: **T12** (walk through AC1–AC31 on a phone in both languages), then **T13** (PR to `develop`).
+- Done 2026-09-30: **T12**. Syed walked through AC1–AC31 on a phone in both languages; all passed.
+- Next: **T13**, the PR from `feature/prayer-times` to `develop`.
 - Not yet decided: whether to add a CLAUDE.md rule making a spec mandatory before any feature code.
 
 Still outstanding from before: the first promotion of `develop` to `main` + deploy (`main` is still only the scaffold commit).
