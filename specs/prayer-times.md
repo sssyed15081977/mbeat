@@ -97,11 +97,11 @@ v1 is done when every box is ticked. Each criterion should be checkable by hand 
 - **No permission:** see AC16.
 - **Save error:** keep the volunteer's edits and show "Couldn't save — try again".
 
-### 4.4 Tamil labels — ⚠ draft, awaiting Syed's check
+### 4.4 Tamil labels — confirmed by Syed 2026-09-30
 
-The spellings follow what the app already uses for Islamic terms (ஜனாஸா, தொழுகை): Arabic terms in Tamil script. Where local usage differs, change the Tamil column, not the English key.
+The spellings follow what the app already uses for Islamic terms (ஜனாஸா, தொழுகை): Arabic terms in Tamil script. The "Tamil" column is what ships; the alternatives were considered and not chosen. To change a label later, change the Tamil column, not the English key.
 
-| English | Tamil (proposed) | Alternatives to consider |
+| English | Tamil | Alternatives considered |
 |---|---|---|
 | Prayer Times (tab) | தொழுகை நேரங்கள் | |
 | Feed (tab) | பதிவுகள் | *Decided 2026-09-27: "post" is always பதிவு (verb: பதிவிடு), never இடுகை / ஃபீட்* |
@@ -135,6 +135,12 @@ The spellings follow what the app already uses for Islamic terms (ஜனாஸ�
 | Adding… | சேர்க்கிறது… | |
 | Done | முடிந்தது | |
 | Thanks — this masjid will appear once it's reviewed | நன்றி — சரிபார்த்த பிறகு இந்த மஸ்ஜித் காட்டப்படும் | |
+| No jamaat times yet | ஜமாஅத் நேரங்கள் இன்னும் சேர்க்கப்படவில்லை | *Added during T8* |
+| tomorrow (after "Next jamaat") | நாளை | *Added during T8* |
+| You're offline. Connect to the internet and try again. | இணைய இணைப்பு இல்லை. இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும். | *Added during T8* |
+| This masjid isn't available. | இந்த மஸ்ஜித் கிடைக்கவில்லை. | *Added during T9* |
+| Back to Prayer Times | தொழுகை நேரங்களுக்குத் திரும்பவும் | *Added during T9* |
+| You can't update this masjid's times. | இந்த மஸ்ஜிதின் நேரங்களை நீங்கள் புதுப்பிக்க முடியாது. | *Added during T10* |
 
 ### 4.5 Add masjid — `/masjid/new` (`pages/NewMasjidPage.jsx`)
 - **Content:** a `BackButton` (to `/`), a name input, an address input, then the same jamaat-time inputs as 4.3, all empty.
@@ -194,14 +200,17 @@ All tables, triggers and RLS policies are in the migration linked above. `masjid
 11. **Friday at a masjid with no Jumu'ah row:** "next jamaat" shows its Dhuhr instead of skipping the midday slot.
 12. **Jamaat times read "5:15 AM" in both languages.** Tamil keeps AM/PM, matching the notice boards, rather than முற்பகல்/பிற்பகல்.
 
+### Decided (2026-09-30)
+13. **Tamil labels in §4.4 confirmed as drafted**, including the ones added during T8–T10. No alternatives were taken.
+
 ### Open
-1. **Tamil labels in §4.4**, waiting for Syed's check (blocks T11). மஸ்ஜித் and பதிவு are already decided.
+None.
 
 ## 8. Task checklist
 
 Work top to bottom; each task is small enough for one sitting.
 
-- [x] T1 Review this spec; resolve the open questions in §7. *(Done except the Tamil label check.)*
+- [x] T1 Review this spec; resolve the open questions in §7. *(Tamil labels confirmed 2026-09-30.)*
 - [x] T2 Commit the migration + naming-table updates; `supabase db push`. *(Pushed by Syed 2026-09-26.)*
 - [x] T3 Migration for the "add masjid" database function (§5); `supabase db push`. *(Pushed by Syed 2026-09-27.)*
 - [x] T4 Add masjid page (4.5) at `/masjid/new`: the shared jamaat-time inputs (AC30) and `createMasjid()` in a new `features/prayerTimes/prayerTimesApi.js`. Reached by typing the URL until T8 adds the button. *(Tested by Syed 2026-09-28.)*
@@ -211,6 +220,6 @@ Work top to bottom; each task is small enough for one sitting.
 - [x] T8 Prayer Times tab (4.1), incl. optimistic pinning and the "Add masjid" button. *(Tested by Syed 2026-09-30.)*
 - [x] T9 Masjid detail page (4.2). *(Tested by Syed 2026-09-30.)*
 - [x] T10 Volunteer update page (4.3), reusing the jamaat-time inputs from T4. *(Tested by Syed 2026-09-30.)*
-- [ ] T11 i18n pass: every key in `en.json` + `ta.json`.
+- [x] T11 i18n pass: every key in `en.json` + `ta.json`. *(2026-09-30: English and Tamil keys match exactly, every key the code uses exists in both, and there's no hardcoded display text in the Prayer Times screens.)*
 - [ ] T12 Walk through AC1–AC31 on a phone in both languages; tick the boxes above.
 - [ ] T13 PR `feature/prayer-times` → `develop`, with the PR description linking this spec.
