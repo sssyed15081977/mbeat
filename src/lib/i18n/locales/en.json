@@ -150,6 +150,11 @@
       "stale": "Times may be out of date"
     }
   },
+  "masjidDetail": {
+    "updateTimes": "Update times",
+    "notAvailable": "This masjid isn't available.",
+    "backToList": "Back to Prayer Times"
+  },
   "nav": {
     "label": "Main",
     "prayerTimes": "Prayer Times",

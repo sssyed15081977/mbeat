@@ -11,6 +11,7 @@ import PostDetailPage from './pages/PostDetailPage'
 import EditDeathAnnouncementPage from './pages/EditDeathAnnouncementPage'
 import IslamicGuidePage from './pages/IslamicGuidePage'
 import NewMasjidPage from './pages/NewMasjidPage'
+import MasjidDetailPage from './pages/MasjidDetailPage'
 
 function App() {
   return (
@@ -35,6 +36,10 @@ function App() {
               />
             </Route>
           </Route>
+
+          {/* Open to guests (AC24). /masjid/new below still wins: React
+              Router prefers the exact path over :id. */}
+          <Route path="/masjid/:id" element={<MasjidDetailPage />} />
 
           <Route element={<ProtectedRoute />}>
             <Route
