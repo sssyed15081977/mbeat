@@ -325,9 +325,9 @@ Considered switching to NoSQL given many post/profile/entity types are planned o
 ## Progress log — branch cleanup, doc catch-up (done)
 - `feature/death-announcement-enhancements` merged into `develop` via PR #3 and PR #4 (both done in the previous session — this doc's "Immediate next step" said the PR was still pending, which was stale; corrected here). Branch deleted after merge (local + remote), per the standing feature-branch cleanup habit.
 - `feature/auth-google-login` was found still lying around (local + `origin`) despite being fully merged into `develop` months earlier (`git merge-base --is-ancestor` confirmed every commit on it is an ancestor of `develop`). Deleted, local + remote — it was leftover branch clutter, not in-progress work.
-- `develop` currently 30 commits ahead of `main`; `main` still sits at the original scaffold commit — no release cut yet. Still believed intentional (pre-launch), still not independently confirmed with Syed.
+- `develop` currently 30 commits ahead of `main` (49 as of 2026-09-30, after the Prayer Times merge); `main` still sits at the original scaffold commit — no release cut yet. Still believed intentional (pre-launch), still not independently confirmed with Syed.
 
-## Prayer Times — design settled, not built yet
+## Prayer Times — built (v1 merged to `develop` 2026-09-30)
 Chosen as the next module to build, because it gives users (and Syed himself) a **daily** reason to open the app. Death announcements matter but aren't daily, and a volunteer project needs regular use and feedback to keep momentum. Generic prayer apps already show calculated start times, so mbeat's value is the **local, per-masjid jamaat times** that today only live on notice boards and in announcements after salah.
 
 - **Local facts (from Syed):** Melapalayam has ~50 masjids. Times shift with sunrise/sunset. Masjids don't follow any common calculation method: adhan times differ from each other and from astronomical times by several minutes (e.g. sunset 6:20, one masjid's adhan 6:23, another's 6:27). Almost every masjid sets jamaat as a fixed gap after adhan (e.g. "jamaat 10 min after adhan").
@@ -342,14 +342,15 @@ Chosen as the next module to build, because it gives users (and Syed himself) a 
 - **v2 ideas (not in v1):** user confirmations ("✓ time was right" / "⚠ time changed") that alert that masjid's volunteer; AI reading times from a photo of the notice board; linking a death announcement's "after Asr at X masjid" to that masjid's jamaat time.
 
 ## Immediate next step
-**Prayer Times v1 is in progress on `feature/prayer-times`.** Work from the task checklist in [specs/prayer-times.md](specs/prayer-times.md) §8, the first per-feature spec (spec-driven: acceptance criteria are the definition of done). As of 2026-09-26:
+**Prayer Times v1 is done: merged into `develop` via PR #5 on 2026-09-30.** It was built from the task checklist in [specs/prayer-times.md](specs/prayer-times.md) §8, the first per-feature spec (spec-driven: acceptance criteria are the definition of done). As of 2026-09-26:
 - Done: T1 (spec reviewed, decisions recorded in §7) and T2 (migration committed and applied to Supabase by Syed).
 - 2026-09-27: dashboard seeding was replaced by an in-app **Add masjid** screen (`/masjid/new`, spec §4.5, §7 decisions 7–10). Any signed-in user can add a masjid; it starts `pending`, the creator becomes its `masjid_volunteer`, and Syed publishes it from the dashboard. This reverses the first migration's "no client-side path to create a masjid" stance, so it needs a new migration.
 - Done 2026-09-27: **T3**, migration `20260927120000_add_create_masjid_function.sql` (all-or-nothing `create_masjid` function; requires sign-in + a profile row), applied to Supabase by Syed.
 - Done 2026-09-28 to 2026-09-30: **T4–T10**. All four screens are built and tested by Syed: Add masjid (`/masjid/new`), the Prayer Times tab (`/`), masjid detail (`/masjid/:id`) and volunteer update (`/masjid/:id/update`). The 3 pilot masjids are live (T5).
 - Done 2026-09-30: **T11**. Tamil labels confirmed as drafted (spec §4.4, §7 decision 13), and the English and Tamil key sets match.
 - Done 2026-09-30: **T12**. Syed walked through AC1–AC31 on a phone in both languages; all passed.
-- Next: **T13**, the PR from `feature/prayer-times` to `develop`.
+- Done 2026-09-30: **T13**. PR #5 merged into `develop`; `feature/prayer-times` deleted (local + remote).
+- **Next:** not yet chosen. The strongest candidate is the first promotion of `develop` to `main` + deploy, since Prayer Times only brings in daily users once it's live. After that, pick from the candidates below.
 - Not yet decided: whether to add a CLAUDE.md rule making a spec mandatory before any feature code.
 
 Still outstanding from before: the first promotion of `develop` to `main` + deploy (`main` is still only the scaffold commit).
@@ -361,7 +362,7 @@ Other candidates, not started (after Prayer Times):
    - **Reputation system** (`reactions`, flags/reports, trust scoring) — referenced throughout as the eventual backbone for auto-publish/verified-announcer status, not started.
 
 ## Notes for whoever picks this up next
-- The open feature branch is `feature/prayer-times` (Prayer Times v1 only, per the branch-scope discipline rule). Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` is well behind `develop` (only the original scaffold commit) — this is believed intentional (pre-launch, nothing promoted yet), not an oversight, but wasn't independently confirmed with Syed.
+- No feature branch is open (`feature/prayer-times` was merged and deleted 2026-09-30); `develop` is the working branch. Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` is well behind `develop` (only the original scaffold commit) — this is believed intentional (pre-launch, nothing promoted yet), not an oversight, but wasn't independently confirmed with Syed.
 - A fresh machine/clone needs `npx supabase login` + `npx supabase link --project-ref slalnatjabrcnjxngqoo` before any `supabase db push`/`migration list` command works, and `gh auth login --web` before `gh pr create` works — neither credential persists in the repo (both are gitignored/local-machine state).
 - Before trusting this doc's "already done" claims, spot-check the actual repo state (folders can exist but be empty, files can exist but be wrong — e.g. we once found `VITE_SUPABASE_URL` had `/rest/v1/` wrongly appended) rather than assuming the doc is authoritative. This doc itself went stale once already (progress log sat several commits behind actual repo state, including an inconsistency where the lifecycle-status naming table had already been updated to 5 stages but the prose above it still described the old 3) — re-verify against `git log`/actual files each session rather than trusting the log at face value.
 - Syed prefers step-by-step confirmation before executing, narrated plans, and one file at a time when debugging — see "Working style / preferences" above.

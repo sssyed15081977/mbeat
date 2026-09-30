@@ -222,4 +222,4 @@ Work top to bottom; each task is small enough for one sitting.
 - [x] T10 Volunteer update page (4.3), reusing the jamaat-time inputs from T4. *(Tested by Syed 2026-09-30.)*
 - [x] T11 i18n pass: every key in `en.json` + `ta.json`. *(2026-09-30: English and Tamil keys match exactly, every key the code uses exists in both, and there's no hardcoded display text in the Prayer Times screens.)*
 - [x] T12 Walk through AC1–AC31 on a phone in both languages; tick the boxes above. *(All passed, Syed 2026-09-30.)*
-- [ ] T13 PR `feature/prayer-times` → `develop`, with the PR description linking this spec.
+- [x] T13 PR `feature/prayer-times` → `develop`, with the PR description linking this spec. *(PR #5, merged by Syed 2026-09-30; branch deleted.)*
