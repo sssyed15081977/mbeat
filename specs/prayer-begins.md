@@ -133,7 +133,7 @@ None.
 ## 8. Task checklist
 
 - [x] T1 Review this spec; resolve §7's open questions. Update the naming tables (CLAUDE.md + mbeat-rebuild-context.md) for "Begins" and the reversed adhan decision. *(2026-09-30)*
-- [ ] T2 `npm install adhan`; pure helper + method config.
+- [x] T2 `npm install adhan`; pure helper + method config. *(2026-09-30: checked for today in three phone time zones; identical results.)*
 - [ ] T3 Saved-method hook (`localStorage`, fallback).
 - [ ] T4 "Today in Melapalayam" card on the Prayer Times tab, with next-prayer highlight.
 - [ ] T5 Bottom sheet (generic `components/ui/BottomSheet.jsx` if none exists) + method picker.

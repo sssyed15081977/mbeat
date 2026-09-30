@@ -5,16 +5,20 @@ export const KOLKATA_OFFSET_MINUTES = 5 * 60 + 30
 const FRIDAY = 5
 const MINUTES_PER_DAY = 24 * 60
 
-function kolkataClock(now) {
+// Melapalayam's calendar date, weekday and minutes since midnight at `now`.
+export function kolkataClock(now) {
   const shifted = new Date(now.getTime() + KOLKATA_OFFSET_MINUTES * 60 * 1000)
   return {
+    year: shifted.getUTCFullYear(),
+    month: shifted.getUTCMonth(),
+    day: shifted.getUTCDate(),
     weekday: shifted.getUTCDay(),
     minutes: shifted.getUTCHours() * 60 + shifted.getUTCMinutes(),
   }
 }
 
 // "05:15:00" (Postgres `time`) -> minutes since midnight.
-function toMinutes(time) {
+export function toMinutes(time) {
   const [hours, minutes] = time.split(':').map(Number)
   return hours * 60 + minutes
 }
