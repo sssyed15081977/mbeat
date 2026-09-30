@@ -62,7 +62,10 @@ export function useMasjid(id) {
       .finally(() => setLoading(false))
   }, [id])
 
-  const isVolunteer = volunteerKey !== null && volunteer.key === volunteerKey && volunteer.value
+  const volunteerChecked = volunteerKey !== null && volunteer.key === volunteerKey
+  const isVolunteer = volunteerChecked && volunteer.value
+  // Guests are never volunteers, so there's nothing to wait for.
+  const volunteerLoading = volunteerKey !== null && !volunteerChecked
 
-  return { masjid, loading, error, refetch, isVolunteer }
+  return { masjid, loading, error, refetch, isVolunteer, volunteerLoading }
 }
