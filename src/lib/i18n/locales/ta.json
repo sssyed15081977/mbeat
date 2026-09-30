@@ -1,0 +1,178 @@
+{
+  "common": {
+    "retry": "மீண்டும் முயற்சிக்கவும்",
+    "back": "பின்செல்ல",
+    "close": "மூடு"
+  },
+  "auth": {
+    "tagline": "எம்.பி.எம் ஹெல்ப்லைன் — மேலப்பாளையம் சமூகத் தகவல்கள் அனைத்தும் ஒரே இடத்தில்.",
+    "signInWithGoogle": "Google மூலம் உள்நுழையவும்"
+  },
+  "profileCompletion": {
+    "title": "உங்கள் சுயவிவரத்தை முடிக்கவும்",
+    "subtitle": "mbeat-இல் பதிவிட உண்மையான பெயர் அவசியம் — இது சமூகப் பொறுப்புணர்வைப் பேணுகிறது.",
+    "fullNameLabel": "முழுப் பெயர்",
+    "fullNamePlaceholder": "முழுப் பெயர்",
+    "phoneLabel": "தொலைபேசி எண்",
+    "phonePlaceholder": "தொலைபேசி எண்",
+    "localityLabel": "இடம்",
+    "localityPlaceholder": "எ.கா. மேலப்பாளையத்தில் உள்ள பகுதி",
+    "saving": "சேமிக்கிறது…",
+    "continue": "தொடரவும்"
+  },
+  "feed": {
+    "newPost": "+ புதியது",
+    "empty": "இதுவரை பதிவுகள் இல்லை.",
+    "emptyCta": "முதலில் ஒரு பதிவைப் பகிரவும்.",
+    "loadError": "பதிவுகளை ஏற்ற முடியவில்லை."
+  },
+  "postDetail": {
+    "loadError": "இந்தப் பதிவை ஏற்ற முடியவில்லை.",
+    "notFound": "இந்தப் பதிவு கிடைக்கவில்லை."
+  },
+  "postType": {
+    "blood_request": "இரத்தம் தேவை",
+    "death_announcement": "இறப்பு அறிவிப்பு",
+    "job": "வேலைவாய்ப்பு",
+    "dua": "துஆ",
+    "fundraiser": "நிதி திரட்டல்",
+    "discussion": "விவாதம்"
+  },
+  "moderationStatus": {
+    "pending": "நிலுவையில்",
+    "published": "வெளியிடப்பட்டது",
+    "flagged": "புகார் செய்யப்பட்டது",
+    "hidden": "மறைக்கப்பட்டது"
+  },
+  "lifecycleStatus": {
+    "deathAnnouncement": {
+      "awaiting_body": "உடல் இன்னும் வரவில்லை",
+      "body_available": "ஆறுதல் சொல்ல வரலாம்",
+      "upcoming_janazah": "வரவிருக்கும் ஜனாஸா",
+      "janazah_in_progress": "ஜனாஸா நடைபெறுகிறது",
+      "completed": "முடிந்தது"
+    }
+  },
+  "gender": {
+    "male": "ஆண்",
+    "female": "பெண்"
+  },
+  "deathAnnouncementForm": {
+    "heading": "இறப்பு அறிவிப்பைப் பதிவிடவும்",
+    "titleLabel": "தலைப்பு",
+    "titlePlaceholder": "எ.கா. இறப்பு அறிவிப்பு - பெயர்",
+    "titleAutoFill": "இறப்பு அறிவிப்பு - {{name}}",
+    "descriptionLabel": "விவரம்",
+    "descriptionPlaceholder": "விருப்பத்தேர்வு",
+    "deceasedNameLabel": "இறந்தவரின் பெயர்",
+    "deceasedNamePlaceholder": "இறந்தவரின் பெயர்",
+    "deceasedAgeLabel": "இறந்தவரின் வயது",
+    "deceasedAgePlaceholder": "விருப்பத்தேர்வு",
+    "genderLabel": "பாலினம்",
+    "genderPlaceholder": "விருப்பத்தேர்வு",
+    "announcerRelationLabel": "அறிவிப்பாளர் உறவு",
+    "announcerRelationPlaceholder": "எ.கா. மகன், மஸ்ஜித் கமிட்டி",
+    "photoLabel": "புகைப்படம் (விருப்பத்தேர்வு)",
+    "photoHelp": "JPG, PNG அல்லது WEBP, 5MB வரை",
+    "photoTypeError": "தயவுசெய்து JPG, PNG அல்லது WEBP படத்தைத் தேர்ந்தெடுக்கவும்.",
+    "photoSizeError": "புகைப்படம் 5MB-க்குள் இருக்க வேண்டும்.",
+    "deathDatetimeLabel": "இறந்த தேதி & நேரம்",
+    "bodyNotYetAvailableLabel": "உடல் இன்னும் பார்வைக்கு கிடைக்கவில்லை (வேறு இடத்திலிருந்து கொண்டு வரப்படுகிறது)",
+    "bodyLocationLabel": "உடல் வைக்கப்பட்டுள்ள இடம்",
+    "bodyLocationPlaceholder": "எ.கா. வீடு, மருத்துவமனை பெயர்",
+    "bodyLocationHelp": "உறவினர்களை ஆறுதல்படுத்த பார்வையாளர்கள் செல்லக்கூடிய இடம்",
+    "janazahDatetimeLabel": "ஜனாஸா தேதி & நேரம்",
+    "janazahLocationLabel": "தொழுகை நடைபெறும் இடம்",
+    "janazahLocationPlaceholder": "தொழுகை நடைபெறும் இடம்",
+    "burialLocationLabel": "அடக்கம் செய்யும் இடம்",
+    "burialLocationPlaceholder": "விருப்பத்தேர்வு, தொழுகை இடத்திலிருந்து வேறுபட்டால்",
+    "posting": "பதிவிடுகிறது…",
+    "submit": "அறிவிப்பைப் பதிவிடவும்",
+    "editHeading": "இறப்பு அறிவிப்பைத் திருத்தவும்",
+    "savingChanges": "மாற்றங்களைச் சேமிக்கிறது…",
+    "saveChanges": "மாற்றங்களைச் சேமிக்கவும்",
+    "notAuthorized": "உங்கள் சொந்த அறிவிப்புகளை மட்டுமே நீங்கள் திருத்த முடியும்."
+  },
+  "deathAnnouncementDetail": {
+    "janazahGuideLink": "ஜனாஸா தொழுவது எப்படி",
+    "viewPhoto": "புகைப்படத்தைப் பார்க்க",
+    "editLink": "திருத்து",
+    "statusControlLabel": "நிலையைப் புதுப்பிக்கவும்",
+    "statusUpdateError": "நிலையைப் புதுப்பிக்க முடியவில்லை — மீண்டும் முயற்சிக்கவும்."
+  },
+  "islamicGuide": {
+    "pendingReviewBanner": "ஏதேனும் தவறாகத் தெரிந்தால் தயவுசெய்து எங்களிடம் தெரிவிக்கவும்.",
+    "notFound": "இந்த வழிகாட்டி கிடைக்கவில்லை."
+  },
+  "prayer": {
+    "fajr": "ஃபஜ்ர்",
+    "dhuhr": "லுஹர்",
+    "asr": "அஸர்",
+    "maghrib": "மஃரிப்",
+    "isha": "இஷா",
+    "jumuah": "ஜும்ஆ"
+  },
+  "jamaatTimeFields": {
+    "legend": "ஜமாஅத் நேரங்கள்"
+  },
+  "addMasjid": {
+    "heading": "மஸ்ஜிதைச் சேர்க்கவும்",
+    "nameLabel": "மஸ்ஜித் பெயர்",
+    "addressLabel": "முகவரி",
+    "addressPlaceholder": "விருப்பத்தேர்வு",
+    "submit": "மஸ்ஜிதைச் சேர்க்கவும்",
+    "submitting": "சேர்க்கிறது…",
+    "saveError": "சேமிக்க முடியவில்லை — மீண்டும் முயற்சிக்கவும்.",
+    "submitted": "நன்றி — சரிபார்த்த பிறகு இந்த மஸ்ஜித் காட்டப்படும்.",
+    "done": "முடிந்தது"
+  },
+  "prayerTimes": {
+    "heading": "தொழுகை நேரங்கள்",
+    "myMasjids": "எனது மஸ்ஜித்கள்",
+    "allMasjids": "அனைத்து மஸ்ஜித்கள்",
+    "pinHint": "நீங்கள் தொழும் மஸ்ஜித்களைப் பின் செய்யவும்",
+    "signInToPin": "மஸ்ஜித்களைப் பின் செய்ய உள்நுழையவும்",
+    "pin": "{{name}} — பின் செய்யவும்",
+    "unpin": "{{name}} — பின்னை நீக்கவும்",
+    "pinError": "உங்கள் மஸ்ஜித்களைப் புதுப்பிக்க முடியவில்லை — மீண்டும் முயற்சிக்கவும்.",
+    "nextJamaat": "அடுத்த ஜமாஅத்",
+    "tomorrow": "நாளை",
+    "noTimes": "ஜமாஅத் நேரங்கள் இன்னும் சேர்க்கப்படவில்லை",
+    "empty": "இன்னும் மஸ்ஜித்கள் சேர்க்கப்படவில்லை.",
+    "addMasjid": "மஸ்ஜிதைச் சேர்க்கவும்",
+    "loadError": "தொழுகை நேரங்களை ஏற்ற முடியவில்லை — மீண்டும் முயற்சிக்கவும்.",
+    "offline": "இணைய இணைப்பு இல்லை. இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.",
+    "freshness": {
+      "today": "இன்று உறுதிசெய்யப்பட்டது",
+      "yesterday": "நேற்று உறுதிசெய்யப்பட்டது",
+      "daysAgo": "{{count}} நாட்களுக்கு முன் உறுதிசெய்யப்பட்டது",
+      "notConfirmed": "இன்னும் உறுதிசெய்யப்படவில்லை",
+      "stale": "நேரங்கள் பழையதாக இருக்கலாம்"
+    }
+  },
+  "masjidDetail": {
+    "updateTimes": "நேரங்களைப் புதுப்பிக்கவும்",
+    "notAvailable": "இந்த மஸ்ஜித் கிடைக்கவில்லை.",
+    "backToList": "தொழுகை நேரங்களுக்குத் திரும்பவும்"
+  },
+  "updateTimes": {
+    "heading": "நேரங்களைப் புதுப்பிக்கவும்",
+    "saveChanges": "மாற்றங்களைச் சேமிக்கவும்",
+    "saving": "சேமிக்கிறது…",
+    "boardUnchanged": "அறிவிப்புப் பலகையில் மாற்றமில்லை",
+    "saveError": "சேமிக்க முடியவில்லை — மீண்டும் முயற்சிக்கவும்.",
+    "noPermission": "இந்த மஸ்ஜிதின் நேரங்களை நீங்கள் புதுப்பிக்க முடியாது."
+  },
+  "nav": {
+    "label": "முதன்மை",
+    "prayerTimes": "தொழுகை நேரங்கள்",
+    "feed": "பதிவுகள்",
+    "findNow": "தேடல்",
+    "comingSoon": "விரைவில்",
+    "findNowComingSoon": "தேடல் விரைவில் வருகிறது."
+  },
+  "languageToggle": {
+    "english": "EN",
+    "tamil": "TA"
+  }
+}

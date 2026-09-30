@@ -1,0 +1,178 @@
+{
+  "common": {
+    "retry": "Try again",
+    "back": "Back",
+    "close": "Close"
+  },
+  "auth": {
+    "tagline": "MPM Helpline — community info for Melapalayam, in one place.",
+    "signInWithGoogle": "Sign in with Google"
+  },
+  "profileCompletion": {
+    "title": "Complete your profile",
+    "subtitle": "Real names are required to post on mbeat — this keeps the community accountable.",
+    "fullNameLabel": "Full name",
+    "fullNamePlaceholder": "Full name",
+    "phoneLabel": "Phone number",
+    "phonePlaceholder": "Phone number",
+    "localityLabel": "Locality",
+    "localityPlaceholder": "e.g. area in Melapalayam",
+    "saving": "Saving…",
+    "continue": "Continue"
+  },
+  "feed": {
+    "newPost": "+ New",
+    "empty": "No posts yet.",
+    "emptyCta": "Be the first to share something.",
+    "loadError": "Couldn't load the feed."
+  },
+  "postDetail": {
+    "loadError": "Couldn't load this post.",
+    "notFound": "This post isn't available."
+  },
+  "postType": {
+    "blood_request": "Blood Request",
+    "death_announcement": "Death Announcement",
+    "job": "Job",
+    "dua": "Dua",
+    "fundraiser": "Fundraiser",
+    "discussion": "Discussion"
+  },
+  "moderationStatus": {
+    "pending": "Pending",
+    "published": "Published",
+    "flagged": "Flagged",
+    "hidden": "Hidden"
+  },
+  "lifecycleStatus": {
+    "deathAnnouncement": {
+      "awaiting_body": "Body Not Yet Available",
+      "body_available": "Available for Condolence Visits",
+      "upcoming_janazah": "Upcoming Janazah",
+      "janazah_in_progress": "Janazah in Progress",
+      "completed": "Completed"
+    }
+  },
+  "gender": {
+    "male": "Male",
+    "female": "Female"
+  },
+  "deathAnnouncementForm": {
+    "heading": "Post a death announcement",
+    "titleLabel": "Title",
+    "titlePlaceholder": "e.g. Death Announcement - Name",
+    "titleAutoFill": "Death Announcement - {{name}}",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Optional",
+    "deceasedNameLabel": "Deceased's name",
+    "deceasedNamePlaceholder": "Deceased's name",
+    "deceasedAgeLabel": "Deceased's age",
+    "deceasedAgePlaceholder": "Optional",
+    "genderLabel": "Gender",
+    "genderPlaceholder": "Optional",
+    "announcerRelationLabel": "Announcer relation",
+    "announcerRelationPlaceholder": "e.g. Son, Masjid Committee",
+    "photoLabel": "Photo (optional)",
+    "photoHelp": "JPG, PNG or WEBP, up to 5MB",
+    "photoTypeError": "Please choose a JPG, PNG or WEBP image.",
+    "photoSizeError": "Photo must be under 5MB.",
+    "deathDatetimeLabel": "Date & time of death",
+    "bodyNotYetAvailableLabel": "Body not yet available for visiting (still being brought from elsewhere)",
+    "bodyLocationLabel": "Body location",
+    "bodyLocationPlaceholder": "e.g. Family home, Hospital name",
+    "bodyLocationHelp": "Where visitors can go to console the family",
+    "janazahDatetimeLabel": "Janazah date & time",
+    "janazahLocationLabel": "Prayer location",
+    "janazahLocationPlaceholder": "Prayer location",
+    "burialLocationLabel": "Burial location",
+    "burialLocationPlaceholder": "Optional, if different from prayer location",
+    "posting": "Posting…",
+    "submit": "Post announcement",
+    "editHeading": "Edit death announcement",
+    "savingChanges": "Saving changes…",
+    "saveChanges": "Save changes",
+    "notAuthorized": "You can only edit your own announcements."
+  },
+  "deathAnnouncementDetail": {
+    "janazahGuideLink": "How to pray Janazah",
+    "viewPhoto": "View photo",
+    "editLink": "Edit",
+    "statusControlLabel": "Update status",
+    "statusUpdateError": "Couldn't update the status — try again."
+  },
+  "islamicGuide": {
+    "pendingReviewBanner": "If anything looks off, please let us know.",
+    "notFound": "This guide isn't available."
+  },
+  "prayer": {
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha",
+    "jumuah": "Jumu'ah"
+  },
+  "jamaatTimeFields": {
+    "legend": "Jamaat times"
+  },
+  "addMasjid": {
+    "heading": "Add masjid",
+    "nameLabel": "Masjid name",
+    "addressLabel": "Address",
+    "addressPlaceholder": "Optional",
+    "submit": "Add masjid",
+    "submitting": "Adding…",
+    "saveError": "Couldn't save — try again.",
+    "submitted": "Thanks — this masjid will appear once it's reviewed.",
+    "done": "Done"
+  },
+  "prayerTimes": {
+    "heading": "Prayer Times",
+    "myMasjids": "My masjids",
+    "allMasjids": "All masjids",
+    "pinHint": "Pin the masjids you pray at",
+    "signInToPin": "Sign in to pin masjids",
+    "pin": "Pin {{name}}",
+    "unpin": "Unpin {{name}}",
+    "pinError": "Couldn't update your masjids — try again.",
+    "nextJamaat": "Next jamaat",
+    "tomorrow": "tomorrow",
+    "noTimes": "No jamaat times yet",
+    "empty": "No masjids added yet.",
+    "addMasjid": "Add masjid",
+    "loadError": "Couldn't load prayer times — try again.",
+    "offline": "You're offline. Connect to the internet and try again.",
+    "freshness": {
+      "today": "Confirmed today",
+      "yesterday": "Confirmed yesterday",
+      "daysAgo": "Confirmed {{count}} days ago",
+      "notConfirmed": "Not yet confirmed",
+      "stale": "Times may be out of date"
+    }
+  },
+  "masjidDetail": {
+    "updateTimes": "Update times",
+    "notAvailable": "This masjid isn't available.",
+    "backToList": "Back to Prayer Times"
+  },
+  "updateTimes": {
+    "heading": "Update times",
+    "saveChanges": "Save changes",
+    "saving": "Saving…",
+    "boardUnchanged": "Board unchanged",
+    "saveError": "Couldn't save — try again.",
+    "noPermission": "You can't update this masjid's times."
+  },
+  "nav": {
+    "label": "Main",
+    "prayerTimes": "Prayer Times",
+    "feed": "Feed",
+    "findNow": "Find Now",
+    "comingSoon": "Coming soon",
+    "findNowComingSoon": "Find Now is coming soon."
+  },
+  "languageToggle": {
+    "english": "EN",
+    "tamil": "TA"
+  }
+}
