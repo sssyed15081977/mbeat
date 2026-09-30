@@ -346,8 +346,9 @@ Chosen as the next module to build, because it gives users (and Syed himself) a 
 - Done: T1 (spec reviewed, decisions recorded in §7) and T2 (migration committed and applied to Supabase by Syed).
 - 2026-09-27: dashboard seeding was replaced by an in-app **Add masjid** screen (`/masjid/new`, spec §4.5, §7 decisions 7–10). Any signed-in user can add a masjid; it starts `pending`, the creator becomes its `masjid_volunteer`, and Syed publishes it from the dashboard. This reverses the first migration's "no client-side path to create a masjid" stance, so it needs a new migration.
 - Done 2026-09-27: **T3**, migration `20260927120000_add_create_masjid_function.sql` (all-or-nothing `create_masjid` function; requires sign-in + a profile row), applied to Supabase by Syed.
-- Next: **T4**, the Add masjid page, then **T5**, adding the 3 pilot masjids through it.
-- Pending: Syed's check of the draft Tamil labels (spec §4.4), needed before T11.
+- Done 2026-09-28 to 2026-09-30: **T4–T10**. All four screens are built and tested by Syed: Add masjid (`/masjid/new`), the Prayer Times tab (`/`), masjid detail (`/masjid/:id`) and volunteer update (`/masjid/:id/update`). The 3 pilot masjids are live (T5).
+- Next: **T11** (i18n pass), **T12** (walk through AC1–AC31 on a phone in both languages), **T13** (PR to `develop`).
+- Pending: Syed's check of the draft Tamil labels (spec §4.4, plus the few added during T9/T10 that aren't in that table), needed before T11.
 - Not yet decided: whether to add a CLAUDE.md rule making a spec mandatory before any feature code.
 
 Still outstanding from before: the first promotion of `develop` to `main` + deploy (`main` is still only the scaffold commit).
