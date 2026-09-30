@@ -51,7 +51,14 @@ export function AuthProvider({ children }) {
     session,
     user: session?.user ?? null,
     loading,
-    signInWithGoogle: () => supabase.auth.signInWithOAuth({ provider: 'google' }),
+    // Come back to whichever address the app is running on (localhost in dev,
+    // the live site in production). Supabase only allows addresses listed
+    // under Auth → URL Configuration → Redirect URLs.
+    signInWithGoogle: () =>
+      supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.origin },
+      }),
     signOut: () => supabase.auth.signOut(),
   }
 
