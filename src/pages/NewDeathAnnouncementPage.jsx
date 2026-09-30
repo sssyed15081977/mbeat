@@ -7,8 +7,8 @@ export default function NewDeathAnnouncementPage() {
 
   return (
     <div className="min-h-screen p-4 max-w-sm mx-auto space-y-4">
-      <BackButton to="/" />
-      <DeathAnnouncementForm onSuccess={() => navigate('/')} />
+      <BackButton to="/feed" />
+      <DeathAnnouncementForm onSuccess={() => navigate('/feed')} />
     </div>
   )
 }

@@ -11,7 +11,7 @@ export default function IslamicGuidePage() {
 
   return (
     <div className="min-h-screen p-4 max-w-sm mx-auto space-y-4">
-      <BackButton to="/" />
+      <BackButton to="/feed" />
 
       {guide ? (
         <ContentGuideDetail guide={guide} />

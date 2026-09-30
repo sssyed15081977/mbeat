@@ -71,7 +71,7 @@
     "genderLabel": "Gender",
     "genderPlaceholder": "Optional",
     "announcerRelationLabel": "Announcer relation",
-    "announcerRelationPlaceholder": "e.g. Son, Mosque Committee",
+    "announcerRelationPlaceholder": "e.g. Son, Masjid Committee",
     "photoLabel": "Photo (optional)",
     "photoHelp": "JPG, PNG or WEBP, up to 5MB",
     "photoTypeError": "Please choose a JPG, PNG or WEBP image.",
@@ -103,6 +103,73 @@
   "islamicGuide": {
     "pendingReviewBanner": "If anything looks off, please let us know.",
     "notFound": "This guide isn't available."
+  },
+  "prayer": {
+    "fajr": "Fajr",
+    "dhuhr": "Dhuhr",
+    "asr": "Asr",
+    "maghrib": "Maghrib",
+    "isha": "Isha",
+    "jumuah": "Jumu'ah"
+  },
+  "jamaatTimeFields": {
+    "legend": "Jamaat times"
+  },
+  "addMasjid": {
+    "heading": "Add masjid",
+    "nameLabel": "Masjid name",
+    "addressLabel": "Address",
+    "addressPlaceholder": "Optional",
+    "submit": "Add masjid",
+    "submitting": "Adding…",
+    "saveError": "Couldn't save — try again.",
+    "submitted": "Thanks — this masjid will appear once it's reviewed.",
+    "done": "Done"
+  },
+  "prayerTimes": {
+    "heading": "Prayer Times",
+    "myMasjids": "My masjids",
+    "allMasjids": "All masjids",
+    "pinHint": "Pin the masjids you pray at",
+    "signInToPin": "Sign in to pin masjids",
+    "pin": "Pin {{name}}",
+    "unpin": "Unpin {{name}}",
+    "pinError": "Couldn't update your masjids — try again.",
+    "nextJamaat": "Next jamaat",
+    "tomorrow": "tomorrow",
+    "noTimes": "No jamaat times yet",
+    "empty": "No masjids added yet.",
+    "addMasjid": "Add masjid",
+    "loadError": "Couldn't load prayer times — try again.",
+    "offline": "You're offline. Connect to the internet and try again.",
+    "freshness": {
+      "today": "Confirmed today",
+      "yesterday": "Confirmed yesterday",
+      "daysAgo": "Confirmed {{count}} days ago",
+      "notConfirmed": "Not yet confirmed",
+      "stale": "Times may be out of date"
+    }
+  },
+  "masjidDetail": {
+    "updateTimes": "Update times",
+    "notAvailable": "This masjid isn't available.",
+    "backToList": "Back to Prayer Times"
+  },
+  "updateTimes": {
+    "heading": "Update times",
+    "saveChanges": "Save changes",
+    "saving": "Saving…",
+    "boardUnchanged": "Board unchanged",
+    "saveError": "Couldn't save — try again.",
+    "noPermission": "You can't update this masjid's times."
+  },
+  "nav": {
+    "label": "Main",
+    "prayerTimes": "Prayer Times",
+    "feed": "Feed",
+    "findNow": "Find Now",
+    "comingSoon": "Coming soon",
+    "findNowComingSoon": "Find Now is coming soon."
   },
   "languageToggle": {
     "english": "EN",

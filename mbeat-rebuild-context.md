@@ -95,13 +95,20 @@ Naming mistakes are expensive here because a name isn't just a label — it prop
 | Photo storage for post types that have one (deceased's photo is the first user) | Shared bucket `post-photos`, paths `<uploader_user_id>/<file>` | Supabase Storage bucket, `death_announcement.photo_url` |
 | Where the body/family can be visited for condolences (distinct from janazah_location, the prayer venue) | Body Location; label shown to users: "Body location" | `death_announcement.body_location` |
 | "Janazah location" display label reworded for clarity (schema/internal name unchanged — still the funeral-prayer venue) | Label: "Prayer location" | UI label only, i18n `deathAnnouncementForm.janazahLocationLabel`; DB column stays `janazah_location` |
-| Place of congregational prayer (chosen over "Mosque") | Masjid | `entities.category = 'masjid'` (future) |
-| Congregation start time at a masjid (chosen over the Arabic "Iqamah") | Jamaat time | `jamaat_time` (future) |
-| Feature/screen for per-masjid prayer schedules | Prayer Times | UI label (future) |
-| Volunteer who keeps a masjid's jamaat times current | Masjid volunteer | `volunteer_roles.role_type = 'masjid_volunteer'` (future) |
-| Call to prayer (chosen over "Azan" / "Baang") | Adhan | `adhan_time` (future); Tamil UI label still to be picked when built (e.g. பாங்கு) |
-| Minutes from adhan to jamaat at a masjid | Jamaat offset | `jamaat_offset_minutes` (future) |
-| Friday congregational prayer (chosen over "Jummah" / "Friday prayer") | Jumu'ah | `jumuah` (future) |
+| Place of congregational prayer (chosen over "Mosque") | Masjid; Tamil UI text is always மஸ்ஜித், never பள்ளிவாசல் (2026-09-27) | `entities.category = 'masjid'`; 1:1 extension table `masjid`; `ta.json` |
+| Congregation start time at a masjid (chosen over the Arabic "Iqamah") | Jamaat time | `masjid_prayer_times.jamaat_time` — the only prayer time stored and shown |
+| Feature/screen for per-masjid prayer schedules | Prayer Times | Bottom nav tab label, folder `features/prayerTimes/`; the app's landing page at route `/` (`/prayer-times` redirects there) |
+| Feed route (moved so Prayer Times can be the landing page, 2026-09-26) | `/feed` | Route; was `/` |
+| Tamil word for "post" / the Feed (chosen over இடுகை and ஃபீட், 2026-09-27) | பதிவு (plural பதிவுகள் = Feed tab; verb பதிவிடு) | `ta.json` only; English keys unchanged |
+| Volunteer who keeps a masjid's jamaat times current | Masjid volunteer | `entity_members.role = 'masjid_volunteer'` (per-masjid permission; the `volunteer_roles` table is deferred until blood donors) |
+| Call to prayer (chosen over "Azan" / "Baang") | Adhan | Term only — adhan times are **not stored or shown** (decided 2026-09-26: people hear the adhan; board adhan times can be off). `adhan_time` and `jamaat_offset_minutes` were dropped from the schema before first apply |
+| Friday congregational prayer (chosen over "Jummah" / "Friday prayer") | Jumu'ah | prayer value `jumuah` |
+| The five daily prayers + Jumu'ah as stored values (chosen `dhuhr` over `zuhr` / `luhar`) | `fajr`, `dhuhr`, `asr`, `maghrib`, `isha`, `jumuah` | `masjid_prayer_times.prayer` |
+| A masjid's current jamaat times, and their audit trail | `masjid_prayer_times`, `masjid_prayer_times_history` | Supabase tables |
+| When a masjid's times were last checked against its notice board, and by whom | `times_confirmed_at`, `times_confirmed_by` | `masjid` table |
+| A user's pinned masjids (generic, reusable for other entities later) | My masjids (UI label); table `saved_entities` | `saved_entities (user_id, entity_id)` |
+| Masjid detail / volunteer update screens | Routes `/masjid/:id`, `/masjid/:id/update` | `pages/` + `features/prayerTimes/` |
+| Screen where any signed-in user adds a masjid (it starts `pending`; they become its volunteer) | Add masjid (UI label); route `/masjid/new` | `pages/NewMasjidPage.jsx`; database function `create_masjid` |
 
 ## Working style / preferences (for Claude Code to follow)
 - Syed's background: ~10 years Google Apps Script, prior ASP.NET, Python as primary language, still learning React/modern web frameworks.
@@ -324,10 +331,10 @@ Considered switching to NoSQL given many post/profile/entity types are planned o
 Chosen as the next module to build, because it gives users (and Syed himself) a **daily** reason to open the app. Death announcements matter but aren't daily, and a volunteer project needs regular use and feedback to keep momentum. Generic prayer apps already show calculated start times, so mbeat's value is the **local, per-masjid jamaat times** that today only live on notice boards and in announcements after salah.
 
 - **Local facts (from Syed):** Melapalayam has ~50 masjids. Times shift with sunrise/sunset. Masjids don't follow any common calculation method: adhan times differ from each other and from astronomical times by several minutes (e.g. sunset 6:20, one masjid's adhan 6:23, another's 6:27). Almost every masjid sets jamaat as a fixed gap after adhan (e.g. "jamaat 10 min after adhan").
-- **Manual adhan times, no astronomical calculation (decided).** Calculated times can't be guaranteed to match a masjid, so volunteers enter each masjid's adhan times by hand, copying the notice board. Automatic sunrise/sunset-based rules were considered and rejected. The update history below keeps them possible later, using real data.
-- **Jamaat derived from adhan.** Each masjid sets a jamaat offset (`jamaat_offset_minutes`) per prayer, once. Jamaat time = adhan time + offset. A prayer can instead use a fixed jamaat time, for masjids that don't follow the offset pattern.
-- **Jumu'ah is in v1**, following the same pattern (adhan time + offset or fixed jamaat time).
-- **Fast volunteer updates:** one screen per masjid with its current adhan times already filled in, so the volunteer only edits what changed. A one-tap "board unchanged" action refreshes "last confirmed" without editing anything.
+- **Manual times, no astronomical calculation (decided).** Calculated times can't be guaranteed to match a masjid, so volunteers enter each masjid's times by hand, copying the notice board. Automatic sunrise/sunset-based rules were considered and rejected. The update history below keeps them possible later, using real data.
+- **Jamaat times only, no adhan times (decided 2026-09-26, revising the earlier adhan + offset design).** Boards show both, but people already know the adhan by hearing it, and a board's adhan time can be a few minutes off. Jamaat is the one time only the masjid sets and the one residents act on, so each prayer stores a single `jamaat_time`, copied straight from the board. The earlier `adhan_time` + `jamaat_offset_minutes` model was dropped before the migration was ever applied. Full v1 requirements: [specs/prayer-times.md](specs/prayer-times.md).
+- **Jumu'ah is in v1**, same as the daily prayers (one jamaat time).
+- **Fast volunteer updates:** one screen per masjid with its current jamaat times already filled in, so the volunteer only edits what changed. A one-tap "board unchanged" action refreshes "last confirmed" without editing anything.
 - **Freshness is visible to users** ("Confirmed 2 days ago"), with a warning once times are older than about a week.
 - **Update history kept:** each update is a new row with its date, never an overwrite (same audit idea as `lifecycle_status_history`).
 - **Where it fits:** masjids are rows in `entities` (`category = 'masjid'`) in the **Find Now** directory; volunteers are `volunteer_roles.role_type = 'masjid_volunteer'`, linked to their masjid(s) through `entity_members`. Table/column names beyond the confirmed terms still go through the naming protocol at build time.
@@ -335,9 +342,17 @@ Chosen as the next module to build, because it gives users (and Syed himself) a 
 - **v2 ideas (not in v1):** user confirmations ("✓ time was right" / "⚠ time changed") that alert that masjid's volunteer; AI reading times from a photo of the notice board; linking a death announcement's "after Asr at X masjid" to that masjid's jamaat time.
 
 ## Immediate next step
-`develop` is clean, nothing mid-flight. **Prayer Times** is the next module (design above). Suggested order:
-1. **First promotion to `main` + deploy**, so Death Announcement becomes usable by a small group of real users (`main` is 30 commits behind `develop`, pre-launch).
-2. Start a fresh `feature/*` branch off `develop` for Prayer Times v1 (Syed's 3 masjids).
+**Prayer Times v1 is in progress on `feature/prayer-times`.** Work from the task checklist in [specs/prayer-times.md](specs/prayer-times.md) §8, the first per-feature spec (spec-driven: acceptance criteria are the definition of done). As of 2026-09-26:
+- Done: T1 (spec reviewed, decisions recorded in §7) and T2 (migration committed and applied to Supabase by Syed).
+- 2026-09-27: dashboard seeding was replaced by an in-app **Add masjid** screen (`/masjid/new`, spec §4.5, §7 decisions 7–10). Any signed-in user can add a masjid; it starts `pending`, the creator becomes its `masjid_volunteer`, and Syed publishes it from the dashboard. This reverses the first migration's "no client-side path to create a masjid" stance, so it needs a new migration.
+- Done 2026-09-27: **T3**, migration `20260927120000_add_create_masjid_function.sql` (all-or-nothing `create_masjid` function; requires sign-in + a profile row), applied to Supabase by Syed.
+- Done 2026-09-28 to 2026-09-30: **T4–T10**. All four screens are built and tested by Syed: Add masjid (`/masjid/new`), the Prayer Times tab (`/`), masjid detail (`/masjid/:id`) and volunteer update (`/masjid/:id/update`). The 3 pilot masjids are live (T5).
+- Done 2026-09-30: **T11**. Tamil labels confirmed as drafted (spec §4.4, §7 decision 13), and the English and Tamil key sets match.
+- Done 2026-09-30: **T12**. Syed walked through AC1–AC31 on a phone in both languages; all passed.
+- Next: **T13**, the PR from `feature/prayer-times` to `develop`.
+- Not yet decided: whether to add a CLAUDE.md rule making a spec mandatory before any feature code.
+
+Still outstanding from before: the first promotion of `develop` to `main` + deploy (`main` is still only the scaffold commit).
 
 Other candidates, not started (after Prayer Times):
    - **Find Now** (directory/search — `profiles`/`entities`/`entity_members`, its own nav tab) — the other half of the locked push/pull architecture split, currently just a design on paper.
@@ -346,7 +361,7 @@ Other candidates, not started (after Prayer Times):
    - **Reputation system** (`reactions`, flags/reports, trust scoring) — referenced throughout as the eventual backbone for auto-publish/verified-announcer status, not started.
 
 ## Notes for whoever picks this up next
-- `develop` is the active branch, clean, no open feature branch right now — next module work should start a fresh `feature/*` branch off `develop`, per the branch-scope discipline rule. Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` is well behind `develop` (only the original scaffold commit) — this is believed intentional (pre-launch, nothing promoted yet), not an oversight, but wasn't independently confirmed with Syed.
+- The open feature branch is `feature/prayer-times` (Prayer Times v1 only, per the branch-scope discipline rule). Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` is well behind `develop` (only the original scaffold commit) — this is believed intentional (pre-launch, nothing promoted yet), not an oversight, but wasn't independently confirmed with Syed.
 - A fresh machine/clone needs `npx supabase login` + `npx supabase link --project-ref slalnatjabrcnjxngqoo` before any `supabase db push`/`migration list` command works, and `gh auth login --web` before `gh pr create` works — neither credential persists in the repo (both are gitignored/local-machine state).
 - Before trusting this doc's "already done" claims, spot-check the actual repo state (folders can exist but be empty, files can exist but be wrong — e.g. we once found `VITE_SUPABASE_URL` had `/rest/v1/` wrongly appended) rather than assuming the doc is authoritative. This doc itself went stale once already (progress log sat several commits behind actual repo state, including an inconsistency where the lifecycle-status naming table had already been updated to 5 stages but the prose above it still described the old 3) — re-verify against `git log`/actual files each session rather than trusting the log at face value.
 - Syed prefers step-by-step confirmation before executing, narrated plans, and one file at a time when debugging — see "Working style / preferences" above.

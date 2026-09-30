@@ -20,7 +20,7 @@ export default function FeedPage() {
   const { t } = useTranslation()
 
   return (
-    <div className="min-h-screen p-4 max-w-sm mx-auto">
+    <div className="p-4 max-w-sm mx-auto">
       <div className="flex items-center justify-between gap-2">
         <h1 className="text-xl font-bold text-brand">mbeat</h1>
         <div className="flex items-center gap-2">

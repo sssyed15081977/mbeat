@@ -1,14 +1,26 @@
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../features/auth/useAuth'
+import { peekReturnTo, rememberReturnTo } from '../features/auth/returnTo'
 import { LanguageToggle } from '../components/ui/LanguageToggle'
 import { Skeleton } from '../components/ui/Skeleton'
 
 export default function LoginPage() {
   const { session, loading, signInWithGoogle } = useAuth()
   const { t } = useTranslation()
+  const location = useLocation()
+  const returnTo = location.state?.from ?? '/feed'
 
-  if (session) return <Navigate to="/" replace />
+  function handleSignIn() {
+    rememberReturnTo(returnTo)
+    signInWithGoogle()
+  }
+
+  if (session) {
+    // Coming back from Google: AuthProvider sends the user to the saved page.
+    if (peekReturnTo()) return null
+    return <Navigate to={returnTo} replace />
+  }
 
   if (loading) {
     return (
@@ -26,7 +38,7 @@ export default function LoginPage() {
       <h1 className="text-2xl font-bold text-brand">mbeat</h1>
       <p className="text-gray-600 text-center max-w-xs">{t('auth.tagline')}</p>
       <button
-        onClick={signInWithGoogle}
+        onClick={handleSignIn}
         className="border rounded px-4 py-2 font-medium hover:bg-gray-50"
       >
         {t('auth.signInWithGoogle')}
