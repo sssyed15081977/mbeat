@@ -127,7 +127,28 @@
     "done": "Done"
   },
   "prayerTimes": {
-    "heading": "Prayer Times"
+    "heading": "Prayer Times",
+    "myMasjids": "My masjids",
+    "allMasjids": "All masjids",
+    "pinHint": "Pin the masjids you pray at",
+    "signInToPin": "Sign in to pin masjids",
+    "pin": "Pin {{name}}",
+    "unpin": "Unpin {{name}}",
+    "pinError": "Couldn't update your masjids — try again.",
+    "nextJamaat": "Next jamaat",
+    "tomorrow": "tomorrow",
+    "noTimes": "No jamaat times yet",
+    "empty": "No masjids added yet.",
+    "addMasjid": "Add masjid",
+    "loadError": "Couldn't load prayer times — try again.",
+    "offline": "You're offline. Connect to the internet and try again.",
+    "freshness": {
+      "today": "Confirmed today",
+      "yesterday": "Confirmed yesterday",
+      "daysAgo": "Confirmed {{count}} days ago",
+      "notConfirmed": "Not yet confirmed",
+      "stale": "Times may be out of date"
+    }
   },
   "nav": {
     "label": "Main",
