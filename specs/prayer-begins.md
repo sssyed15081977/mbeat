@@ -54,7 +54,7 @@ Done when every box is ticked. Each criterion should be checkable by hand at a *
 ### Cross-cutting (standing requirements)
 - [x] **AC14** Every string goes through `useTranslation()`, with keys in both `en.json` and `ta.json`. Method names and explanations are translated too.
 - [x] **AC15** The bottom sheet is keyboard- and screen-reader-usable: it has a heading, the current method is marked as selected, and it closes with Escape or a tap outside.
-- [x] **AC16** Touch targets are comfortable, and the card doesn't push "My masjids" so far down that the first row is hidden below the fold at 360×640.
+- [x] **AC16** Touch targets are comfortable, and the card doesn't push "My masjids" so far down that the first row is hidden below the fold at 360×640. *(Passes on Syed's phone; on the board this becomes jamaat-board.md AC31, the slim board.)*
 
 ## 4. Screens
 
