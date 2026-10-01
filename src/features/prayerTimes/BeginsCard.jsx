@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { getBeginsTimes, getNextBegins } from './beginsTimes'
 import { formatJamaatTime } from './nextJamaat'
 import { useCalcMethod } from './useCalcMethod'
+import { CalcMethodPicker } from './CalcMethodPicker'
 
 // Sunrise isn't a prayer, so its label lives outside `prayer.*`.
 function labelKey(prayer) {
@@ -13,7 +14,7 @@ function labelKey(prayer) {
 // loading or error state and it works offline (AC8).
 export function BeginsCard({ now }) {
   const { t } = useTranslation()
-  const [method] = useCalcMethod()
+  const [method, setMethod] = useCalcMethod()
 
   const rows = getBeginsTimes(now, method)
   const next = getNextBegins(now, method)
@@ -56,10 +57,7 @@ export function BeginsCard({ now }) {
       </ul>
 
       <p className="px-2 text-xs text-gray-500">{t('begins.note')}</p>
-      {/* Becomes the button that opens the method picker in T5. */}
-      <p className="px-2 text-sm text-gray-700">
-        {t('begins.method', { name: t(`calcMethod.${method}.name`) })}
-      </p>
+      <CalcMethodPicker method={method} onChange={setMethod} />
     </section>
   )
 }

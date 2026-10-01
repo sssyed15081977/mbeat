@@ -1,6 +1,7 @@
 # Spec: Prayer Begins times
 
 **Status:** reviewed, open questions resolved (2026-09-30); build in progress
+**Next:** after this merges, the "Today in Melapalayam" card is replaced by the two-column Begins + Jamaat board ([jamaat-board.md](jamaat-board.md), decided 2026-10-01). That spec overrides AC4a (Dhuhr stays "Dhuhr" on the board) and AC16, and reverses the §6 exclusion of calculated times on the masjid page / next to jamaat times.
 **Branch:** `feature/prayer-begins-times`
 **Builds on:** [prayer-times.md](prayer-times.md) (v1, done)
 **Design rationale:** [mbeat-rebuild-context.md → "Prayer Times"](../mbeat-rebuild-context.md)
@@ -85,7 +86,15 @@ Same convention as prayer-times.md §4.4: Arabic terms in Tamil script, AM/PM ke
 | Umm al-Qura | உம்முல் குரா | |
 | ISNA (North America) | ISNA (வட அமெரிக்கா) | |
 
-Method explanations (one line each) will be drafted in both languages during the build and added here for confirmation.
+Method explanations, drafted 2026-10-01 for confirmation:
+
+| Method | English | Tamil |
+|---|---|---|
+| Karachi | University of Islamic Sciences, Karachi. The usual method in India and Pakistan. | இஸ்லாமிய அறிவியல் பல்கலைக்கழகம், கராச்சி. இந்தியா, பாகிஸ்தானில் வழக்கமான முறை. |
+| Muslim World League | Used in Europe, the Far East and parts of the Americas. | ஐரோப்பா, தூர கிழக்கு, அமெரிக்காவின் சில பகுதிகளில் பயன்படுகிறது. |
+| Egyptian | Egyptian General Authority of Survey. Used in Africa, Syria and Lebanon. | எகிப்து பொது நில அளவை ஆணையம். ஆப்பிரிக்கா, சிரியா, லெபனானில் பயன்படுகிறது. |
+| Umm al-Qura | Umm al-Qura University, Makkah. Used in Saudi Arabia. | உம்முல் குரா பல்கலைக்கழகம், மக்கா. சவூதி அரேபியாவில் பயன்படுகிறது. |
+| ISNA (North America) | Islamic Society of North America. Used in the USA and Canada. | வட அமெரிக்க இஸ்லாமிய சங்கம். அமெரிக்கா, கனடாவில் பயன்படுகிறது. |
 
 ## 5. Data and calculation
 
@@ -135,8 +144,8 @@ None.
 - [x] T1 Review this spec; resolve §7's open questions. Update the naming tables (CLAUDE.md + mbeat-rebuild-context.md) for "Begins" and the reversed adhan decision. *(2026-09-30)*
 - [x] T2 `npm install adhan`; pure helper + method config. *(2026-09-30: checked for today in three phone time zones; identical results.)*
 - [x] T3 Saved-method hook (`localStorage`, fallback). *(2026-09-30: `useCalcMethod.js`; storage errors fall back to Karachi.)*
-- [ ] T4 "Today in Melapalayam" card on the Prayer Times tab, with next-prayer highlight.
-- [ ] T5 Bottom sheet (generic `components/ui/BottomSheet.jsx` if none exists) + method picker.
+- [x] T4 "Today in Melapalayam" card on the Prayer Times tab, with next-prayer highlight.
+- [x] T5 Bottom sheet (generic `components/ui/BottomSheet.jsx` if none exists) + method picker. *(2026-10-01: `BottomSheet.jsx` + `CalcMethodPicker.jsx`; checked in Chrome at 360px: pick applies and closes, survives reload, Escape closes, focus returns to the button.)*
 - [ ] T6 i18n pass: every key in `en.json` + `ta.json`; Tamil confirmed.
 - [ ] T7 Walk through AC1–AC16 on a phone in both languages; tick the boxes.
 - [ ] T8 PR `feature/prayer-begins-times` → `develop`, linking this spec.

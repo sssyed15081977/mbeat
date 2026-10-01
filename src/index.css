@@ -3,6 +3,12 @@
 @theme {
     --font-sans: "Noto Sans", "Noto Sans Tamil", sans-serif;
     --color-brand: #16a34a;
+
+    --animate-sheet-up: sheet-up 200ms ease-out;
+    @keyframes sheet-up {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
