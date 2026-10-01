@@ -100,7 +100,7 @@ Names propagate into DB tables/columns, UI text, routes, and variables all at on
 | Feed route (moved so Prayer Times can be the landing page, 2026-09-26) | `/feed` | Route; was `/` |
 | Tamil word for "post" / the Feed (chosen over இடுகை and ஃபீட், 2026-09-27) | பதிவு (plural பதிவுகள் = Feed tab; verb பதிவிடு) | `ta.json` only; English keys unchanged |
 | Volunteer who keeps a masjid's jamaat times current | Masjid volunteer | `entity_members.role = 'masjid_volunteer'` (per-masjid permission; the `volunteer_roles` table is deferred until blood donors) |
-| Call to prayer (chosen over "Azan" / "Baang") | Adhan | Term only — adhan times are **not stored or shown** (decided 2026-09-26: people hear the adhan; board adhan times can be off). `adhan_time` and `jamaat_offset_minutes` were dropped from the schema before first apply |
+| Call to prayer (chosen over "Azan" / "Baang") | Adhan | Term only — **masjid** adhan times are **not stored or shown** (decided 2026-09-26: people hear the adhan; board adhan times can be off). `adhan_time` and `jamaat_offset_minutes` were dropped from the schema before first apply. Calculated start times *are* shown since 2026-09-30, under the label "Begins" (next row), never called "adhan" |
 | Friday congregational prayer (chosen over "Jummah" / "Friday prayer") | Jumu'ah | prayer value `jumuah` |
 | The five daily prayers + Jumu'ah as stored values (chosen `dhuhr` over `zuhr` / `luhar`) | `fajr`, `dhuhr`, `asr`, `maghrib`, `isha`, `jumuah` | `masjid_prayer_times.prayer` |
 | A masjid's current jamaat times, and their audit trail | `masjid_prayer_times`, `masjid_prayer_times_history` | Supabase tables |
@@ -108,6 +108,8 @@ Names propagate into DB tables/columns, UI text, routes, and variables all at on
 | A user's pinned masjids (generic, reusable for other entities later) | My masjids (UI label); table `saved_entities` | `saved_entities (user_id, entity_id)` |
 | Masjid detail / volunteer update screens | Routes `/masjid/:id`, `/masjid/:id/update` | `pages/` + `features/prayerTimes/` |
 | Screen where any signed-in user adds a masjid (it starts `pending`; they become its volunteer) | Add masjid (UI label); route `/masjid/new` | `pages/NewMasjidPage.jsx`; database function `create_masjid` |
+| When a prayer's time starts in Melapalayam, calculated from the sun (chosen over "Adhan times" and "Prayer start times", 2026-09-30; reverses "no calculated times" for display only — nothing stored) | Begins; Tamil தொடக்கம் | "Today in Melapalayam" card on the Prayer Times tab; library `adhan` (adhan-js); spec [specs/prayer-begins.md](specs/prayer-begins.md) |
+| The user's chosen calculation method for Begins times (default Karachi; Asr always Shafi'i) | Calculation method; values `karachi`, `muslim_world_league`, `egyptian`, `umm_al_qura`, `north_america` | `localStorage` key `mbeat_prayer_calc_method` (device only, no DB column) |
 
 Keep this table in sync with [mbeat-rebuild-context.md](mbeat-rebuild-context.md) as new terms get locked.
 

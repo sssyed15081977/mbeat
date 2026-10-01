@@ -150,6 +150,37 @@
       "stale": "Times may be out of date"
     }
   },
+  "begins": {
+    "heading": "Today in Melapalayam",
+    "column": "Begins",
+    "sunrise": "Sunrise",
+    "next": "Next",
+    "note": "Calculated times. Adhan times may vary between masjids.",
+    "method": "Method: {{name}}",
+    "methodHeading": "Calculation method"
+  },
+  "calcMethod": {
+    "karachi": {
+      "name": "Karachi",
+      "description": "University of Islamic Sciences, Karachi. The usual method in India and Pakistan."
+    },
+    "muslim_world_league": {
+      "name": "Muslim World League",
+      "description": "Used in Europe, the Far East and parts of the Americas."
+    },
+    "egyptian": {
+      "name": "Egyptian",
+      "description": "Egyptian General Authority of Survey. Used in Africa, Syria and Lebanon."
+    },
+    "umm_al_qura": {
+      "name": "Umm al-Qura",
+      "description": "Umm al-Qura University, Makkah. Used in Saudi Arabia."
+    },
+    "north_america": {
+      "name": "ISNA (North America)",
+      "description": "Islamic Society of North America. Used in the USA and Canada."
+    }
+  },
   "masjidDetail": {
     "updateTimes": "Update times",
     "notAvailable": "This masjid isn't available.",
