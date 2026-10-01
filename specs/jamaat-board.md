@@ -1,7 +1,7 @@
 # Spec: Jamaat board
 
-**Status:** v2 reviewed, open questions resolved (2026-10-01); waiting for prayer-begins to merge
-**Branch:** `feature/jamaat-board`, to be rebased onto `develop` once `feature/prayer-begins-times` is merged
+**Status:** v2 reviewed, open questions resolved (2026-10-01); prayer-begins merged (PR #7), build ready to start
+**Branch:** `feature/jamaat-board`, rebased onto `develop` after PR #7 (2026-10-01)
 **Builds on:** [prayer-times.md](prayer-times.md) (v1, done), [prayer-begins.md](prayer-begins.md) (must be merged first)
 **Mockup:** three styles reviewed by Syed 2026-10-01 (claude.ai artifact "Jamaat Board Styles"). The mockup shows one column; this spec adds the Begins column.
 
@@ -152,7 +152,7 @@ None.
 Prerequisite: prayer-begins.md T5–T8 done and merged to `develop`.
 
 - [x] T1 Write this spec (v1, then v2 redesign); update the naming tables. *(2026-10-01)*
-- [ ] T2 Resolve §7's open questions *(done 2026-10-01)*; rebase onto `develop` after prayer-begins merges.
+- [x] T2 Resolve §7's open questions; rebase onto `develop` after prayer-begins merges. *(2026-10-01)*
 - [ ] T3 `JamaatBoard.jsx` + painted style (full and slim) + fonts. Replace the Begins card on the tab and the list on the masjid page.
 - [ ] T4 Saved-masjid hook + "Choose masjid" sheet.
 - [ ] T5 Digital style, with clock and countdown.
