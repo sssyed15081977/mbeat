@@ -1,6 +1,6 @@
 # Spec: Jamaat board
 
-**Status:** draft v2 (2026-10-01), redesigned as a two-column Begins + Jamaat board; awaiting review
+**Status:** v2 reviewed, open questions resolved (2026-10-01); waiting for prayer-begins to merge
 **Branch:** `feature/jamaat-board`, to be rebased onto `develop` once `feature/prayer-begins-times` is merged
 **Builds on:** [prayer-times.md](prayer-times.md) (v1, done), [prayer-begins.md](prayer-begins.md) (must be merged first)
 **Mockup:** three styles reviewed by Syed 2026-10-01 (claude.ai artifact "Jamaat Board Styles"). The mockup shows one column; this spec adds the Begins column.
@@ -74,7 +74,7 @@ Done when every box is ticked. Each criterion should be checkable by hand at a *
 - [ ] **AC28** The style picker is a labelled radio group, and the masjid sheet follows prayer-begins.md AC15 (heading, current choice marked, closes with Escape or a tap outside). Both are keyboard-usable with visible focus, and touch targets are at least 44px.
 - [ ] **AC29** The blinking colon and glow animations stop under `prefers-reduced-motion`.
 - [ ] **AC30** The boards look right **offline**: their fonts ship with the app (§5).
-- [ ] **AC31** On the tab at 360×640, the board doesn't push "My masjids" entirely off the first screen. This replaces prayer-begins.md AC16 and may need a compact board height (see §7).
+- [ ] **AC31** On the tab, the board uses a **slim** version of each style (smaller Bismillah and arch, tighter rows) so that at 360×640 "My masjids" isn't pushed entirely off the first screen. This replaces prayer-begins.md AC16. The masjid page uses the full-size board.
 
 ## 4. Screens
 
@@ -95,12 +95,12 @@ Heading "Choose masjid", then "No masjid", then "My masjids" (if any) and "All m
 | Painted / Digital / Wooden | வண்ணப் பலகை / டிஜிட்டல் / மரப் பலகை | |
 | Begins / Jamaat | தொடக்கம் / ஜமாஅத் | column headings |
 | {{prayer}} · Jamaat in {{time}} | {{prayer}} · ஜமாஅத்துக்கு இன்னும் {{time}} | |
-| {{prayer}} · Begins in {{time}} | {{prayer}} · தொடங்க இன்னும் {{time}} | *draft* |
-| Melapalayam | மேலப்பாளையம் | *draft* |
-| Choose masjid | மஸ்ஜிதைத் தேர்ந்தெடு | *draft* |
-| No masjid | மஸ்ஜித் வேண்டாம் | *draft* |
-| Masjid page | மஸ்ஜித் பக்கம் | *draft* |
-| Next prayer | அடுத்த தொழுகை | *draft* |
+| {{prayer}} · Begins in {{time}} | {{prayer}} · தொடங்க இன்னும் {{time}} | |
+| Melapalayam | மேலப்பாளையம் | |
+| Choose masjid | மஸ்ஜிதைத் தேர்ந்தெடு | |
+| No masjid | மஸ்ஜித் வேண்டாம் | |
+| Masjid page | மஸ்ஜித் பக்கம் | |
+| Next prayer | அடுத்த தொழுகை | |
 | Next jamaat, tomorrow, Sunrise, prayer names, note, Method | *(existing keys)* | |
 
 "Jamaat times" (ஜமாஅத் நேரங்கள், confirmed in v1) is no longer used as a heading, since the column headings say it.
@@ -140,18 +140,20 @@ Heading "Choose masjid", then "No masjid", then "My masjids" (if any) and "All m
 9. **Fonts bundled; Tamil drafts from v1 confirmed.**
 10. **Names:** the v1 names (§5) plus Begins / Jamaat column headings, "selected masjid" internally, and `mbeat_selected_masjid`.
 
+11. **Jumu'ah:** a separate Jumu'ah row (jamaat only), and Dhuhr stays "Dhuhr" on Fridays (AC4).
+12. **Slim board on the tab**, full size on the masjid page (AC31).
+13. **Tamil drafts in §4.4 confirmed.**
+
 ### Open
-1. Tamil labels marked *draft* in §4.4.
-2. **Jumu'ah handling (AC4):** a separate Jumu'ah row, with Dhuhr staying "Dhuhr" on Fridays. Confirm.
-3. **Height (AC31):** the decorative boards are taller than the Begins card. If "My masjids" ends up off the first screen, which is acceptable: a slimmer board on the tab (e.g. a smaller Bismillah and arch), or letting the lists start below the fold?
+None.
 
 ## 8. Task checklist
 
 Prerequisite: prayer-begins.md T5–T8 done and merged to `develop`.
 
 - [x] T1 Write this spec (v1, then v2 redesign); update the naming tables. *(2026-10-01)*
-- [ ] T2 Resolve §7's open questions; rebase onto `develop` after prayer-begins merges.
-- [ ] T3 `JamaatBoard.jsx` + painted style + fonts. Replace the Begins card on the tab and the list on the masjid page.
+- [ ] T2 Resolve §7's open questions *(done 2026-10-01)*; rebase onto `develop` after prayer-begins merges.
+- [ ] T3 `JamaatBoard.jsx` + painted style (full and slim) + fonts. Replace the Begins card on the tab and the list on the masjid page.
 - [ ] T4 Saved-masjid hook + "Choose masjid" sheet.
 - [ ] T5 Digital style, with clock and countdown.
 - [ ] T6 Wooden style.
