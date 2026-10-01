@@ -86,7 +86,7 @@ Same convention as prayer-times.md §4.4: Arabic terms in Tamil script, AM/PM ke
 | Umm al-Qura | உம்முல் குரா | |
 | ISNA (North America) | ISNA (வட அமெரிக்கா) | |
 
-Method explanations, drafted 2026-10-01 for confirmation:
+Method explanations, confirmed by Syed 2026-10-01:
 
 | Method | English | Tamil |
 |---|---|---|
@@ -146,6 +146,6 @@ None.
 - [x] T3 Saved-method hook (`localStorage`, fallback). *(2026-09-30: `useCalcMethod.js`; storage errors fall back to Karachi.)*
 - [x] T4 "Today in Melapalayam" card on the Prayer Times tab, with next-prayer highlight.
 - [x] T5 Bottom sheet (generic `components/ui/BottomSheet.jsx` if none exists) + method picker. *(2026-10-01: `BottomSheet.jsx` + `CalcMethodPicker.jsx`; checked in Chrome at 360px: pick applies and closes, survives reload, Escape closes, focus returns to the button.)*
-- [ ] T6 i18n pass: every key in `en.json` + `ta.json`; Tamil confirmed.
+- [x] T6 i18n pass: every key in `en.json` + `ta.json`; Tamil confirmed. *(2026-10-01: key parity checked app-wide, no hardcoded strings; Tamil card and sheet fit at 360px.)*
 - [ ] T7 Walk through AC1–AC16 on a phone in both languages; tick the boxes.
 - [ ] T8 PR `feature/prayer-begins-times` → `develop`, linking this spec.
