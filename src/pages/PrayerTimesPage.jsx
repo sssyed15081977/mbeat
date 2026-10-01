@@ -6,7 +6,7 @@ import { useMasjids } from '../features/prayerTimes/useMasjids'
 import { useSavedMasjids } from '../features/prayerTimes/useSavedMasjids'
 import { useNow } from '../features/prayerTimes/useNow'
 import { MasjidListItem } from '../features/prayerTimes/MasjidListItem'
-import { BeginsCard } from '../features/prayerTimes/BeginsCard'
+import { JamaatBoard } from '../features/prayerTimes/JamaatBoard'
 
 function MasjidRowSkeleton() {
   return (
@@ -64,8 +64,9 @@ export default function PrayerTimesPage() {
         <LanguageToggle />
       </div>
 
-      {/* Outside the loading/error branches: it needs no network (AC8). */}
-      <BeginsCard now={now} />
+      {/* Outside the loading/error branches: Begins needs no network. The
+          Jamaat column stays blank until a masjid is chosen (jamaat-board.md T4). */}
+      <JamaatBoard now={now} heading={t('board.melapalayam')} size="slim" />
 
       {loading && (
         <div className="divide-y divide-gray-100">

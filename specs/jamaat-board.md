@@ -34,7 +34,7 @@ Show prayer times the way a masjid board does: one board with two columns, **Beg
 Done when every box is ticked. Each criterion should be checkable by hand at a **mobile width (360px)** in **both English and Tamil**.
 
 ### Board content (all styles, both screens)
-- [ ] **AC1** Top to bottom, the board shows: the Bismillah line (Arabic, بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ), the heading (§4), column headings **Begins** / **Jamaat**, then rows Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha, and a Jumu'ah row set apart at the bottom.
+- [ ] **AC1** Top to bottom, the board shows: the Bismillah line (Arabic, بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ), the heading (§4), column headings **Begins** / **Jamaat**, then rows Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha, and a Jumu'ah row set apart at the bottom. With no masjid chosen, the Jumu'ah row is left out, since both its cells would be blank.
 - [ ] **AC2** The Begins column is filled exactly as prayer-begins.md specifies (Melapalayam coordinates, Asia/Kolkata, the saved calculation method, Shafi'i Asr). It is always filled, offline too.
 - [ ] **AC3** The Jamaat column is blank when no masjid is chosen. When one is, it shows that masjid's times. The Sunrise row and any prayer the masjid has no time for show "—".
 - [ ] **AC4** The Jumu'ah row shows the masjid's Jumu'ah jamaat time, and its Begins cell is blank. The Dhuhr row always reads "Dhuhr" on this board, overriding prayer-begins.md AC4a so that Fridays don't show two Jumu'ah rows.
@@ -153,7 +153,7 @@ Prerequisite: prayer-begins.md T5–T8 done and merged to `develop`.
 
 - [x] T1 Write this spec (v1, then v2 redesign); update the naming tables. *(2026-10-01)*
 - [x] T2 Resolve §7's open questions; rebase onto `develop` after prayer-begins merges. *(2026-10-01)*
-- [ ] T3 `JamaatBoard.jsx` + painted style (full and slim) + fonts. Replace the Begins card on the tab and the list on the masjid page.
+- [x] T3 `JamaatBoard.jsx` + painted style (full and slim) + fonts. Replace the Begins card on the tab and the list on the masjid page. *(2026-10-01: `boardRows.js` holds the shared row logic; `BeginsCard.jsx` removed. Fonts: Marcellus latin (15 KB) via `@fontsource/marcellus`, and Amiri cut down to the Bismillah's letters (20 KB, `src/assets/fonts/`, OFL licence alongside) instead of the full 108 KB Arabic file; woff2 added to the PWA precache. Checked in Chrome at 360×640 in both languages: no horizontal scroll, and the first masjid row is visible on the tab (AC31). On the full board, Tamil "Sunrise" wraps to two lines.)*
 - [ ] T4 Saved-masjid hook + "Choose masjid" sheet.
 - [ ] T5 Digital style, with clock and countdown.
 - [ ] T6 Wooden style.

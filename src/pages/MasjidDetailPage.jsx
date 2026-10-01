@@ -6,7 +6,7 @@ import { useMasjid } from '../features/prayerTimes/useMasjid'
 import { useSavedMasjids } from '../features/prayerTimes/useSavedMasjids'
 import { useNow } from '../features/prayerTimes/useNow'
 import { PRAYERS } from '../features/prayerTimes/prayers'
-import { getNextJamaat, formatJamaatTime } from '../features/prayerTimes/nextJamaat'
+import { JamaatBoard } from '../features/prayerTimes/JamaatBoard'
 import { FreshnessLabel } from '../features/prayerTimes/FreshnessLabel'
 import { PinButton } from '../features/prayerTimes/PinButton'
 
@@ -24,46 +24,6 @@ function DetailSkeleton() {
         ))}
       </div>
     </div>
-  )
-}
-
-// Every prayer the masjid has a row for, Fajr → Isha then Jumu'ah (AC5).
-// Missing prayers are simply left out (AC9). The next jamaat is highlighted.
-function JamaatTimeList({ prayerTimes, next }) {
-  const { t } = useTranslation()
-  const timeByPrayer = new Map(prayerTimes.map((row) => [row.prayer, row.jamaat_time]))
-  const rows = PRAYERS.filter((prayer) => timeByPrayer.has(prayer))
-
-  if (!rows.length) {
-    return <p className="text-gray-500">{t('prayerTimes.noTimes')}</p>
-  }
-
-  return (
-    <ul className="divide-y divide-gray-100">
-      {rows.map((prayer) => {
-        const isNext = next?.prayer === prayer
-        return (
-          <li
-            key={prayer}
-            aria-current={isNext ? 'true' : undefined}
-            className={`flex items-center justify-between gap-2 px-3 py-3 rounded ${
-              isNext ? 'bg-brand/10 font-semibold text-brand' : 'text-gray-900'
-            }`}
-          >
-            <span>
-              {t(`prayer.${prayer}`)}
-              {isNext && (
-                <span className="block text-xs font-normal">
-                  {t('prayerTimes.nextJamaat')}
-                  {next.isTomorrow && <> ({t('prayerTimes.tomorrow')})</>}
-                </span>
-              )}
-            </span>
-            <span className="tabular-nums">{formatJamaatTime(timeByPrayer.get(prayer))}</span>
-          </li>
-        )
-      })}
-    </ul>
   )
 }
 
@@ -130,10 +90,11 @@ export default function MasjidDetailPage() {
             </p>
           )}
 
-          <JamaatTimeList
-            prayerTimes={masjid.prayer_times}
-            next={getNextJamaat(masjid.prayer_times, now)}
-          />
+          {/* Missing prayers show "—" on the board (jamaat-board.md AC3). */}
+          <JamaatBoard now={now} heading={masjid.name} prayerTimes={masjid.prayer_times} />
+          {!masjid.prayer_times.length && (
+            <p className="text-sm text-gray-500">{t('prayerTimes.noTimes')}</p>
+          )}
 
           {/* Last on the page, within thumb reach (4.2). */}
           {isVolunteer && (

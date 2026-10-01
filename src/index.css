@@ -1,8 +1,27 @@
 @import "tailwindcss";
+@import "@fontsource/marcellus/latin-400.css";
+
+/* Amiri (SIL OFL, see assets/fonts/OFL-Amiri.txt) cut down to the Bismillah's
+   letters only: 20 KB instead of 108 KB. Regenerate with fontTools if the text changes:
+   pyftsubset amiri-arabic-400-normal.woff2 --text="<bismillah>" --layout-features='*' --flavor=woff2 */
+@font-face {
+    font-family: "Amiri Bismillah";
+    src: url("./assets/fonts/amiri-bismillah.woff2") format("woff2");
+    font-display: swap;
+}
 
 @theme {
     --font-sans: "Noto Sans", "Noto Sans Tamil", sans-serif;
     --color-brand: #16a34a;
+
+    /* Jamaat board (specs/jamaat-board.md). Each style keeps its own look in light and dark mode. */
+    --font-bismillah: "Amiri Bismillah", "Noto Naskh Arabic", serif;
+    --font-board-painted: "Marcellus", "Noto Sans Tamil", Georgia, serif;
+    --color-board-painted-top: #144a39;
+    --color-board-painted-bottom: #0d3328;
+    --color-board-painted-gold: #d1ab55;
+    --color-board-painted-cream: #f4ead0;
+    --color-board-painted-glow: #ffe39a;
 
     --animate-sheet-up: sheet-up 200ms ease-out;
     @keyframes sheet-up {
