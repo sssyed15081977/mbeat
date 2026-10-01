@@ -1,6 +1,6 @@
 # Spec: Prayer Begins times
 
-**Status:** reviewed, open questions resolved (2026-09-30); build in progress
+**Status:** built and checked on a phone (2026-10-01); in review
 **Next:** after this merges, the "Today in Melapalayam" card is replaced by the two-column Begins + Jamaat board ([jamaat-board.md](jamaat-board.md), decided 2026-10-01). That spec overrides AC4a (Dhuhr stays "Dhuhr" on the board) and AC16, and reverses the §6 exclusion of calculated times on the masjid page / next to jamaat times.
 **Branch:** `feature/prayer-begins-times`
 **Builds on:** [prayer-times.md](prayer-times.md) (v1, done)
@@ -35,26 +35,26 @@ Masjids' own adhan times differ from each other and from the calculated start ti
 Done when every box is ticked. Each criterion should be checkable by hand at a **mobile width (360px)** in **both English and Tamil**.
 
 ### The card
-- [ ] **AC1** The Prayer Times tab (`/`) shows a **"Today in Melapalayam"** card above "My masjids", for guests and signed-in users alike.
-- [ ] **AC2** The card lists, in order: Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha, each with its Begins time ("Fajr · 4:52 AM"). Times use the same format as jamaat times (`formatJamaatTime`'s style: "4:52 AM" in both languages).
-- [ ] **AC3** Times are calculated for Melapalayam's fixed coordinates and shown in **Asia/Kolkata** time, whatever the phone's time zone or location. No location permission is ever requested.
-- [ ] **AC4** The prayer that begins next is highlighted. Sunrise is never highlighted: after Fajr begins, the next highlight is Dhuhr. After Isha begins, tomorrow's Fajr is highlighted and marked "tomorrow".
-- [ ] **AC4a** On Fridays the Dhuhr row reads **"Jumu'ah"** (same Begins time), matching how "next jamaat" treats Friday.
-- [ ] **AC5** The highlight moves on by itself while the screen stays open (reuse `useNow`).
-- [ ] **AC6** Asr uses the **Shafi'i** calculation (shadow equal to the object's length). There is no madhab setting.
-- [ ] **AC7** The card carries one short note: "Calculated times. Adhan times may vary between masjids." *(Wording changed by Syed 2026-09-30, from "Jamaat times are set by each masjid.")*
-- [ ] **AC8** The card works **offline** and never shows a loading state or skeleton, because nothing is fetched.
+- [x] **AC1** The Prayer Times tab (`/`) shows a **"Today in Melapalayam"** card above "My masjids", for guests and signed-in users alike.
+- [x] **AC2** The card lists, in order: Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha, each with its Begins time ("Fajr · 4:52 AM"). Times use the same format as jamaat times (`formatJamaatTime`'s style: "4:52 AM" in both languages).
+- [x] **AC3** Times are calculated for Melapalayam's fixed coordinates and shown in **Asia/Kolkata** time, whatever the phone's time zone or location. No location permission is ever requested.
+- [x] **AC4** The prayer that begins next is highlighted. Sunrise is never highlighted: after Fajr begins, the next highlight is Dhuhr. After Isha begins, tomorrow's Fajr is highlighted and marked "tomorrow".
+- [x] **AC4a** On Fridays the Dhuhr row reads **"Jumu'ah"** (same Begins time), matching how "next jamaat" treats Friday. *(Superseded on the board by jamaat-board.md AC4.)*
+- [x] **AC5** The highlight moves on by itself while the screen stays open (reuse `useNow`).
+- [x] **AC6** Asr uses the **Shafi'i** calculation (shadow equal to the object's length). There is no madhab setting.
+- [x] **AC7** The card carries one short note: "Calculated times. Adhan times may vary between masjids." *(Wording changed by Syed 2026-09-30, from "Jamaat times are set by each masjid.")*
+- [x] **AC8** The card works **offline** and never shows a loading state or skeleton, because nothing is fetched.
 
 ### Calculation method
-- [ ] **AC9** The bottom of the card shows the current method ("Method: Karachi"). Tapping it opens a bottom sheet listing: **Karachi** (default), **Muslim World League**, **Egyptian**, **Umm al-Qura**, **ISNA (North America)**. Each has a one-line explanation.
-- [ ] **AC10** Picking a method closes the sheet and updates the times immediately, with no save button or confirmation.
-- [ ] **AC11** The choice is saved on the device (`localStorage`) and is still there after closing and reopening the app. It works for guests; signing in is not required.
-- [ ] **AC12** A missing or unrecognised stored value falls back to Karachi without an error.
+- [x] **AC9** The bottom of the card shows the current method ("Method: Karachi"). Tapping it opens a bottom sheet listing: **Karachi** (default), **Muslim World League**, **Egyptian**, **Umm al-Qura**, **ISNA (North America)**. Each has a one-line explanation.
+- [x] **AC10** Picking a method closes the sheet and updates the times immediately, with no save button or confirmation.
+- [x] **AC11** The choice is saved on the device (`localStorage`) and is still there after closing and reopening the app. It works for guests; signing in is not required.
+- [x] **AC12** A missing or unrecognised stored value falls back to Karachi without an error.
 
 ### Cross-cutting (standing requirements)
-- [ ] **AC14** Every string goes through `useTranslation()`, with keys in both `en.json` and `ta.json`. Method names and explanations are translated too.
-- [ ] **AC15** The bottom sheet is keyboard- and screen-reader-usable: it has a heading, the current method is marked as selected, and it closes with Escape or a tap outside.
-- [ ] **AC16** Touch targets are comfortable, and the card doesn't push "My masjids" so far down that the first row is hidden below the fold at 360×640.
+- [x] **AC14** Every string goes through `useTranslation()`, with keys in both `en.json` and `ta.json`. Method names and explanations are translated too.
+- [x] **AC15** The bottom sheet is keyboard- and screen-reader-usable: it has a heading, the current method is marked as selected, and it closes with Escape or a tap outside.
+- [x] **AC16** Touch targets are comfortable, and the card doesn't push "My masjids" so far down that the first row is hidden below the fold at 360×640.
 
 ## 4. Screens
 
@@ -147,5 +147,5 @@ None.
 - [x] T4 "Today in Melapalayam" card on the Prayer Times tab, with next-prayer highlight.
 - [x] T5 Bottom sheet (generic `components/ui/BottomSheet.jsx` if none exists) + method picker. *(2026-10-01: `BottomSheet.jsx` + `CalcMethodPicker.jsx`; checked in Chrome at 360px: pick applies and closes, survives reload, Escape closes, focus returns to the button.)*
 - [x] T6 i18n pass: every key in `en.json` + `ta.json`; Tamil confirmed. *(2026-10-01: key parity checked app-wide, no hardcoded strings; Tamil card and sheet fit at 360px.)*
-- [ ] T7 Walk through AC1–AC16 on a phone in both languages; tick the boxes.
+- [x] T7 Walk through AC1–AC16 on a phone in both languages; tick the boxes. *(2026-10-01: all passed on Syed's phone.)*
 - [ ] T8 PR `feature/prayer-begins-times` → `develop`, linking this spec.
