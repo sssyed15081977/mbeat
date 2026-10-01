@@ -41,7 +41,7 @@ Done when every box is ticked. Each criterion should be checkable by hand at a *
 - [ ] **AC4a** On Fridays the Dhuhr row reads **"Jumu'ah"** (same Begins time), matching how "next jamaat" treats Friday.
 - [ ] **AC5** The highlight moves on by itself while the screen stays open (reuse `useNow`).
 - [ ] **AC6** Asr uses the **Shafi'i** calculation (shadow equal to the object's length). There is no madhab setting.
-- [ ] **AC7** The card carries one short note: "Calculated times. Jamaat times are set by each masjid." This makes clear the times below it come from the masjids and the card's don't.
+- [ ] **AC7** The card carries one short note: "Calculated times. Adhan times may vary between masjids." *(Wording changed by Syed 2026-09-30, from "Jamaat times are set by each masjid.")*
 - [ ] **AC8** The card works **offline** and never shows a loading state or skeleton, because nothing is fetched.
 
 ### Calculation method
@@ -76,7 +76,7 @@ Same convention as prayer-times.md §4.4: Arabic terms in Tamil script, AM/PM ke
 | Today in Melapalayam | இன்று மேலப்பாளையத்தில் | |
 | Sunrise | சூரிய உதயம் | |
 | tomorrow | நாளை | *(existing key)* |
-| Calculated times. Jamaat times are set by each masjid. | கணக்கிடப்பட்ட நேரங்கள். ஜமாஅத் நேரங்களை ஒவ்வொரு மஸ்ஜிதும் தீர்மானிக்கிறது. | |
+| Calculated times. Adhan times may vary between masjids. | கணக்கிடப்பட்ட நேரங்கள். அதான் நேரங்கள் மஸ்ஜிதுக்கு மஸ்ஜித் மாறுபடலாம். | *Reworded 2026-09-30; Tamil awaiting confirmation (அதான் vs பாங்கு)* |
 | Method: {{name}} | முறை: {{name}} | |
 | Calculation method | கணக்கீட்டு முறை | |
 | Karachi | கராச்சி | |

@@ -6,6 +6,7 @@ import { useMasjids } from '../features/prayerTimes/useMasjids'
 import { useSavedMasjids } from '../features/prayerTimes/useSavedMasjids'
 import { useNow } from '../features/prayerTimes/useNow'
 import { MasjidListItem } from '../features/prayerTimes/MasjidListItem'
+import { BeginsCard } from '../features/prayerTimes/BeginsCard'
 
 function MasjidRowSkeleton() {
   return (
@@ -62,6 +63,9 @@ export default function PrayerTimesPage() {
         <h1 className="text-xl font-bold text-brand">{t('prayerTimes.heading')}</h1>
         <LanguageToggle />
       </div>
+
+      {/* Outside the loading/error branches: it needs no network (AC8). */}
+      <BeginsCard now={now} />
 
       {loading && (
         <div className="divide-y divide-gray-100">
