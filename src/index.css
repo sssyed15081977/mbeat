@@ -1,8 +1,44 @@
 @import "tailwindcss";
+@import "@fontsource/marcellus/latin-400.css";
+@import "@fontsource/cinzel/latin-700.css";
+
+/* Amiri (SIL OFL, see assets/fonts/OFL-Amiri.txt) cut down to the Bismillah's
+   letters only: 20 KB instead of 108 KB. Regenerate with fontTools if the text changes:
+   pyftsubset amiri-arabic-400-normal.woff2 --text="<bismillah>" --layout-features='*' --flavor=woff2 */
+@font-face {
+    font-family: "Amiri Bismillah";
+    src: url("./assets/fonts/amiri-bismillah.woff2") format("woff2");
+    font-display: swap;
+}
 
 @theme {
     --font-sans: "Noto Sans", "Noto Sans Tamil", sans-serif;
     --color-brand: #16a34a;
+
+    /* Jamaat board (specs/jamaat-board.md). Each style keeps its own look in light and dark mode. */
+    --font-bismillah: "Amiri Bismillah", "Noto Naskh Arabic", serif;
+    --font-board-painted: "Marcellus", "Noto Sans Tamil", Georgia, serif;
+    --color-board-painted-top: #144a39;
+    --color-board-painted-bottom: #0d3328;
+    --color-board-painted-gold: #d1ab55;
+    --color-board-painted-cream: #f4ead0;
+    --color-board-painted-glow: #ffe39a;
+
+    --color-board-digital-panel: #0a0a0b;
+    --color-board-digital-frame: #2b2c30;
+    --color-board-digital-text: #eaeaea;
+    --color-board-digital-muted: #9a9a9a;
+    --color-board-digital-rule: #26272b;
+    --color-board-digital-lit: #ff3a2a;
+    --color-board-digital-ghost: rgb(255 58 42 / 0.09);
+    --color-board-digital-amber: #ffb547;
+
+    --font-board-wooden: "Cinzel", "Noto Serif Tamil", "Noto Sans Tamil", Georgia, serif;
+    --color-board-wooden-light: #7b4a28;
+    --color-board-wooden-dark: #5a331b;
+    --color-board-wooden-engraved: #f1d9a8;
+    --color-board-wooden-brass-text: #2e1f08;
+    --color-board-wooden-green: #1f7a47;
 
     --animate-sheet-up: sheet-up 200ms ease-out;
     @keyframes sheet-up {

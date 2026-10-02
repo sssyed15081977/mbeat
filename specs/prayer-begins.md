@@ -75,7 +75,7 @@ Same convention as prayer-times.md §4.4: Arabic terms in Tamil script, AM/PM ke
 |---|---|---|
 | Begins | தொடக்கம் | ஆரம்பம் |
 | Today in Melapalayam | இன்று மேலப்பாளையத்தில் | |
-| Sunrise | சூரிய உதயம் | |
+| Sunrise | உதயம் | *Shortened from சூரிய உதயம் by Syed 2026-10-01 so it fits on the board* |
 | tomorrow | நாளை | *(existing key)* |
 | Calculated times. Adhan times may vary between masjids. | கணக்கிடப்பட்ட நேரங்கள். அதான் நேரங்கள் மஸ்ஜிதுக்கு மஸ்ஜித் மாறுபடலாம். | *Reworded 2026-09-30; Tamil awaiting confirmation (அதான் vs பாங்கு)* |
 | Method: {{name}} | முறை: {{name}} | |

@@ -151,13 +151,30 @@
     }
   },
   "begins": {
-    "heading": "Today in Melapalayam",
     "column": "Begins",
     "sunrise": "Sunrise",
-    "next": "Next",
     "note": "Calculated times. Adhan times may vary between masjids.",
     "method": "Method: {{name}}",
     "methodHeading": "Calculation method"
+  },
+  "board": {
+    "melapalayam": "Melapalayam",
+    "jamaat": "Jamaat",
+    "nextPrayer": "Next prayer",
+    "next": "Next",
+    "prayer": "Prayer",
+    "chooseMasjid": "Choose masjid",
+    "noMasjid": "No masjid",
+    "masjidPage": "Masjid page",
+    "jamaatIn": "{{prayer}} · Jamaat in {{time}}",
+    "beginsIn": "{{prayer}} · Begins in {{time}}",
+    "style": "Board style",
+    "displaySettings": "Display settings",
+    "styles": {
+      "painted": "Painted",
+      "digital": "Digital",
+      "wooden": "Wooden"
+    }
   },
   "calcMethod": {
     "karachi": {
