@@ -101,7 +101,7 @@ Naming mistakes are expensive here because a name isn't just a label — it prop
 | Feed route (moved so Prayer Times can be the landing page, 2026-09-26) | `/feed` | Route; was `/` |
 | Tamil word for "post" / the Feed (chosen over இடுகை and ஃபீட், 2026-09-27) | பதிவு (plural பதிவுகள் = Feed tab; verb பதிவிடு) | `ta.json` only; English keys unchanged |
 | Volunteer who keeps a masjid's jamaat times current | Masjid volunteer | `entity_members.role = 'masjid_volunteer'` (per-masjid permission; the `volunteer_roles` table is deferred until blood donors) |
-| Call to prayer (chosen over "Azan" / "Baang") | Adhan | Term only — adhan times are **not stored or shown** (decided 2026-09-26: people hear the adhan; board adhan times can be off). `adhan_time` and `jamaat_offset_minutes` were dropped from the schema before first apply |
+| Call to prayer (chosen over "Azan" / "Baang") | Adhan | Term only — **masjid** adhan times are **not stored or shown** (decided 2026-09-26: people hear the adhan; board adhan times can be off). `adhan_time` and `jamaat_offset_minutes` were dropped from the schema before first apply. Calculated start times *are* shown since 2026-09-30, under the label "Begins" (next row), never called "adhan" |
 | Friday congregational prayer (chosen over "Jummah" / "Friday prayer") | Jumu'ah | prayer value `jumuah` |
 | The five daily prayers + Jumu'ah as stored values (chosen `dhuhr` over `zuhr` / `luhar`) | `fajr`, `dhuhr`, `asr`, `maghrib`, `isha`, `jumuah` | `masjid_prayer_times.prayer` |
 | A masjid's current jamaat times, and their audit trail | `masjid_prayer_times`, `masjid_prayer_times_history` | Supabase tables |
@@ -109,6 +109,11 @@ Naming mistakes are expensive here because a name isn't just a label — it prop
 | A user's pinned masjids (generic, reusable for other entities later) | My masjids (UI label); table `saved_entities` | `saved_entities (user_id, entity_id)` |
 | Masjid detail / volunteer update screens | Routes `/masjid/:id`, `/masjid/:id/update` | `pages/` + `features/prayerTimes/` |
 | Screen where any signed-in user adds a masjid (it starts `pending`; they become its volunteer) | Add masjid (UI label); route `/masjid/new` | `pages/NewMasjidPage.jsx`; database function `create_masjid` |
+| When a prayer's time starts in Melapalayam, calculated from the sun (chosen over "Adhan times" and "Prayer start times", 2026-09-30; reverses "no calculated times" for display only — nothing stored) | Begins; Tamil தொடக்கம் | "Today in Melapalayam" card on the Prayer Times tab; library `adhan` (adhan-js); spec [specs/prayer-begins.md](specs/prayer-begins.md) |
+| The user's chosen calculation method for Begins times (default Karachi; Asr always Shafi'i) | Calculation method; values `karachi`, `muslim_world_league`, `egyptian`, `umm_al_qura`, `north_america` | `localStorage` key `mbeat_prayer_calc_method` (device only, no DB column) |
+| The two-column Begins + Jamaat board (Prayer Times tab and masjid page) and how it is drawn, chosen per device (2026-10-01) | Board style (Tamil பலகை வடிவம்); values `painted` (default), `digital`, `wooden`; column headings Begins / Jamaat (தொடக்கம் / ஜமாஅத்) | `localStorage` key `mbeat_jamaat_board_style`; `features/prayerTimes/JamaatBoard.jsx` + `JamaatBoard.<style>.jsx`, `useBoardStyle.js`; spec [specs/jamaat-board.md](specs/jamaat-board.md) |
+| The sheet opened from the gear on the Jamaat board, holding Board style and Calculation method (chosen over "Board settings", 2026-10-02) | Display settings; Tamil காட்சி அமைப்புகள் | i18n `board.displaySettings`; `features/prayerTimes/DisplaySettingsSheet.jsx` (with `BoardStylePicker.jsx`, `CalcMethodPicker.jsx`); spec [specs/jamaat-board.md](specs/jamaat-board.md) |
+| The masjid whose jamaat times fill the board on the Prayer Times tab, chosen from the board (2026-10-01) | Selected masjid (internal term; UI control "Choose masjid") | `localStorage` key `mbeat_selected_masjid` (masjid id); `features/prayerTimes/useSelectedMasjid.js` + `ChooseMasjidSheet.jsx` (names confirmed 2026-10-02); spec [specs/jamaat-board.md](specs/jamaat-board.md) |
 
 ## Working style / preferences (for Claude Code to follow)
 - Syed's background: ~10 years Google Apps Script, prior ASP.NET, Python as primary language, still learning React/modern web frameworks.
@@ -325,13 +330,13 @@ Considered switching to NoSQL given many post/profile/entity types are planned o
 ## Progress log — branch cleanup, doc catch-up (done)
 - `feature/death-announcement-enhancements` merged into `develop` via PR #3 and PR #4 (both done in the previous session — this doc's "Immediate next step" said the PR was still pending, which was stale; corrected here). Branch deleted after merge (local + remote), per the standing feature-branch cleanup habit.
 - `feature/auth-google-login` was found still lying around (local + `origin`) despite being fully merged into `develop` months earlier (`git merge-base --is-ancestor` confirmed every commit on it is an ancestor of `develop`). Deleted, local + remote — it was leftover branch clutter, not in-progress work.
-- `develop` currently 30 commits ahead of `main` (49 as of 2026-09-30, after the Prayer Times merge); `main` still sits at the original scaffold commit — no release cut yet. Still believed intentional (pre-launch), still not independently confirmed with Syed.
+- `develop` was then 30 commits ahead of `main` (49 by 2026-09-30); `main` sat at the original scaffold commit until the first launch (PR #6, 2026-09-30).
 
 ## Prayer Times — built (v1 merged to `develop` 2026-09-30)
 Chosen as the next module to build, because it gives users (and Syed himself) a **daily** reason to open the app. Death announcements matter but aren't daily, and a volunteer project needs regular use and feedback to keep momentum. Generic prayer apps already show calculated start times, so mbeat's value is the **local, per-masjid jamaat times** that today only live on notice boards and in announcements after salah.
 
 - **Local facts (from Syed):** Melapalayam has ~50 masjids. Times shift with sunrise/sunset. Masjids don't follow any common calculation method: adhan times differ from each other and from astronomical times by several minutes (e.g. sunset 6:20, one masjid's adhan 6:23, another's 6:27). Almost every masjid sets jamaat as a fixed gap after adhan (e.g. "jamaat 10 min after adhan").
-- **Manual times, no astronomical calculation (decided).** Calculated times can't be guaranteed to match a masjid, so volunteers enter each masjid's times by hand, copying the notice board. Automatic sunrise/sunset-based rules were considered and rejected. The update history below keeps them possible later, using real data.
+- **Manual times, no astronomical calculation (decided).** Calculated times can't be guaranteed to match a masjid, so volunteers enter each masjid's times by hand, copying the notice board. Automatic sunrise/sunset-based rules were considered and rejected. The update history below keeps them possible later, using real data. *(Still true for masjid jamaat times. 2026-09-30: calculated **Begins** times are now shown separately, in their own card, for the town as a whole; see "Prayer Begins times" below.)*
 - **Jamaat times only, no adhan times (decided 2026-09-26, revising the earlier adhan + offset design).** Boards show both, but people already know the adhan by hearing it, and a board's adhan time can be a few minutes off. Jamaat is the one time only the masjid sets and the one residents act on, so each prayer stores a single `jamaat_time`, copied straight from the board. The earlier `adhan_time` + `jamaat_offset_minutes` model was dropped before the migration was ever applied. Full v1 requirements: [specs/prayer-times.md](specs/prayer-times.md).
 - **Jumu'ah is in v1**, same as the daily prayers (one jamaat time).
 - **Fast volunteer updates:** one screen per masjid with its current jamaat times already filled in, so the volunteer only edits what changed. A one-tap "board unchanged" action refreshes "last confirmed" without editing anything.
@@ -350,19 +355,29 @@ Chosen as the next module to build, because it gives users (and Syed himself) a 
 - Done 2026-09-30: **T11**. Tamil labels confirmed as drafted (spec §4.4, §7 decision 13), and the English and Tamil key sets match.
 - Done 2026-09-30: **T12**. Syed walked through AC1–AC31 on a phone in both languages; all passed.
 - Done 2026-09-30: **T13**. PR #5 merged into `develop`; `feature/prayer-times` deleted (local + remote).
-- **Next:** not yet chosen. The strongest candidate is the first promotion of `develop` to `main` + deploy, since Prayer Times only brings in daily users once it's live. After that, pick from the candidates below.
 - Not yet decided: whether to add a CLAUDE.md rule making a spec mandatory before any feature code.
 
-Still outstanding from before: the first promotion of `develop` to `main` + deploy (`main` is still only the scaffold commit).
+## Progress log — first launch (done 2026-09-30)
+- `develop` promoted to `main` via PR #6 and deployed on Cloudflare (Node pinned to 24 in `.node-version`; OAuth `redirectTo` set to the current origin so login works on the production domain). Launch confirmed finished by Syed.
 
-Other candidates, not started (after Prayer Times):
+## Prayer Begins times — in progress (started 2026-09-30)
+Syed wants residents to see when each prayer's time actually **begins**, because masjids' adhan times differ from the times set in Islam (through ignorance or madhab differences). This **partly reverses** the 2026-09-26 "no adhan times, no calculated times" decision: calculated times are now *shown* (label **"Begins"**), but still never *stored*, and masjid adhan times are still not shown. Jamaat times stay manual.
+- Calculated on the phone with the `adhan` library (adhan-js) for fixed Melapalayam coordinates, in Asia/Kolkata time. No migration.
+- A "Today in Melapalayam" card at the top of the Prayer Times tab: Fajr, Sunrise, Dhuhr (Jumu'ah on Fridays), Asr, Maghrib, Isha, with the next prayer highlighted.
+- Asr is Shafi'i only. The calculation method is the user's choice (default Karachi), picked in a bottom sheet on the card and saved in `localStorage` only.
+- No local printed calendar lists Begins times, so there's no reference check; accuracy is trusted to the library and the chosen method.
+- Full requirements and task checklist: [specs/prayer-begins.md](specs/prayer-begins.md). Branch `feature/prayer-begins-times`.
+
+**Next:** build Prayer Begins times, following its spec's task checklist (T2 onward).
+
+Other candidates, not started (after Prayer Begins times):
    - **Find Now** (directory/search — `profiles`/`entities`/`entity_members`, its own nav tab) — the other half of the locked push/pull architecture split, currently just a design on paper.
    - **A second post type** (blood request is the most-referenced candidate throughout this doc, and death announcements have already proven out the `posts` + extension-table pattern end to end).
    - **Phone+OTP login** — deferred pending an SMS provider being set up in the Supabase dashboard (a billing step).
    - **Reputation system** (`reactions`, flags/reports, trust scoring) — referenced throughout as the eventual backbone for auto-publish/verified-announcer status, not started.
 
 ## Notes for whoever picks this up next
-- No feature branch is open (`feature/prayer-times` was merged and deleted 2026-09-30); `develop` is the working branch. Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` is well behind `develop` (only the original scaffold commit) — this is believed intentional (pre-launch, nothing promoted yet), not an oversight, but wasn't independently confirmed with Syed.
+- Open feature branch: `feature/prayer-begins-times` (off `develop`). Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` was first promoted from `develop` on 2026-09-30 (PR #6) and is what Cloudflare deploys.
 - A fresh machine/clone needs `npx supabase login` + `npx supabase link --project-ref slalnatjabrcnjxngqoo` before any `supabase db push`/`migration list` command works, and `gh auth login --web` before `gh pr create` works — neither credential persists in the repo (both are gitignored/local-machine state).
 - Before trusting this doc's "already done" claims, spot-check the actual repo state (folders can exist but be empty, files can exist but be wrong — e.g. we once found `VITE_SUPABASE_URL` had `/rest/v1/` wrongly appended) rather than assuming the doc is authoritative. This doc itself went stale once already (progress log sat several commits behind actual repo state, including an inconsistency where the lifecycle-status naming table had already been updated to 5 stages but the prose above it still described the old 3) — re-verify against `git log`/actual files each session rather than trusting the log at face value.
 - Syed prefers step-by-step confirmation before executing, narrated plans, and one file at a time when debugging — see "Working style / preferences" above.

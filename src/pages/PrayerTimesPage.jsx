@@ -1,11 +1,70 @@
+import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { LanguageToggle } from '../components/ui/LanguageToggle'
 import { Skeleton } from '../components/ui/Skeleton'
 import { useMasjids } from '../features/prayerTimes/useMasjids'
 import { useSavedMasjids } from '../features/prayerTimes/useSavedMasjids'
+import { useSelectedMasjid } from '../features/prayerTimes/useSelectedMasjid'
 import { useNow } from '../features/prayerTimes/useNow'
 import { MasjidListItem } from '../features/prayerTimes/MasjidListItem'
+import { JamaatBoard } from '../features/prayerTimes/JamaatBoard'
+import { ChooseMasjidSheet } from '../features/prayerTimes/ChooseMasjidSheet'
+import { FreshnessLabel } from '../features/prayerTimes/FreshnessLabel'
+
+// Controls drawn on the board use its colours (currentColor) and a visible
+// focus ring in the same colour. Padding keeps the tap target 44px tall
+// without making the board taller (AC28, AC31).
+const ON_BOARD_CONTROL =
+  'inline-flex items-center gap-1 rounded px-2 py-2 -my-2 underline-offset-2 focus-visible:outline-2 focus-visible:outline-current'
+
+function Chevron() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 flex-none" aria-hidden="true">
+      <path d="M6 9l6 6 6-6" />
+    </svg>
+  )
+}
+
+// The tab board's heading (spec jamaat-board.md AC10, AC12): "Melapalayam" +
+// "Choose masjid", or the chosen masjid's name (tap to change), its
+// freshness and a link to its page.
+function boardHeading({ t, masjid, now, onChoose }) {
+  if (!masjid) {
+    return {
+      heading: t('board.melapalayam'),
+      subheading: (
+        <button type="button" onClick={onChoose} aria-haspopup="dialog" className={`${ON_BOARD_CONTROL} underline`}>
+          {t('board.chooseMasjid')}
+          <Chevron />
+        </button>
+      ),
+    }
+  }
+
+  return {
+    heading: (
+      <button
+        type="button"
+        onClick={onChoose}
+        aria-haspopup="dialog"
+        aria-label={`${masjid.name}, ${t('board.chooseMasjid')}`}
+        className={`${ON_BOARD_CONTROL} max-w-full`}
+      >
+        <span className="truncate">{masjid.name}</span>
+        <Chevron />
+      </button>
+    ),
+    subheading: (
+      <div className="flex flex-wrap items-center justify-center gap-x-2">
+        <FreshnessLabel timesConfirmedAt={masjid.times_confirmed_at} now={now} onBoard />
+        <Link to={`/masjid/${masjid.id}`} className={`${ON_BOARD_CONTROL} underline`}>
+          {t('board.masjidPage')}
+        </Link>
+      </div>
+    ),
+  }
+}
 
 function MasjidRowSkeleton() {
   return (
@@ -39,9 +98,13 @@ export default function PrayerTimesPage() {
   const { masjids, loading: masjidsLoading, error, refetch } = useMasjids()
   const { savedIds, loading: pinsLoading, togglePin, pinError, canPin } = useSavedMasjids()
 
+  const { masjid: selected, select } = useSelectedMasjid(masjids, !masjidsLoading && !error)
+  const [sheetOpen, setSheetOpen] = useState(false)
+
   const loading = masjidsLoading || pinsLoading
   const myMasjids = masjids.filter((m) => savedIds.has(m.id))
   const otherMasjids = masjids.filter((m) => !savedIds.has(m.id))
+  const { heading, subheading } = boardHeading({ t, masjid: selected, now, onChoose: () => setSheetOpen(true) })
 
   function renderItem(masjid) {
     return (
@@ -62,6 +125,24 @@ export default function PrayerTimesPage() {
         <h1 className="text-xl font-bold text-brand">{t('prayerTimes.heading')}</h1>
         <LanguageToggle />
       </div>
+
+      {/* Outside the loading/error branches: Begins needs no network. The
+          Jamaat column stays blank until a masjid is chosen and the list has
+          loaded; the list below handles its own errors (jamaat-board.md AC15). */}
+      <JamaatBoard
+        now={now}
+        heading={heading}
+        subheading={subheading}
+        prayerTimes={selected?.prayer_times ?? null}
+      />
+      <ChooseMasjidSheet
+        open={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        myMasjids={myMasjids}
+        otherMasjids={otherMasjids}
+        selectedId={selected?.id ?? null}
+        onSelect={select}
+      />
 
       {loading && (
         <div className="divide-y divide-gray-100">

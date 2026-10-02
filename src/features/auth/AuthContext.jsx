@@ -40,7 +40,14 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     function handleLanguageChanged(language) {
       if (!session?.user) return
-      supabase.from('profiles').update({ preferred_language: language }).eq('id', session.user.id)
+      // Supabase queries are lazy — without .then() the request is never sent.
+      supabase
+        .from('profiles')
+        .update({ preferred_language: language })
+        .eq('id', session.user.id)
+        .then(({ error }) => {
+          if (error) console.error('Failed to save preferred_language', error)
+        })
     }
 
     i18n.on('languageChanged', handleLanguageChanged)

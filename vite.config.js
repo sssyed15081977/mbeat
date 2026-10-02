@@ -9,6 +9,10 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Default is js/css/html; woff2 too so the board fonts work offline.
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,woff2}'],
+      },
       manifest: {
         name: 'mbeat',
         short_name: 'mbeat',
