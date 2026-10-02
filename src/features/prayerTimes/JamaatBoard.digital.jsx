@@ -123,7 +123,7 @@ function Row({ row, next }) {
 // Digital LED board (AC19–AC20): live clock and date on top, seven-segment
 // times, and a countdown to the highlighted row at the bottom. One compact
 // size on both screens (AC31).
-export function DigitalBoard({ headingId, heading, subheading, rows, jumuah, next, now }) {
+export function DigitalBoard({ headingId, heading, subheading, rows, jumuah, next, now, methodText, note }) {
   const { t, i18n } = useTranslation()
   const clock = kolkataClock(now)
   const date = now.toLocaleDateString(i18n.language === 'ta' ? 'ta-IN' : 'en-GB', {
@@ -134,23 +134,26 @@ export function DigitalBoard({ headingId, heading, subheading, rows, jumuah, nex
   })
 
   return (
-    <div className="board-digital px-3 py-2.5 space-y-1.5">
+    <div className="board-digital px-3 py-2 space-y-1.5">
       <p lang="ar" dir="rtl" className="font-bismillah text-center text-board-digital-amber text-sm">
         {BISMILLAH}
       </p>
-      <div className="name-bar text-center rounded-sm px-2 py-1">
+      <div className="name-bar text-center rounded-sm px-2 py-0.5">
         <h2 id={headingId} className="font-bold leading-tight text-sm">
           {heading}
         </h2>
         {subheading && <div className="text-xs">{subheading}</div>}
       </div>
 
-      {/* The date sits beside the clock, not under it, to keep the board short. */}
+      {/* Date and method sit beside the clock, not under it, to keep the board short. */}
       <div className="flex items-end justify-center gap-3">
         <div className="clock" role="timer" aria-label={formatClock(clock.minutes)}>
           <LedTime value={clock.minutes} blink />
         </div>
-        <p className="text-xs tracking-wider text-board-digital-amber pb-0.5">{date}</p>
+        <div className="leading-tight">
+          <p className="text-xs tracking-wider text-board-digital-amber">{date}</p>
+          <p className="text-[0.7rem] text-board-digital-muted">{methodText}</p>
+        </div>
       </div>
 
       <table className="w-full border-collapse leading-tight">
@@ -174,6 +177,7 @@ export function DigitalBoard({ headingId, heading, subheading, rows, jumuah, nex
       </table>
 
       <p className="text-xs text-board-digital-amber">{countdownText(t, next)}</p>
+      <p className="text-[0.7rem] leading-snug text-board-digital-muted">{note}</p>
     </div>
   )
 }

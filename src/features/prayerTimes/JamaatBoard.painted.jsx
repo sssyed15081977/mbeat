@@ -48,10 +48,10 @@ function Row({ row, next }) {
   )
 }
 
-// Painted board (AC18): green, arched, gold-bordered. One compact size on
+// Painted board (AC18): green, gold-bordered, flat-topped like the others. One compact size on
 // both screens, so the tab's list and the masjid page's content below the
 // board stay near the top (AC31).
-export function PaintedBoard({ headingId, heading, subheading, rows, jumuah, next }) {
+export function PaintedBoard({ headingId, heading, subheading, rows, jumuah, next, methodText, note }) {
   const { t } = useTranslation()
 
   return (
@@ -83,6 +83,10 @@ export function PaintedBoard({ headingId, heading, subheading, rows, jumuah, nex
           </tbody>
         )}
       </table>
+      <div className="text-[0.7rem] leading-snug text-board-painted-gold">
+        <p>{note}</p>
+        <p>{methodText}</p>
+      </div>
     </div>
   )
 }

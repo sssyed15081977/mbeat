@@ -169,6 +169,7 @@
     "jamaatIn": "{{prayer}} · Jamaat in {{time}}",
     "beginsIn": "{{prayer}} · Begins in {{time}}",
     "style": "Board style",
+    "displaySettings": "Display settings",
     "styles": {
       "painted": "Painted",
       "digital": "Digital",

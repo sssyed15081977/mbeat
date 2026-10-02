@@ -52,7 +52,7 @@ function Plate({ row, next, className = '' }) {
 // Wooden plaque (AC21): wood-grain frame, a brass name plate and one brass
 // plate per row; the highlighted row gets a green tag and outline. One
 // compact size on both screens (AC31).
-export function WoodenBoard({ headingId, heading, subheading, rows, jumuah, next }) {
+export function WoodenBoard({ headingId, heading, subheading, rows, jumuah, next, methodText, note }) {
   const { t } = useTranslation()
 
   return (
@@ -81,6 +81,10 @@ export function WoodenBoard({ headingId, heading, subheading, rows, jumuah, next
         ))}
         {/* No wrapper here: rows must sit directly in the table for screen readers. */}
         {jumuah && <Plate row={jumuah} next={next} className="mt-1.5" />}
+      </div>
+      <div className="engraved text-center text-[0.7rem] leading-snug pt-0.5">
+        <p>{note}</p>
+        <p>{methodText}</p>
       </div>
     </div>
   )

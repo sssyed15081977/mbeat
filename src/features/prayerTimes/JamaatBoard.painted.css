@@ -6,7 +6,7 @@
     radial-gradient(ellipse at 50% 0%, rgb(255 255 255 / 0.07), transparent 60%),
     linear-gradient(180deg, var(--color-board-painted-top), var(--color-board-painted-bottom));
   border: 3px solid var(--color-board-painted-gold);
-  border-radius: 50% 50% 14px 14px / 36px 36px 14px 14px;
+  border-radius: 14px;
   box-shadow:
     inset 0 0 0 6px var(--color-board-painted-bottom),
     inset 0 0 0 7px rgb(209 171 85 / 0.55),
@@ -17,7 +17,7 @@
 .board-swatch-painted {
   background: linear-gradient(180deg, var(--color-board-painted-top), var(--color-board-painted-bottom));
   border: 2px solid var(--color-board-painted-gold);
-  border-radius: 50% 50% 4px 4px / 12px 12px 4px 4px;
+  border-radius: 4px;
 }
 
 .board-painted .lamp {
