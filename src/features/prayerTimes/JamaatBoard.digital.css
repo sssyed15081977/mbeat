@@ -24,11 +24,9 @@
 .board-digital .digits {
   display: inline-flex;
   gap: 3px;
-  height: 20px;
+  height: 17px;
 }
-.board-digital--slim .digits { height: 17px; }
-.board-digital .clock .digits { height: 44px; gap: 5px; }
-.board-digital--slim .clock .digits { height: 28px; }
+.board-digital .clock .digits { height: 28px; gap: 5px; }
 /* Table cells hold inline-flex digits; without this the line box adds height. */
 .board-digital td { line-height: 0; }
 

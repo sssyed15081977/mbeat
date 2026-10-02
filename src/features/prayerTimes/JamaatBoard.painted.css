@@ -6,16 +6,11 @@
     radial-gradient(ellipse at 50% 0%, rgb(255 255 255 / 0.07), transparent 60%),
     linear-gradient(180deg, var(--color-board-painted-top), var(--color-board-painted-bottom));
   border: 3px solid var(--color-board-painted-gold);
-  border-radius: 50% 50% 16px 16px / 96px 96px 16px 16px;
+  border-radius: 50% 50% 14px 14px / 36px 36px 14px 14px;
   box-shadow:
     inset 0 0 0 6px var(--color-board-painted-bottom),
     inset 0 0 0 7px rgb(209 171 85 / 0.55),
     0 10px 24px rgb(0 0 0 / 0.25);
-}
-
-/* Slim (Prayer Times tab, AC31): a shallower arch. */
-.board-painted--slim {
-  border-radius: 50% 50% 14px 14px / 36px 36px 14px 14px;
 }
 
 /* Board style picker swatch. */

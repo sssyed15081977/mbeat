@@ -38,7 +38,7 @@ Done when every box is ticked. Each criterion should be checkable by hand at a *
 - [x] **AC2** The Begins column is filled exactly as prayer-begins.md specifies (Melapalayam coordinates, Asia/Kolkata, the saved calculation method, Shafi'i Asr). It is always filled, offline too.
 - [x] **AC3** The Jamaat column is blank when no masjid is chosen. When one is, it shows that masjid's times. The Sunrise row and any prayer the masjid has no time for show "—".
 - [x] **AC4** The Jumu'ah row shows the masjid's Jumu'ah jamaat time, and its Begins cell is blank. The Dhuhr row always reads "Dhuhr" on this board, overriding prayer-begins.md AC4a so that Fridays don't show two Jumu'ah rows.
-- [x] **AC5** One row is highlighted. With no masjid chosen, it's the **next Begins** (Sunrise is never highlighted; after Isha, tomorrow's Fajr is marked "tomorrow"). With a masjid chosen, it's the **next jamaat** from `getNextJamaat` (Jumu'ah on Fridays, "tomorrow" after the last jamaat). The row has `aria-current="true"` and visible text saying what it is ("Next jamaat" or "Next prayer").
+- [x] **AC5** One row is highlighted. With no masjid chosen, it's the **next Begins** (Sunrise is never highlighted; after Isha, tomorrow's Fajr is marked "tomorrow"). With a masjid chosen, it's the **next jamaat** from `getNextJamaat` (Jumu'ah on Fridays, "tomorrow" after the last jamaat). The row has `aria-current="true"` and a short visible label, **"Next" (அடுத்து)**, on the same line as the prayer name, plus "(tomorrow)" when it applies. Screen readers hear the full "Next jamaat" or "Next prayer" instead. *(Changed 2026-10-02 at Syed's request; was a second line reading "Next jamaat" / அடுத்த ஜமாஅத்.)*
 - [x] **AC6** The highlight and countdown move on by themselves while the screen stays open (`useNow`).
 - [x] **AC7** All times use the existing format ("5:10 AM") in both languages.
 - [x] **AC8** The board keeps its own look whether the phone is in light or dark mode.
@@ -74,8 +74,8 @@ Done when every box is ticked. Each criterion should be checkable by hand at a *
 - [x] **AC28** The style picker is a labelled radio group, and the masjid sheet follows prayer-begins.md AC15 (heading, current choice marked, closes with Escape or a tap outside). Both are keyboard-usable with visible focus, and touch targets are at least 44px.
 - [x] **AC29** The blinking colon and glow animations stop under `prefers-reduced-motion`.
 - [x] **AC30** The boards look right **offline**: their fonts ship with the app (§5).
-- [ ] **AC31** On the tab, the board uses a **slim** version of each style (smaller Bismillah and arch, tighter rows) so that at 360×640 "My masjids" isn't pushed entirely off the first screen. This replaces prayer-begins.md AC16. The masjid page uses the full-size board.
-  *(2026-10-02, measured at 360×640 against the bottom nav's top edge, 583px, as a guest: the list heading is above it with **Painted** in every case, and with **Wooden** except in Tamil with a masjid chosen (616px). **Digital** is over in three of four cases (English + masjid 591, Tamil 588 / 633), since it also carries the clock and countdown. Open for Syed: accept, or slim the digital board further, e.g. by dropping the date on the tab.)*
+- [ ] **AC31** Each style has one **compact** size (small Bismillah, shallow arch, tight rows), used on both the tab and the masjid page, so that at 360×640 "My masjids" isn't pushed entirely off the tab's first screen and there is room for content below the board on the masjid page. This replaces prayer-begins.md AC16. *(Changed 2026-10-02 at Syed's request: the masjid page used a full-size board, which has been removed.)*
+  *(2026-10-02, after that change, measured at 360×640 against the bottom nav's top edge, 583px, as a guest: the list heading is above it with **Painted** and **Wooden** in every case except Wooden in Tamil with a masjid chosen (590px). **Digital** is over with a masjid chosen in either language (English 583, Tamil 625), since it also carries the clock and countdown. On the masjid page the board now ends at 428–513px. Open for Syed: accept, or slim the digital board further.)*
 
 ## 4. Screens
 
@@ -83,7 +83,7 @@ Done when every box is ticked. Each criterion should be checkable by hand at a *
 Order: **board** (heading: "Melapalayam" + "Choose masjid ▾", or the masjid name ▾ + freshness + "Masjid page" link), note, Method control, Board style picker, then the existing "My masjids" / "All masjids" lists, which are unchanged.
 
 ### 4.2 Masjid page — `/masjid/:id` (changed)
-Order: back button, masjid header (name, address, freshness, pin, all unchanged), **board** (heading: masjid name), note, Method control, Board style picker, volunteer "Update times" button (unchanged, last).
+Order: back button, masjid header (name, address, freshness, pin, all unchanged), **board** (heading: masjid name; the same compact size as the tab), note, Method control, Board style picker, volunteer "Update times" button (unchanged, last).
 
 ### 4.3 Choose masjid sheet
 Heading "Choose masjid", then "No masjid", then "My masjids" (if any) and "All masjids". It reuses the generic `components/ui/BottomSheet.jsx` from prayer-begins.md T5.
@@ -101,7 +101,8 @@ Heading "Choose masjid", then "No masjid", then "My masjids" (if any) and "All m
 | Choose masjid | மஸ்ஜிதைத் தேர்ந்தெடு | |
 | No masjid | மஸ்ஜித் வேண்டாம் | |
 | Masjid page | மஸ்ஜித் பக்கம் | |
-| Next prayer | அடுத்த தொழுகை | |
+| Next prayer | அடுத்த தொழுகை | screen readers only, since 2026-10-02 |
+| Next | அடுத்து | on the highlighted row (Syed, 2026-10-02) |
 | Next jamaat, tomorrow, Sunrise, prayer names, note, Method | *(existing keys)* | |
 
 "Jamaat times" (ஜமாஅத் நேரங்கள், confirmed in v1) is no longer used as a heading, since the column headings say it.
@@ -142,8 +143,9 @@ Heading "Choose masjid", then "No masjid", then "My masjids" (if any) and "All m
 10. **Names:** the v1 names (§5) plus Begins / Jamaat column headings, "selected masjid" internally, and `mbeat_selected_masjid`.
 
 11. **Jumu'ah:** a separate Jumu'ah row (jamaat only), and Dhuhr stays "Dhuhr" on Fridays (AC4).
-12. **Slim board on the tab**, full size on the masjid page (AC31).
+12. **Slim board on the tab**, full size on the masjid page (AC31). *Changed 2026-10-02: the slim board is used on both, to leave room for content below it on the masjid page.*
 13. **Tamil drafts in §4.4 confirmed.**
+14. **Next label (2026-10-02):** a short "Next" / அடுத்து on the prayer's line, instead of "Next jamaat" / "Next prayer" on a line of its own (AC5).
 
 ### Open
 None.

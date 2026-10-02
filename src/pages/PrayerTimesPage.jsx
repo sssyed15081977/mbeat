@@ -14,7 +14,7 @@ import { FreshnessLabel } from '../features/prayerTimes/FreshnessLabel'
 
 // Controls drawn on the board use its colours (currentColor) and a visible
 // focus ring in the same colour. Padding keeps the tap target 44px tall
-// without making the slim board taller (AC28, AC31).
+// without making the board taller (AC28, AC31).
 const ON_BOARD_CONTROL =
   'inline-flex items-center gap-1 rounded px-2 py-2 -my-2 underline-offset-2 focus-visible:outline-2 focus-visible:outline-current'
 
@@ -134,7 +134,6 @@ export default function PrayerTimesPage() {
         heading={heading}
         subheading={subheading}
         prayerTimes={selected?.prayer_times ?? null}
-        size="slim"
       />
       <ChooseMasjidSheet
         open={sheetOpen}

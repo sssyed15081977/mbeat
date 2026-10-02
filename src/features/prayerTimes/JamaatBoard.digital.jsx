@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { BISMILLAH, cellText, countdownText, nextLabel, prayerLabelKey } from './boardRows'
+import { BISMILLAH, cellText, countdownText, nextLabel, prayerLabelKey, shortNextLabel } from './boardRows'
 import { kolkataClock, toMinutes } from './nextJamaat'
 import './JamaatBoard.digital.css'
 
@@ -87,21 +87,24 @@ function LedTime({ value, blink = false }) {
   )
 }
 
-function Row({ row, next, slim }) {
+function Row({ row, next }) {
   const { t } = useTranslation()
   const isNext = next.prayer === row.prayer
-  const padY = slim ? 'py-px' : 'py-2'
+  const padY = 'py-px'
 
   return (
     <tr aria-current={isNext ? 'true' : undefined} className={isNext ? 'is-next' : ''}>
       <th scope="row" className={`text-left font-normal ${padY}`}>
         <span className="flex items-center gap-1.5">
           <span className="indicator" aria-hidden="true" />
-          <span className="min-w-0">
-            <span className={`block font-semibold ${slim ? 'text-sm' : 'text-base'} ${isNext ? 'text-board-digital-amber' : ''}`}>
-              {t(prayerLabelKey(row.prayer))}
-            </span>
-            {isNext && <span className="block text-[0.65rem] leading-tight text-board-digital-amber">{nextLabel(t, next)}</span>}
+          <span className={`min-w-0 ${isNext ? 'text-board-digital-amber' : ''}`}>
+            <span className="font-semibold text-sm">{t(prayerLabelKey(row.prayer))}</span>
+            {isNext && (
+              <>
+                <span className="ml-1 text-[0.65rem]" aria-hidden="true">{shortNextLabel(t, next)}</span>
+                <span className="sr-only">, {nextLabel(t, next)}</span>
+              </>
+            )}
           </span>
         </span>
       </th>
@@ -118,8 +121,9 @@ function Row({ row, next, slim }) {
 }
 
 // Digital LED board (AC19–AC20): live clock and date on top, seven-segment
-// times, and a countdown to the highlighted row at the bottom.
-export function DigitalBoard({ headingId, heading, subheading, rows, jumuah, next, now, slim }) {
+// times, and a countdown to the highlighted row at the bottom. One compact
+// size on both screens (AC31).
+export function DigitalBoard({ headingId, heading, subheading, rows, jumuah, next, now }) {
   const { t, i18n } = useTranslation()
   const clock = kolkataClock(now)
   const date = now.toLocaleDateString(i18n.language === 'ta' ? 'ta-IN' : 'en-GB', {
@@ -130,27 +134,26 @@ export function DigitalBoard({ headingId, heading, subheading, rows, jumuah, nex
   })
 
   return (
-    <div className={`board-digital ${slim ? 'board-digital--slim px-3 py-2.5 space-y-1.5' : 'p-4 space-y-3'}`}>
-      <p lang="ar" dir="rtl" className={`font-bismillah text-center text-board-digital-amber ${slim ? 'text-sm' : 'text-lg'}`}>
+    <div className="board-digital px-3 py-2.5 space-y-1.5">
+      <p lang="ar" dir="rtl" className="font-bismillah text-center text-board-digital-amber text-sm">
         {BISMILLAH}
       </p>
       <div className="name-bar text-center rounded-sm px-2 py-1">
-        <h2 id={headingId} className={`font-bold leading-tight ${slim ? 'text-sm' : 'text-base'}`}>
+        <h2 id={headingId} className="font-bold leading-tight text-sm">
           {heading}
         </h2>
         {subheading && <div className="text-xs">{subheading}</div>}
       </div>
 
-      {/* Slim (tab, AC31): the date sits beside the clock instead of under it. */}
+      {/* The date sits beside the clock, not under it, to keep the board short. */}
       <div className="flex items-end justify-center gap-3">
         <div className="clock" role="timer" aria-label={formatClock(clock.minutes)}>
           <LedTime value={clock.minutes} blink />
         </div>
-        {slim && <p className="text-xs tracking-wider text-board-digital-amber pb-0.5">{date}</p>}
+        <p className="text-xs tracking-wider text-board-digital-amber pb-0.5">{date}</p>
       </div>
-      {!slim && <p className="text-center text-xs tracking-wider text-board-digital-amber -mt-1">{date}</p>}
 
-      <table className={`w-full border-collapse ${slim ? 'leading-tight' : ''}`}>
+      <table className="w-full border-collapse leading-tight">
         <thead>
           <tr className="text-[0.65rem] uppercase tracking-widest text-board-digital-muted">
             <td />
@@ -160,12 +163,12 @@ export function DigitalBoard({ headingId, heading, subheading, rows, jumuah, nex
         </thead>
         <tbody>
           {rows.map((row) => (
-            <Row key={row.prayer} row={row} next={next} slim={slim} />
+            <Row key={row.prayer} row={row} next={next} />
           ))}
         </tbody>
         {jumuah && (
           <tbody className="jumuah">
-            <Row row={jumuah} next={next} slim={slim} />
+            <Row row={jumuah} next={next} />
           </tbody>
         )}
       </table>

@@ -66,6 +66,12 @@ export function countdownText(t, next) {
   return t(key, { prayer: t(prayerLabelKey(next.prayer)), time })
 }
 
+// "Next", plus "(tomorrow)" when it is: shown on the same line as the prayer
+// name. Boards pair it with the full nextLabel for screen readers.
+export function shortNextLabel(t, next) {
+  return next.isTomorrow ? `${t('board.next')} (${t('prayerTimes.tomorrow')})` : t('board.next')
+}
+
 // "Next jamaat" / "Next prayer", plus "(tomorrow)" when it is.
 export function nextLabel(t, next) {
   const label = next.kind === 'jamaat' ? t('prayerTimes.nextJamaat') : t('board.nextPrayer')
