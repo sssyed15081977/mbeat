@@ -160,7 +160,19 @@
   "board": {
     "melapalayam": "Melapalayam",
     "jamaat": "Jamaat",
-    "nextPrayer": "Next prayer"
+    "nextPrayer": "Next prayer",
+    "prayer": "Prayer",
+    "chooseMasjid": "Choose masjid",
+    "noMasjid": "No masjid",
+    "masjidPage": "Masjid page",
+    "jamaatIn": "{{prayer}} · Jamaat in {{time}}",
+    "beginsIn": "{{prayer}} · Begins in {{time}}",
+    "style": "Board style",
+    "styles": {
+      "painted": "Painted",
+      "digital": "Digital",
+      "wooden": "Wooden"
+    }
   },
   "calcMethod": {
     "karachi": {

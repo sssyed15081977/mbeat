@@ -160,7 +160,19 @@
   "board": {
     "melapalayam": "மேலப்பாளையம்",
     "jamaat": "ஜமாஅத்",
-    "nextPrayer": "அடுத்த தொழுகை"
+    "nextPrayer": "அடுத்த தொழுகை",
+    "prayer": "தொழுகை",
+    "chooseMasjid": "மஸ்ஜிதைத் தேர்ந்தெடு",
+    "noMasjid": "மஸ்ஜித் வேண்டாம்",
+    "masjidPage": "மஸ்ஜித் பக்கம்",
+    "jamaatIn": "{{prayer}} · ஜமாஅத்துக்கு இன்னும் {{time}}",
+    "beginsIn": "{{prayer}} · தொடங்க இன்னும் {{time}}",
+    "style": "பலகை வடிவம்",
+    "styles": {
+      "painted": "வண்ணப் பலகை",
+      "digital": "டிஜிட்டல்",
+      "wooden": "மரப் பலகை"
+    }
   },
   "calcMethod": {
     "karachi": {

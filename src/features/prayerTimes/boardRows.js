@@ -1,7 +1,8 @@
 import { getBeginsTimes, getNextBegins } from './beginsTimes'
-import { getNextJamaat, formatJamaatTime } from './nextJamaat'
+import { getNextJamaat, formatJamaatTime, kolkataClock, toMinutes } from './nextJamaat'
 
 export const BISMILLAH = 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ'
+const MINUTES_PER_DAY = 24 * 60
 
 // What every board style draws (spec jamaat-board.md AC1–AC5), worked out once
 // so the styles only differ in looks.
@@ -21,11 +22,13 @@ export function buildBoard({ now, method, prayerTimes }) {
   const nextJamaat = prayerTimes ? getNextJamaat(prayerTimes, now) : null
   let next
   if (nextJamaat) {
-    next = { prayer: nextJamaat.prayer, isTomorrow: nextJamaat.isTomorrow, kind: 'jamaat' }
+    next = { prayer: nextJamaat.prayer, isTomorrow: nextJamaat.isTomorrow, kind: 'jamaat', time: nextJamaat.jamaatTime }
   } else {
     const nextBegins = getNextBegins(now, method)
     next = { prayer: nextBegins.prayer, isTomorrow: nextBegins.isTomorrow, kind: 'begins', time: nextBegins.time }
   }
+  // For the digital board's countdown (AC20).
+  next.minutesUntil = toMinutes(next.time) + (next.isTomorrow ? MINUTES_PER_DAY : 0) - kolkataClock(now).minutes
 
   const rows = getBeginsTimes(now, method).map(({ prayer, time }) => ({
     prayer,
@@ -53,6 +56,14 @@ export function cellText(time) {
 // Sunrise isn't a prayer, so its label lives outside `prayer.*`.
 export function prayerLabelKey(prayer) {
   return prayer === 'sunrise' ? 'begins.sunrise' : `prayer.${prayer}`
+}
+
+// "Fajr · Jamaat in 1:05" / "Fajr · Begins in 1:05" (AC20).
+export function countdownText(t, next) {
+  const minutes = Math.max(0, next.minutesUntil)
+  const time = `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, '0')}`
+  const key = next.kind === 'jamaat' ? 'board.jamaatIn' : 'board.beginsIn'
+  return t(key, { prayer: t(prayerLabelKey(next.prayer)), time })
 }
 
 // "Next jamaat" / "Next prayer", plus "(tomorrow)" when it is.

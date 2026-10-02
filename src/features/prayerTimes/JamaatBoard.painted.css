@@ -18,6 +18,13 @@
   border-radius: 50% 50% 14px 14px / 36px 36px 14px 14px;
 }
 
+/* Board style picker swatch. */
+.board-swatch-painted {
+  background: linear-gradient(180deg, var(--color-board-painted-top), var(--color-board-painted-bottom));
+  border: 2px solid var(--color-board-painted-gold);
+  border-radius: 50% 50% 4px 4px / 12px 12px 4px 4px;
+}
+
 .board-painted .lamp {
   display: inline-block;
   width: 7px;

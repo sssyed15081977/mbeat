@@ -24,7 +24,8 @@ function Time({ value }) {
   return (
     <>
       {match[1]}
-      <span className="ml-0.5 text-[0.6em] tracking-wide">{match[2]}</span>
+      {/* A real space (not margin), so screen readers say "5:10 AM". */}
+      <span className="text-[0.6em] tracking-wide"> {match[2]}</span>
     </>
   )
 }
@@ -32,7 +33,7 @@ function Time({ value }) {
 function Row({ row, next, slim }) {
   const { t } = useTranslation()
   const isNext = next.prayer === row.prayer
-  const padY = slim ? 'py-0.5' : 'py-1.5'
+  const padY = slim ? 'py-0 leading-tight' : 'py-1.5'
   const cell = `text-right whitespace-nowrap tabular-nums font-board-painted ${padY} ${
     slim ? 'text-lg' : 'text-xl'
   } ${isNext ? 'text-board-painted-glow' : ''}`
@@ -58,7 +59,7 @@ function Row({ row, next, slim }) {
 
 // Painted board (AC18): green, arched, gold-bordered. `slim` is the shorter
 // version for the Prayer Times tab (AC31).
-export function PaintedBoard({ headingId, heading, rows, jumuah, next, slim }) {
+export function PaintedBoard({ headingId, heading, subheading, rows, jumuah, next, slim }) {
   const { t } = useTranslation()
 
   return (
@@ -70,6 +71,7 @@ export function PaintedBoard({ headingId, heading, rows, jumuah, next, slim }) {
       <h2 id={headingId} className={`font-board-painted leading-tight ${slim ? 'text-lg' : 'text-2xl'}`}>
         {heading}
       </h2>
+      {subheading && <div className="text-xs">{subheading}</div>}
 
       <table className="w-full border-collapse">
         <thead>
