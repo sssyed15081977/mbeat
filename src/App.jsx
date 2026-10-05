@@ -13,6 +13,7 @@ import IslamicGuidePage from './pages/IslamicGuidePage'
 import NewMasjidPage from './pages/NewMasjidPage'
 import MasjidDetailPage from './pages/MasjidDetailPage'
 import UpdateMasjidTimesPage from './pages/UpdateMasjidTimesPage'
+import NewMasjidNoticePage from './pages/NewMasjidNoticePage'
 
 function App() {
   return (
@@ -88,6 +89,14 @@ function App() {
               element={
                 <ProfileCompletion>
                   <UpdateMasjidTimesPage />
+                </ProfileCompletion>
+              }
+            />
+            <Route
+              path="/masjid/:id/notice/new"
+              element={
+                <ProfileCompletion>
+                  <NewMasjidNoticePage />
                 </ProfileCompletion>
               }
             />
