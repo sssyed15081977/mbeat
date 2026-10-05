@@ -391,7 +391,9 @@ A masjid volunteer posts the masjid's notice-board content (announcements, ayahs
 - Ayahs and hadiths require a Source. Donation notices always show the volunteer's name (through `get_author_names`, never phone numbers) and a fixed "confirm with the masjid" note.
 - Full requirements and task checklist: [specs/masjid-notices.md](specs/masjid-notices.md). Branch `feature/masjid-notices`.
 
-**Next:** T2, the migration (`posts.type` + `posts.entity_id`, the `masjid_notice` table, the two functions, policies, and the trigger change).
+Built 2026-10-05 (T1–T9): migration `20261005120000_add_masjid_notices.sql` applied; its rules were checked as real roles in a rolled-back transaction. `PostCard` now dispatches to `PostCard.<type>.jsx`; `/post/:id/edit` is `EditPostPage` (picks the form by type); photo upload is shared in `lib/postPhotos.js`.
+
+**Next:** T10, posting the first real notices for the pilot masjids and walking AC1–AC28 on a phone in both languages, then merging the PR.
 
 ## Notes for whoever picks this up next
 - Open feature branch: `feature/masjid-notices` (off `develop`). Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` was first promoted from `develop` on 2026-09-30 (PR #6) and is what Cloudflare deploys.

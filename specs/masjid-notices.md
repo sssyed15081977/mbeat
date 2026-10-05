@@ -1,9 +1,9 @@
 # Spec: Masjid notices v1
 
-**Status:** approved 2026-10-05 — §7 resolved; next is T2 (migration)
+**Status:** built 2026-10-05 (T1–T9); next is T10, Syed's phone walkthrough
 **Branch:** `feature/masjid-notices`
 **Builds on:** [prayer-times.md](prayer-times.md), [jamaat-board.md](jamaat-board.md)
-**Schema:** new migration (T2), not written yet
+**Schema:** [20261005120000_add_masjid_notices.sql](../supabase/migrations/20261005120000_add_masjid_notices.sql), applied 2026-10-05
 
 This file says **what v1 must do and how we know it's done**. The *why* lives in the handoff doc; don't repeat it here.
 
@@ -205,13 +205,13 @@ One new migration. All names below are confirmed (§7).
 Work top to bottom; each task is small enough for one sitting.
 
 - [x] T1 Review this spec; resolve §7's open questions; add the locked names to CLAUDE.md and the handoff doc. *(done 2026-10-05)*
-- [ ] T2 Migration: `posts.type` + `posts.entity_id`, `masjid_notice` table + checks, `create_masjid_notice`, `get_author_names`, update/delete policies, trigger change; `supabase db push` (Syed).
-- [ ] T3 `masjidNoticeApi.js` + the posting form at `/masjid/:id/notice/new`, with photo and QR upload. Reached from the masjid page's **Add notice** button.
-- [ ] T4 Notice cards: `PostCard` type dispatch + `PostCard.masjidNotice.jsx`; Notice board section on the masjid page.
-- [ ] T5 Prayer Times tab: **Notice board →** link on the Jamaat board + hint line above the masjid list.
-- [ ] T6 Detail page: `MasjidNoticeDetail`, donation block, Share; move `/post/:id` out of sign-in so guests can open it.
-- [ ] T7 Edit and Remove: `/post/:id/edit` picks the form by type; delete with one confirmation.
-- [ ] T8 Feed: include notices with their masjid name; expired notices filtered out.
-- [ ] T9 i18n pass: every key in `en.json` + `ta.json`.
+- [x] T2 Migration: `posts.type` + `posts.entity_id`, `masjid_notice` table + checks, `create_masjid_notice`, `get_author_names`, update/delete policies, trigger change; `supabase db push`. *(done 2026-10-05)*
+- [x] T3 `masjidNoticeApi.js` + the posting form at `/masjid/:id/notice/new`, with photo and QR upload. Reached from the masjid page's **Add notice** button. *(done 2026-10-05)*
+- [x] T4 Notice cards: `PostCard` type dispatch + `PostCard.masjidNotice.jsx`; Notice board section on the masjid page. *(done 2026-10-05)*
+- [x] T5 Prayer Times tab: **Notice board →** link on the Jamaat board + hint line above the masjid list. *(done 2026-10-05)*
+- [x] T6 Detail page: `MasjidNoticeDetail`, donation block, Share; move `/post/:id` out of sign-in so guests can open it. *(done 2026-10-05)*
+- [x] T7 Edit and Remove: `/post/:id/edit` picks the form by type; delete with one confirmation. *(done 2026-10-05)*
+- [x] T8 Feed: include notices with their masjid name; expired notices filtered out. *(done 2026-10-05)*
+- [x] T9 i18n pass: every key in `en.json` + `ta.json`. *(done 2026-10-05)*
 - [ ] T10 Post the first real notices for the 3 pilot masjids; walk through AC1–AC28 on a phone in both languages; tick the boxes above.
 - [ ] T11 PR `feature/masjid-notices` → `develop`, with the PR description linking this spec.
