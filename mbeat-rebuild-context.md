@@ -114,6 +114,14 @@ Naming mistakes are expensive here because a name isn't just a label — it prop
 | The two-column Begins + Jamaat board (Prayer Times tab and masjid page) and how it is drawn, chosen per device (2026-10-01) | Board style (Tamil பலகை வடிவம்); values `painted` (default), `digital`, `wooden`; column headings Begins / Jamaat (தொடக்கம் / ஜமாஅத்) | `localStorage` key `mbeat_jamaat_board_style`; `features/prayerTimes/JamaatBoard.jsx` + `JamaatBoard.<style>.jsx`, `useBoardStyle.js`; spec [specs/jamaat-board.md](specs/jamaat-board.md) |
 | The sheet opened from the gear on the Jamaat board, holding Board style and Calculation method (chosen over "Board settings", 2026-10-02) | Display settings; Tamil காட்சி அமைப்புகள் | i18n `board.displaySettings`; `features/prayerTimes/DisplaySettingsSheet.jsx` (with `BoardStylePicker.jsx`, `CalcMethodPicker.jsx`); spec [specs/jamaat-board.md](specs/jamaat-board.md) |
 | The masjid whose jamaat times fill the board on the Prayer Times tab, chosen from the board (2026-10-01) | Selected masjid (internal term; UI control "Choose masjid") | `localStorage` key `mbeat_selected_masjid` (masjid id); `features/prayerTimes/useSelectedMasjid.js` + `ChooseMasjidSheet.jsx` (names confirmed 2026-10-02); spec [specs/jamaat-board.md](specs/jamaat-board.md) |
+| Notice-board content a masjid volunteer posts for their masjid (announcements, ayahs, hadiths, duas, donation appeals), auto-published (2026-10-03) | Masjid notice (`type = 'masjid_notice'`); Tamil அறிவிப்பு | `posts.type`, extension table `masjid_notice`, folder `features/masjidNotice/`; spec [specs/masjid-notices.md](specs/masjid-notices.md) |
+| The section listing a masjid's notices below the Jamaat board (2026-10-03) | Notice board; Tamil அறிவிப்புப் பலகை | Masjid page only; the Prayer Times tab just links to it ("Notice board →" on the Jamaat board), decided 2026-10-05 |
+| Which entity published a post (null for posts by individuals) | `posts.entity_id` | `posts` column, references `entities` |
+| Kind of masjid notice | `kind`: `announcement`, `ayah`, `hadith`, `dua`, `donation`; Tamil பொது அறிவிப்பு, ஆயத், ஹதீஸ், துஆ, நன்கொடை | `masjid_notice.kind` |
+| Required reference for an ayah or hadith | Source (`source_reference`); Tamil ஆதாரம் | `masjid_notice.source_reference` |
+| Date after which a notice is hidden | Show until (`show_until`, date); Tamil வரை காட்டு | `masjid_notice.show_until` |
+| A notice's board photo; a donation notice's payment details | `photo_url` (bucket `post-photos`); `upi_id`, `payment_qr_url` | `masjid_notice` |
+| Screen where a masjid volunteer posts a notice; read view and poster's name (2026-10-05) | Add notice (Tamil அறிவிப்பைச் சேர்க்கவும்); route `/masjid/:id/notice/new` | `pages/NewMasjidNoticePage.jsx`; database functions `create_masjid_notice`, `get_author_names` (returns `id, full_name` only); component `features/masjidNotice/MasjidNoticeDetail.jsx` |
 
 ## Working style / preferences (for Claude Code to follow)
 - Syed's background: ~10 years Google Apps Script, prior ASP.NET, Python as primary language, still learning React/modern web frameworks.
@@ -376,8 +384,17 @@ Other candidates, not started (after Prayer Begins times):
    - **Phone+OTP login** — deferred pending an SMS provider being set up in the Supabase dashboard (a billing step).
    - **Reputation system** (`reactions`, flags/reports, trust scoring) — referenced throughout as the eventual backbone for auto-publish/verified-announcer status, not started.
 
+## Masjid notices — in progress (spec approved 2026-10-05)
+A masjid volunteer posts the masjid's notice-board content (announcements, ayahs, hadiths, duas, donation appeals) as `posts` rows of `type = 'masjid_notice'`. They're auto-published through the `create_masjid_notice` function, which is the narrow exception to "every post starts `pending`".
+- Notices show on the **masjid page** below its Jamaat board, and in the Feed. The Prayer Times tab shows **no** notice cards, so jamaat times stay on top. It only has a "Notice board →" link on the Jamaat board and a hint line above the masjid list (Syed's call, 2026-10-05).
+- `/post/:id` opens to guests, so shared WhatsApp links work without sign-in. This includes death announcements.
+- Ayahs and hadiths require a Source. Donation notices always show the volunteer's name (through `get_author_names`, never phone numbers) and a fixed "confirm with the masjid" note.
+- Full requirements and task checklist: [specs/masjid-notices.md](specs/masjid-notices.md). Branch `feature/masjid-notices`.
+
+**Next:** T2, the migration (`posts.type` + `posts.entity_id`, the `masjid_notice` table, the two functions, policies, and the trigger change).
+
 ## Notes for whoever picks this up next
-- Open feature branch: `feature/prayer-begins-times` (off `develop`). Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` was first promoted from `develop` on 2026-09-30 (PR #6) and is what Cloudflare deploys.
+- Open feature branch: `feature/masjid-notices` (off `develop`). Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` was first promoted from `develop` on 2026-09-30 (PR #6) and is what Cloudflare deploys.
 - A fresh machine/clone needs `npx supabase login` + `npx supabase link --project-ref slalnatjabrcnjxngqoo` before any `supabase db push`/`migration list` command works, and `gh auth login --web` before `gh pr create` works — neither credential persists in the repo (both are gitignored/local-machine state).
 - Before trusting this doc's "already done" claims, spot-check the actual repo state (folders can exist but be empty, files can exist but be wrong — e.g. we once found `VITE_SUPABASE_URL` had `/rest/v1/` wrongly appended) rather than assuming the doc is authoritative. This doc itself went stale once already (progress log sat several commits behind actual repo state, including an inconsistency where the lifecycle-status naming table had already been updated to 5 stages but the prose above it still described the old 3) — re-verify against `git log`/actual files each session rather than trusting the log at face value.
 - Syed prefers step-by-step confirmation before executing, narrated plans, and one file at a time when debugging — see "Working style / preferences" above.
