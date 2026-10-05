@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { MasjidNoticeCard } from './PostCard.masjidNotice'
 
-// Generic shell rendering the fields every post type shares (posts table
-// columns only), plus a single optional thumbnail. Full type-specific
-// rendering (PostCard.<type>.jsx, pulling in the rest of an extension
-// table's fields like death_announcement's janazah info) is deferred until a
-// second type needs its own layout — premature to build the dispatch
-// mechanism for one post type. Full details live behind PostDetailPage,
-// which does the per-type extension-table join.
+// Type-specific cards live in PostCard.<type>.jsx and are picked in
+// PostCard below. Types without one (death_announcement so far) use the
+// generic shell: the fields every post type shares (posts table columns
+// only), plus a single optional thumbnail. Full details live behind
+// PostDetailPage, which does the per-type extension-table join.
 //
 // The thumbnail is the one piece of extension-table data every post type is
 // expected to eventually carry (a representative photo), so it's looked up
@@ -29,7 +28,15 @@ function getLifecycleStatusLabel(post, t) {
   return null
 }
 
+const TYPE_CARDS = { masjid_notice: MasjidNoticeCard }
+
 export function PostCard({ post }) {
+  const TypeCard = TYPE_CARDS[post.type]
+  if (TypeCard) return <TypeCard post={post} />
+  return <GenericPostCard post={post} />
+}
+
+function GenericPostCard({ post }) {
   const { t } = useTranslation()
   const thumbnailUrl = getThumbnailUrl(post)
   const lifecycleStatusLabel = getLifecycleStatusLabel(post, t)

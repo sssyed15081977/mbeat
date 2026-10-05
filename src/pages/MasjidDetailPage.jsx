@@ -1,4 +1,5 @@
-import { Link, useParams } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { BackButton } from '../components/ui/BackButton'
 import { Skeleton } from '../components/ui/Skeleton'
@@ -9,6 +10,7 @@ import { PRAYERS } from '../features/prayerTimes/prayers'
 import { JamaatBoard } from '../features/prayerTimes/JamaatBoard'
 import { FreshnessLabel } from '../features/prayerTimes/FreshnessLabel'
 import { PinButton } from '../features/prayerTimes/PinButton'
+import { NoticeBoard, NOTICE_BOARD_ANCHOR } from '../features/masjidNotice/NoticeBoard'
 
 function DetailSkeleton() {
   return (
@@ -37,6 +39,16 @@ export default function MasjidDetailPage() {
   const { savedIds, loading: pinsLoading, togglePin, pinError, canPin } = useSavedMasjids()
 
   const loading = masjidLoading || pinsLoading
+  const location = useLocation()
+  const showPage = !loading && !error && Boolean(masjid)
+
+  // "Notice board →" links here with #notices (AC8). React Router doesn't
+  // scroll to hashes, so do it once the section is on the page.
+  useEffect(() => {
+    if (showPage && location.hash === `#${NOTICE_BOARD_ANCHOR}`) {
+      document.getElementById(NOTICE_BOARD_ANCHOR)?.scrollIntoView()
+    }
+  }, [showPage, location.hash])
 
   return (
     <div className="min-h-screen p-4 max-w-sm mx-auto space-y-4">
@@ -96,14 +108,24 @@ export default function MasjidDetailPage() {
             <p className="text-sm text-gray-500">{t('prayerTimes.noTimes')}</p>
           )}
 
-          {/* Last on the page, within thumb reach (4.2). */}
+          <NoticeBoard masjidId={masjid.id} />
+
+          {/* Last on the page, within thumb reach (4.2; masjid-notices.md AC1). */}
           {isVolunteer && (
-            <Link
-              to={`/masjid/${masjid.id}/update`}
-              className="block w-full text-center bg-brand text-white rounded px-3 py-3 font-semibold"
-            >
-              {t('masjidDetail.updateTimes')}
-            </Link>
+            <div className="grid grid-cols-2 gap-2">
+              <Link
+                to={`/masjid/${masjid.id}/update`}
+                className="flex items-center justify-center text-center bg-brand text-white rounded px-3 py-3 font-semibold"
+              >
+                {t('masjidDetail.updateTimes')}
+              </Link>
+              <Link
+                to={`/masjid/${masjid.id}/notice/new`}
+                className="flex items-center justify-center text-center bg-brand text-white rounded px-3 py-3 font-semibold"
+              >
+                {t('masjidNotice.addNotice')}
+              </Link>
+            </div>
           )}
         </>
       )}
