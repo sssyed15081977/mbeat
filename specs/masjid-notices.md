@@ -214,4 +214,4 @@ Work top to bottom; each task is small enough for one sitting.
 - [x] T8 Feed: include notices with their masjid name; expired notices filtered out. *(done 2026-10-05)*
 - [x] T9 i18n pass: every key in `en.json` + `ta.json`. *(done 2026-10-05)*
 - [ ] T10 Post the first real notices for the 3 pilot masjids; walk through AC1–AC28 on a phone in both languages; tick the boxes above.
-- [ ] T11 PR `feature/masjid-notices` → `develop`, with the PR description linking this spec.
+- [x] T11 PR `feature/masjid-notices` → `develop`, with the PR description linking this spec. *(opened as draft #10, 2026-10-05)*
