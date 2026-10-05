@@ -43,20 +43,16 @@ function App() {
               Router prefers the exact path over :id. */}
           <Route path="/masjid/:id" element={<MasjidDetailPage />} />
 
+          {/* Open to guests, so shared WhatsApp links work without sign-in
+              (masjid-notices.md AC15). /post/new below still wins over :id. */}
+          <Route path="/post/:id" element={<PostDetailPage />} />
+
           <Route element={<ProtectedRoute />}>
             <Route
               path="/post/new"
               element={
                 <ProfileCompletion>
                   <NewDeathAnnouncementPage />
-                </ProfileCompletion>
-              }
-            />
-            <Route
-              path="/post/:id"
-              element={
-                <ProfileCompletion>
-                  <PostDetailPage />
                 </ProfileCompletion>
               }
             />

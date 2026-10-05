@@ -23,7 +23,7 @@ export async function fetchPosts() {
 export async function fetchPostById(id) {
   const { data, error } = await supabase
     .from('posts')
-    .select('*, death_announcement(*)')
+    .select('*, death_announcement(*), masjid_notice(*), entities(id, name)')
     .eq('id', id)
     .maybeSingle()
 

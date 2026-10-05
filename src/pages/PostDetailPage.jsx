@@ -1,15 +1,33 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../lib/supabaseClient'
 import { fetchPostById } from '../features/feed/feedApi'
+import { useAuth } from '../features/auth/useAuth'
 import { BackButton } from '../components/ui/BackButton'
 import { Skeleton } from '../components/ui/Skeleton'
 import { DeathAnnouncementDetail } from '../features/deathAnnouncement/DeathAnnouncementDetail'
+import { MasjidNoticeDetail } from '../features/masjidNotice/MasjidNoticeDetail'
+import { NOTICE_BOARD_ANCHOR } from '../features/masjidNotice/NoticeBoard'
 
+// Back goes to wherever the post was opened from (cards pass `state.from`).
+// Opened directly (e.g. a WhatsApp link): a notice goes to its masjid's page;
+// anything else to the Feed, or for guests (the Feed needs sign-in) to the
+// Prayer Times tab.
+function backTarget(from, post, session) {
+  if (from) return from
+  if (post?.type === 'masjid_notice' && post.entity_id) return `/masjid/${post.entity_id}`
+  return session ? '/feed' : '/'
+}
+
+// Open to guests (masjid-notices.md AC15): RLS already limits them to
+// published posts.
 export default function PostDetailPage() {
   const { id } = useParams()
   const { t } = useTranslation()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { session } = useAuth()
   const [post, setPost] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -67,7 +85,7 @@ export default function PostDetailPage() {
 
   return (
     <div className="min-h-screen p-4 max-w-sm mx-auto space-y-4">
-      <BackButton to="/feed" />
+      <BackButton to={backTarget(location.state?.from, post, session)} />
 
       {loading && (
         <div className="space-y-2">
@@ -98,6 +116,14 @@ export default function PostDetailPage() {
 
       {!loading && !error && post?.type === 'death_announcement' && (
         <DeathAnnouncementDetail post={post} onLifecycleStatusChange={handleLifecycleStatusChange} />
+      )}
+
+      {!loading && !error && post?.type === 'masjid_notice' && (
+        <MasjidNoticeDetail
+          post={post}
+          // Back to the masjid's notices; replace so Back doesn't reopen the removed notice (AC21).
+          onRemoved={() => navigate(`/masjid/${post.entity_id}#${NOTICE_BOARD_ANCHOR}`, { replace: true })}
+        />
       )}
     </div>
   )
