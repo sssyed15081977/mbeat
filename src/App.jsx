@@ -8,7 +8,7 @@ import PrayerTimesPage from './pages/PrayerTimesPage'
 import FeedPage from './pages/FeedPage'
 import NewDeathAnnouncementPage from './pages/NewDeathAnnouncementPage'
 import PostDetailPage from './pages/PostDetailPage'
-import EditDeathAnnouncementPage from './pages/EditDeathAnnouncementPage'
+import EditPostPage from './pages/EditPostPage'
 import IslamicGuidePage from './pages/IslamicGuidePage'
 import NewMasjidPage from './pages/NewMasjidPage'
 import MasjidDetailPage from './pages/MasjidDetailPage'
@@ -60,7 +60,7 @@ function App() {
               path="/post/:id/edit"
               element={
                 <ProfileCompletion>
-                  <EditDeathAnnouncementPage />
+                  <EditPostPage />
                 </ProfileCompletion>
               }
             />
