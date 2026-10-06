@@ -1,5 +1,6 @@
 {
   "common": {
+    "appName": "Sahabi",
     "retry": "Try again",
     "back": "Back",
     "close": "Close"
@@ -10,7 +11,7 @@
   },
   "profileCompletion": {
     "title": "Complete your profile",
-    "subtitle": "Real names are required to post on mbeat — this keeps the community accountable.",
+    "subtitle": "Real names are required to post on Sahabi — this keeps the community accountable.",
     "fullNameLabel": "Full name",
     "fullNamePlaceholder": "Full name",
     "phoneLabel": "Phone number",
