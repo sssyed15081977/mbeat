@@ -1,16 +1,17 @@
 {
   "common": {
+    "appName": "Sahabi",
     "retry": "Try again",
     "back": "Back",
     "close": "Close"
   },
   "auth": {
-    "tagline": "MPM Helpline — community info for Melapalayam, in one place.",
+    "tagline": "Community info for Melapalayam, in one place.",
     "signInWithGoogle": "Sign in with Google"
   },
   "profileCompletion": {
     "title": "Complete your profile",
-    "subtitle": "Real names are required to post on mbeat — this keeps the community accountable.",
+    "subtitle": "Real names are required to post on Sahabi — this keeps the community accountable.",
     "fullNameLabel": "Full name",
     "fullNamePlaceholder": "Full name",
     "phoneLabel": "Phone number",

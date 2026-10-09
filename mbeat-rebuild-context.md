@@ -122,6 +122,7 @@ Naming mistakes are expensive here because a name isn't just a label — it prop
 | Date after which a notice is hidden | Show until (`show_until`, date); Tamil வரை காட்டு | `masjid_notice.show_until` |
 | A notice's board photo; a donation notice's payment details | `photo_url` (bucket `post-photos`); `upi_id`, `payment_qr_url` | `masjid_notice` |
 | Screen where a masjid volunteer posts a notice; read view and poster's name (2026-10-05) | Add notice (Tamil அறிவிப்பைச் சேர்க்கவும்); route `/masjid/:id/notice/new` | `pages/NewMasjidNoticePage.jsx`; database functions `create_masjid_notice`, `get_author_names` (returns `id, full_name` only); component `features/masjidNotice/MasjidNoticeDetail.jsx` |
+| The app's name as users see it (replaces "mbeat" on screen, 2026-10-06; chosen over "Sahibi", which locally reads as "Muslim") | Sahabi; Tamil ஸஹாபி | i18n `common.appName`, PWA manifest `name`/`short_name`, `index.html` `<title>`. Display only: package name, `mbeat_*` storage keys, Supabase `project_id`, repo and docs stay "mbeat" |
 
 ## Working style / preferences (for Claude Code to follow)
 - Syed's background: ~10 years Google Apps Script, prior ASP.NET, Python as primary language, still learning React/modern web frameworks.
