@@ -6,8 +6,18 @@ import { useAuth } from '../features/auth/useAuth'
 import { BackButton } from '../components/ui/BackButton'
 import { Skeleton } from '../components/ui/Skeleton'
 import { DeathAnnouncementForm } from '../features/deathAnnouncement/DeathAnnouncementForm'
+import { MasjidNoticeForm } from '../features/masjidNotice/MasjidNoticeForm'
 
-export default function EditDeathAnnouncementPage() {
+// "You can only edit your own …" message per type.
+const NOT_AUTHORIZED = {
+  death_announcement: 'deathAnnouncementForm.notAuthorized',
+  masjid_notice: 'masjidNotice.notAuthorized',
+}
+
+// /post/:id/edit for every post type: loads the post and shows its type's
+// form, pre-filled. Only the author sees the form; RLS rejects anyone else's
+// writes anyway.
+export default function EditPostPage() {
   const { id } = useParams()
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -45,9 +55,14 @@ export default function EditDeathAnnouncementPage() {
       .finally(() => setLoading(false))
   }, [id])
 
+  const isAuthor = post && post.author_id === user.id
+  const detailPath = `/post/${id}`
+  // Replace, so Back from the updated post doesn't return to the form.
+  const backToPost = () => navigate(detailPath, { replace: true })
+
   return (
     <div className="min-h-screen p-4 max-w-sm mx-auto space-y-4">
-      <BackButton to={`/post/${id}`} />
+      <BackButton to={detailPath} />
 
       {loading && (
         <div className="space-y-2">
@@ -75,12 +90,18 @@ export default function EditDeathAnnouncementPage() {
         <p className="text-gray-500 text-center mt-8">{t('postDetail.notFound')}</p>
       )}
 
-      {!loading && !error && post && post.author_id !== user.id && (
-        <p className="text-gray-500 text-center mt-8">{t('deathAnnouncementForm.notAuthorized')}</p>
+      {!loading && !error && post && !isAuthor && (
+        <p className="text-gray-500 text-center mt-8">
+          {t(NOT_AUTHORIZED[post.type] ?? 'deathAnnouncementForm.notAuthorized')}
+        </p>
       )}
 
-      {!loading && !error && post && post.author_id === user.id && (
-        <DeathAnnouncementForm editingPost={post} onSuccess={() => navigate(`/post/${id}`)} />
+      {!loading && !error && isAuthor && post.type === 'death_announcement' && (
+        <DeathAnnouncementForm editingPost={post} onSuccess={() => navigate(detailPath)} />
+      )}
+
+      {!loading && !error && isAuthor && post.type === 'masjid_notice' && (
+        <MasjidNoticeForm masjid={post.entities} editingPost={post} onSuccess={backToPost} />
       )}
     </div>
   )
