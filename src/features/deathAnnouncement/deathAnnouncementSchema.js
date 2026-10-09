@@ -27,5 +27,4 @@ export const initialDeathAnnouncementForm = {
   photo: null,
 }
 
-export const DEATH_ANNOUNCEMENT_PHOTO_MAX_BYTES = 5 * 1024 * 1024
-export const DEATH_ANNOUNCEMENT_PHOTO_ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+// Photo size/type limits are shared across post types: see lib/postPhotos.js.

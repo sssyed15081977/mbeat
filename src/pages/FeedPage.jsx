@@ -22,7 +22,7 @@ export default function FeedPage() {
   return (
     <div className="p-4 max-w-sm mx-auto">
       <div className="flex items-center justify-between gap-2">
-        <h1 className="text-xl font-bold text-brand">mbeat</h1>
+        <h1 className="text-xl font-bold text-brand">{t('common.appName')}</h1>
         <div className="flex items-center gap-2">
           <LanguageToggle />
           <Link

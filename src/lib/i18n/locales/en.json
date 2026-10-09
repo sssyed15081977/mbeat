@@ -1,16 +1,17 @@
 {
   "common": {
+    "appName": "Sahabi",
     "retry": "Try again",
     "back": "Back",
     "close": "Close"
   },
   "auth": {
-    "tagline": "MPM Helpline — community info for Melapalayam, in one place.",
+    "tagline": "Community info for Melapalayam, in one place.",
     "signInWithGoogle": "Sign in with Google"
   },
   "profileCompletion": {
     "title": "Complete your profile",
-    "subtitle": "Real names are required to post on mbeat — this keeps the community accountable.",
+    "subtitle": "Real names are required to post on Sahabi — this keeps the community accountable.",
     "fullNameLabel": "Full name",
     "fullNamePlaceholder": "Full name",
     "phoneLabel": "Phone number",
@@ -36,7 +37,8 @@
     "job": "Job",
     "dua": "Dua",
     "fundraiser": "Fundraiser",
-    "discussion": "Discussion"
+    "discussion": "Discussion",
+    "masjid_notice": "Masjid notice"
   },
   "moderationStatus": {
     "pending": "Pending",
@@ -57,6 +59,11 @@
     "male": "Male",
     "female": "Female"
   },
+  "postPhoto": {
+    "help": "JPG, PNG or WEBP, up to 5MB",
+    "typeError": "Please choose a JPG, PNG or WEBP image.",
+    "sizeError": "Photo must be under 5MB."
+  },
   "deathAnnouncementForm": {
     "heading": "Post a death announcement",
     "titleLabel": "Title",
@@ -73,9 +80,6 @@
     "announcerRelationLabel": "Announcer relation",
     "announcerRelationPlaceholder": "e.g. Son, Masjid Committee",
     "photoLabel": "Photo (optional)",
-    "photoHelp": "JPG, PNG or WEBP, up to 5MB",
-    "photoTypeError": "Please choose a JPG, PNG or WEBP image.",
-    "photoSizeError": "Photo must be under 5MB.",
     "deathDatetimeLabel": "Date & time of death",
     "bodyNotYetAvailableLabel": "Body not yet available for visiting (still being brought from elsewhere)",
     "bodyLocationLabel": "Body location",
@@ -99,6 +103,61 @@
     "editLink": "Edit",
     "statusControlLabel": "Update status",
     "statusUpdateError": "Couldn't update the status — try again."
+  },
+  "masjidNotice": {
+    "noticeBoard": "Notice board",
+    "addNotice": "Add notice",
+    "editHeading": "Edit notice",
+    "kindLabel": "Kind",
+    "kinds": {
+      "announcement": "General announcement",
+      "ayah": "Ayah",
+      "hadith": "Hadith",
+      "dua": "Dua",
+      "donation": "Donation"
+    },
+    "photoLabel": "Photo of the notice",
+    "titleLabel": "Title",
+    "textLabel": "Text",
+    "optional": "Optional",
+    "sourceLabel": "Source",
+    "sourcePlaceholder": "e.g. Sahih al-Bukhari 1",
+    "upiLabel": "UPI ID",
+    "upiPlaceholder": "e.g. masjidname@okicici",
+    "qrLabel": "Payment QR",
+    "showUntilLabel": "Show until",
+    "showUntilHelp": "Optional. The notice is hidden after this day.",
+    "contentHint": "Add a photo, a title or some text.",
+    "submit": "Post",
+    "posting": "Posting…",
+    "saveChanges": "Save changes",
+    "saving": "Saving…",
+    "postError": "Couldn't post — try again",
+    "saveError": "Couldn't save — try again.",
+    "noPermission": "You can't post notices for this masjid.",
+    "notAuthorized": "You can only edit your own notices.",
+    "empty": "No notices yet",
+    "loadError": "Couldn't load notices — try again.",
+    "noticeFrom": "Notice from {{masjid}}",
+    "ended": "This notice has ended",
+    "source": "Source: {{source}}",
+    "showUntil": "Shown until {{date}}",
+    "payWithUpi": "Pay with UPI",
+    "copyUpi": "Copy UPI ID",
+    "copied": "Copied",
+    "confirmNote": "Confirm with the masjid before paying.",
+    "postedBy": "Posted by {{name}}, masjid volunteer",
+    "postedByVolunteer": "Posted by a masjid volunteer",
+    "share": "Share",
+    "edit": "Edit",
+    "remove": "Remove",
+    "removing": "Removing…",
+    "removeConfirm": "Remove this notice?",
+    "removeConfirmBody": "It will be removed for everyone.",
+    "removeError": "Couldn't remove — try again.",
+    "cancel": "Cancel",
+    "viewPhoto": "View photo",
+    "viewQr": "View payment QR"
   },
   "islamicGuide": {
     "pendingReviewBanner": "If anything looks off, please let us know.",
@@ -148,7 +207,8 @@
       "daysAgo": "Confirmed {{count}} days ago",
       "notConfirmed": "Not yet confirmed",
       "stale": "Times may be out of date"
-    }
+    },
+    "listHint": "Tap a masjid to see its jamaat times and notice board."
   },
   "begins": {
     "column": "Begins",

@@ -1,13 +1,9 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '../../lib/supabaseClient'
+import { POST_PHOTO_ACCEPTED_TYPES, uploadPostPhoto, validatePostPhoto } from '../../lib/postPhotos'
 import { useAuth } from '../auth/useAuth'
-import {
-  DEATH_ANNOUNCEMENT_GENDERS,
-  DEATH_ANNOUNCEMENT_PHOTO_ACCEPTED_TYPES,
-  DEATH_ANNOUNCEMENT_PHOTO_MAX_BYTES,
-  initialDeathAnnouncementForm,
-} from './deathAnnouncementSchema'
+import { DEATH_ANNOUNCEMENT_GENDERS, initialDeathAnnouncementForm } from './deathAnnouncementSchema'
 
 // datetime-local inputs take/return local wall-clock time with no timezone;
 // timestamptz columns come back as UTC instants — shift by the local offset
@@ -92,29 +88,15 @@ export function DeathAnnouncementForm({ onSuccess, editingPost }) {
   function handlePhotoChange(event) {
     const file = event.target.files?.[0] ?? null
 
-    if (file && !DEATH_ANNOUNCEMENT_PHOTO_ACCEPTED_TYPES.includes(file.type)) {
-      setError(t('deathAnnouncementForm.photoTypeError'))
-      event.target.value = ''
-      return
-    }
-    if (file && file.size > DEATH_ANNOUNCEMENT_PHOTO_MAX_BYTES) {
-      setError(t('deathAnnouncementForm.photoSizeError'))
+    const problem = file && validatePostPhoto(file)
+    if (problem) {
+      setError(t(problem === 'type' ? 'postPhoto.typeError' : 'postPhoto.sizeError'))
       event.target.value = ''
       return
     }
 
     setError(null)
     setPhotoFile(file)
-  }
-
-  async function uploadPhoto(file) {
-    const extension = file.name.split('.').pop()
-    const path = `${user.id}/${crypto.randomUUID()}.${extension}`
-
-    const { error: uploadError } = await supabase.storage.from('post-photos').upload(path, file)
-    if (uploadError) throw uploadError
-
-    return supabase.storage.from('post-photos').getPublicUrl(path).data.publicUrl
   }
 
   async function handleSubmit(event) {
@@ -126,7 +108,7 @@ export function DeathAnnouncementForm({ onSuccess, editingPost }) {
     let photoUrl = isEditing ? existingPhotoUrl : null
     if (form.photo) {
       try {
-        photoUrl = await uploadPhoto(form.photo)
+        photoUrl = await uploadPostPhoto(user.id, form.photo)
       } catch (uploadError) {
         setSubmitting(false)
         setError(uploadError.message)
@@ -317,11 +299,11 @@ export function DeathAnnouncementForm({ onSuccess, editingPost }) {
         <input
           id="photo"
           type="file"
-          accept={DEATH_ANNOUNCEMENT_PHOTO_ACCEPTED_TYPES.join(',')}
+          accept={POST_PHOTO_ACCEPTED_TYPES.join(',')}
           onChange={handlePhotoChange}
           className="w-full text-sm"
         />
-        <p className="text-xs text-gray-500">{t('deathAnnouncementForm.photoHelp')}</p>
+        <p className="text-xs text-gray-500">{t('postPhoto.help')}</p>
       </div>
       <div className="space-y-1">
         <label htmlFor="announcer_relation" className="text-sm font-medium text-gray-700">

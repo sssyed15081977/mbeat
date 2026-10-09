@@ -8,11 +8,12 @@ import PrayerTimesPage from './pages/PrayerTimesPage'
 import FeedPage from './pages/FeedPage'
 import NewDeathAnnouncementPage from './pages/NewDeathAnnouncementPage'
 import PostDetailPage from './pages/PostDetailPage'
-import EditDeathAnnouncementPage from './pages/EditDeathAnnouncementPage'
+import EditPostPage from './pages/EditPostPage'
 import IslamicGuidePage from './pages/IslamicGuidePage'
 import NewMasjidPage from './pages/NewMasjidPage'
 import MasjidDetailPage from './pages/MasjidDetailPage'
 import UpdateMasjidTimesPage from './pages/UpdateMasjidTimesPage'
+import NewMasjidNoticePage from './pages/NewMasjidNoticePage'
 
 function App() {
   return (
@@ -42,6 +43,10 @@ function App() {
               Router prefers the exact path over :id. */}
           <Route path="/masjid/:id" element={<MasjidDetailPage />} />
 
+          {/* Open to guests, so shared WhatsApp links work without sign-in
+              (masjid-notices.md AC15). /post/new below still wins over :id. */}
+          <Route path="/post/:id" element={<PostDetailPage />} />
+
           <Route element={<ProtectedRoute />}>
             <Route
               path="/post/new"
@@ -52,18 +57,10 @@ function App() {
               }
             />
             <Route
-              path="/post/:id"
-              element={
-                <ProfileCompletion>
-                  <PostDetailPage />
-                </ProfileCompletion>
-              }
-            />
-            <Route
               path="/post/:id/edit"
               element={
                 <ProfileCompletion>
-                  <EditDeathAnnouncementPage />
+                  <EditPostPage />
                 </ProfileCompletion>
               }
             />
@@ -88,6 +85,14 @@ function App() {
               element={
                 <ProfileCompletion>
                   <UpdateMasjidTimesPage />
+                </ProfileCompletion>
+              }
+            />
+            <Route
+              path="/masjid/:id/notice/new"
+              element={
+                <ProfileCompletion>
+                  <NewMasjidNoticePage />
                 </ProfileCompletion>
               }
             />

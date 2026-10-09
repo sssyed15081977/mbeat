@@ -14,8 +14,8 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,woff2}'],
       },
       manifest: {
-        name: 'mbeat',
-        short_name: 'mbeat',
+        name: 'Sahabi',
+        short_name: 'Sahabi',
         description: 'Community service app for Melapalayam',
         theme_color: '#16a34a', // green-600, matches your design system
         background_color: '#ffffff',

@@ -11,6 +11,7 @@ import { MasjidListItem } from '../features/prayerTimes/MasjidListItem'
 import { JamaatBoard } from '../features/prayerTimes/JamaatBoard'
 import { ChooseMasjidSheet } from '../features/prayerTimes/ChooseMasjidSheet'
 import { FreshnessLabel } from '../features/prayerTimes/FreshnessLabel'
+import { NOTICE_BOARD_ANCHOR } from '../features/masjidNotice/NoticeBoard'
 
 // Controls drawn on the board use its colours (currentColor) and a visible
 // focus ring in the same colour. Padding keeps the tap target 44px tall
@@ -60,6 +61,11 @@ function boardHeading({ t, masjid, now, onChoose }) {
         <FreshnessLabel timesConfirmedAt={masjid.times_confirmed_at} now={now} onBoard />
         <Link to={`/masjid/${masjid.id}`} className={`${ON_BOARD_CONTROL} underline`}>
           {t('board.masjidPage')}
+        </Link>
+        {/* Notices live on the masjid page, not on this tab (masjid-notices.md AC8). */}
+        <Link to={`/masjid/${masjid.id}#${NOTICE_BOARD_ANCHOR}`} className={`${ON_BOARD_CONTROL} underline`}>
+          {t('masjidNotice.noticeBoard')}
+          <span aria-hidden="true">→</span>
         </Link>
       </div>
     ),
@@ -176,6 +182,8 @@ export default function PrayerTimesPage() {
 
       {!loading && !error && masjids.length > 0 && (
         <>
+          <p className="text-sm text-gray-500">{t('prayerTimes.listHint')}</p>
+
           {pinError && (
             <p className="text-sm text-red-600" role="alert">
               {t('prayerTimes.pinError')}
