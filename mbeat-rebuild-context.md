@@ -394,7 +394,7 @@ A masjid volunteer posts the masjid's notice-board content (announcements, ayahs
 
 Built 2026-10-05 (T1–T9): migration `20261005120000_add_masjid_notices.sql` applied; its rules were checked as real roles in a rolled-back transaction. `PostCard` now dispatches to `PostCard.<type>.jsx`; `/post/:id/edit` is `EditPostPage` (picks the form by type); photo upload is shared in `lib/postPhotos.js`.
 
-Tested 2026-10-09 (T10): Syed walked through AC1–AC28 on a phone; all working.
+Tested 2026-10-09 (T10): Syed walked through AC1–AC28 on a phone; all working. AC23 (hiding a notice from the Supabase dashboard) is not yet checked.
 
 **Next:** merge PR #10 into `develop`, then promote `develop` to `main`.
 
