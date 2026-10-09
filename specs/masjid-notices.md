@@ -1,6 +1,6 @@
 # Spec: Masjid notices v1
 
-**Status:** built 2026-10-05 (T1–T9); next is T10, Syed's phone walkthrough
+**Status:** built 2026-10-05 (T1–T9); T10 phone walkthrough passed 2026-10-09; next is merging PR #10
 **Branch:** `feature/masjid-notices`
 **Builds on:** [prayer-times.md](prayer-times.md), [jamaat-board.md](jamaat-board.md)
 **Schema:** [20261005120000_add_masjid_notices.sql](../supabase/migrations/20261005120000_add_masjid_notices.sql), applied 2026-10-05
@@ -37,42 +37,42 @@ A masjid's notice board carries more than jamaat times: announcements, Quran aya
 v1 is done when every box is ticked. Each criterion should be checkable by hand at a **mobile width (360px)** in **both English and Tamil**.
 
 ### Posting (masjid volunteers)
-- [ ] **AC1** The masjid page shows an **Add notice** button **only** to that masjid's volunteers, beside the **Update times** button and using the same check.
-- [ ] **AC2** The form asks for: **kind** (required; one of பொது அறிவிப்பு / General announcement, Ayah, Hadith, Dua, Donation), **photo** (optional), **title** (optional), **text** (optional), **Source** (shown only for Ayah and Hadith, required for them), **Show until** (optional date), and for Donation only, **UPI ID** and **payment QR** (both optional).
-- [ ] **AC3** A notice needs **at least a photo, a title or text**. The Post button stays disabled until one is given.
-- [ ] **AC4** Posting creates the `posts` row and the `masjid_notice` row **in one step** (all or nothing), already `published`, linked to the masjid by `posts.entity_id`. The client can't choose the moderation status, and a non-volunteer can't post for a masjid (RLS / database function enforces it, not only the hidden button).
-- [ ] **AC5** After posting, the volunteer returns to the masjid page and the new notice is at the top of its notices.
-- [ ] **AC6** Photos (board photo and QR) use the existing `post-photos` bucket, under the uploader's folder, same as death announcements.
-- [ ] **AC7** Post error: the form keeps what was entered and shows "Couldn't post — try again".
+- [x] **AC1** The masjid page shows an **Add notice** button **only** to that masjid's volunteers, beside the **Update times** button and using the same check.
+- [x] **AC2** The form asks for: **kind** (required; one of பொது அறிவிப்பு / General announcement, Ayah, Hadith, Dua, Donation), **photo** (optional), **title** (optional), **text** (optional), **Source** (shown only for Ayah and Hadith, required for them), **Show until** (optional date), and for Donation only, **UPI ID** and **payment QR** (both optional).
+- [x] **AC3** A notice needs **at least a photo, a title or text**. The Post button stays disabled until one is given.
+- [x] **AC4** Posting creates the `posts` row and the `masjid_notice` row **in one step** (all or nothing), already `published`, linked to the masjid by `posts.entity_id`. The client can't choose the moderation status, and a non-volunteer can't post for a masjid (RLS / database function enforces it, not only the hidden button).
+- [x] **AC5** After posting, the volunteer returns to the masjid page and the new notice is at the top of its notices.
+- [x] **AC6** Photos (board photo and QR) use the existing `post-photos` bucket, under the uploader's folder, same as death announcements.
+- [x] **AC7** Post error: the form keeps what was entered and shows "Couldn't post — try again".
 
 ### Viewing (everyone, including guests)
-- [ ] **AC8** The **Prayer Times tab** shows no notice cards. Instead: (a) when a masjid is selected, the Jamaat board shows a **Notice board →** link that opens that masjid's page scrolled to its notices (always shown, even if the masjid has none); (b) a hint line above the masjid list reads "Tap a masjid to see its jamaat times and notice board."
-- [ ] **AC9** The **masjid page** shows a **Notice board** section with all of that masjid's live notices below its board, newest first. This is the main place to see a masjid's notices.
-- [ ] **AC10** The **Feed** shows masjid notices alongside other posts, each card naming its masjid.
-- [ ] **AC11** A notice card shows: the kind label, the masjid name, the title (or, when there's no title, "Notice from {masjid}"), the photo if any, the start of the text, and when it was posted ("2 days ago").
-- [ ] **AC12** Tapping a card opens the post detail page (`/post/:id`): full photo (tap to enlarge, reusing `ImageLightbox`), full text, source, "show until" date, masjid name (links to the masjid page) and the volunteer's name.
-- [ ] **AC13** A notice with a **Show until** date disappears from the masjid page and the Feed **after that day ends** in Asia/Kolkata time. Opening it by link still works, with a "This notice has ended" line.
-- [ ] **AC14** Ayah and Hadith notices always show their **Source** line ("Source: Sahih al-Bukhari 1").
-- [ ] **AC15** Guests can see notices on the masjid page and in shared links, and can **open any published post's detail page (`/post/:id`) without signing in**. This opens death announcement links to guests too (§7 decision 8).
-- [ ] **AC16** No likes, reactions or counts appear on notices.
+- [x] **AC8** The **Prayer Times tab** shows no notice cards. Instead: (a) when a masjid is selected, the Jamaat board shows a **Notice board →** link that opens that masjid's page scrolled to its notices (always shown, even if the masjid has none); (b) a hint line above the masjid list reads "Tap a masjid to see its jamaat times and notice board."
+- [x] **AC9** The **masjid page** shows a **Notice board** section with all of that masjid's live notices below its board, newest first. This is the main place to see a masjid's notices.
+- [x] **AC10** The **Feed** shows masjid notices alongside other posts, each card naming its masjid.
+- [x] **AC11** A notice card shows: the kind label, the masjid name, the title (or, when there's no title, "Notice from {masjid}"), the photo if any, the start of the text, and when it was posted ("2 days ago").
+- [x] **AC12** Tapping a card opens the post detail page (`/post/:id`): full photo (tap to enlarge, reusing `ImageLightbox`), full text, source, "show until" date, masjid name (links to the masjid page) and the volunteer's name.
+- [x] **AC13** A notice with a **Show until** date disappears from the masjid page and the Feed **after that day ends** in Asia/Kolkata time. Opening it by link still works, with a "This notice has ended" line.
+- [x] **AC14** Ayah and Hadith notices always show their **Source** line ("Source: Sahih al-Bukhari 1").
+- [x] **AC15** Guests can see notices on the masjid page and in shared links, and can **open any published post's detail page (`/post/:id`) without signing in**. This opens death announcement links to guests too (§7 decision 8).
+- [x] **AC16** No likes, reactions or counts appear on notices.
 
 ### Donations
-- [ ] **AC17** A Donation notice with a UPI ID shows a **Pay with UPI** button that opens the phone's UPI app (`upi://pay?pa=…&pn=<masjid name>&cu=INR`) and a **Copy UPI ID** button. The copy button is the fallback when no UPI app opens.
-- [ ] **AC18** A Donation notice with a QR shows the QR image, tap to enlarge.
-- [ ] **AC19** Every Donation notice shows "Posted by {name}, masjid volunteer" and the fixed note "Confirm with the masjid before paying." These can't be turned off by the poster.
+- [x] **AC17** A Donation notice with a UPI ID shows a **Pay with UPI** button that opens the phone's UPI app (`upi://pay?pa=…&pn=<masjid name>&cu=INR`) and a **Copy UPI ID** button. The copy button is the fallback when no UPI app opens.
+- [x] **AC18** A Donation notice with a QR shows the QR image, tap to enlarge.
+- [x] **AC19** Every Donation notice shows "Posted by {name}, masjid volunteer" and the fixed note "Confirm with the masjid before paying." These can't be turned off by the poster.
 
 ### Editing, removing, sharing
-- [ ] **AC20** The notice's author sees **Edit** and **Remove** on its detail page. Edit reuses the posting form, pre-filled, at `/post/:id/edit`.
-- [ ] **AC21** **Remove** asks for confirmation once (it's destructive), then deletes the notice and returns to the masjid page. Only the author can remove it (RLS).
-- [ ] **AC22** Every notice's detail page has a **Share** button. It uses the phone's share sheet (`navigator.share`) when available and falls back to a WhatsApp link (`https://wa.me/?text=…`). The shared text is the title (or "Notice from {masjid}") plus the notice's link.
-- [ ] **AC23** Syed can hide a notice by setting `posts.moderation_status = 'hidden'` in the dashboard; it then disappears everywhere (check by hand).
+- [x] **AC20** The notice's author sees **Edit** and **Remove** on its detail page. Edit reuses the posting form, pre-filled, at `/post/:id/edit`.
+- [x] **AC21** **Remove** asks for confirmation once (it's destructive), then deletes the notice and returns to the masjid page. Only the author can remove it (RLS).
+- [x] **AC22** Every notice's detail page has a **Share** button. It uses the phone's share sheet (`navigator.share`) when available and falls back to a WhatsApp link (`https://wa.me/?text=…`). The shared text is the title (or "Notice from {masjid}") plus the notice's link.
+- [x] **AC23** Syed can hide a notice by setting `posts.moderation_status = 'hidden'` in the dashboard; it then disappears everywhere (check by hand).
 
 ### Cross-cutting (standing requirements)
-- [ ] **AC24** Every string goes through `useTranslation()`, with keys in both `en.json` and `ta.json`. Notice content itself (title, text, source) is shown as typed and isn't translated.
-- [ ] **AC25** Arabic text in a notice displays right-to-left correctly (`dir="auto"` on user text).
-- [ ] **AC26** All new non-root pages render a `BackButton`.
-- [ ] **AC27** Every screen handles loading (skeleton), empty ("No notices yet"), error (plain-language message + retry) and offline.
-- [ ] **AC28** On the masjid page, the Notice board section loads below the Jamaat board without shifting it, and the posting form isn't covered by the mobile keyboard.
+- [x] **AC24** Every string goes through `useTranslation()`, with keys in both `en.json` and `ta.json`. Notice content itself (title, text, source) is shown as typed and isn't translated.
+- [x] **AC25** Arabic text in a notice displays right-to-left correctly (`dir="auto"` on user text).
+- [x] **AC26** All new non-root pages render a `BackButton`.
+- [x] **AC27** Every screen handles loading (skeleton), empty ("No notices yet"), error (plain-language message + retry) and offline.
+- [x] **AC28** On the masjid page, the Notice board section loads below the Jamaat board without shifting it, and the posting form isn't covered by the mobile keyboard.
 
 ## 4. Screens
 
@@ -213,5 +213,5 @@ Work top to bottom; each task is small enough for one sitting.
 - [x] T7 Edit and Remove: `/post/:id/edit` picks the form by type; delete with one confirmation. *(done 2026-10-05)*
 - [x] T8 Feed: include notices with their masjid name; expired notices filtered out. *(done 2026-10-05)*
 - [x] T9 i18n pass: every key in `en.json` + `ta.json`. *(done 2026-10-05)*
-- [ ] T10 Post the first real notices for the 3 pilot masjids; walk through AC1–AC28 on a phone in both languages; tick the boxes above.
+- [x] T10 Post the first real notices for the 3 pilot masjids; walk through AC1–AC28 on a phone in both languages; tick the boxes above. *(Syed tested on a phone, all working, 2026-10-09)*
 - [x] T11 PR `feature/masjid-notices` → `develop`, with the PR description linking this spec. *(opened as draft #10, 2026-10-05)*

@@ -385,7 +385,7 @@ Other candidates, not started (after Prayer Begins times):
    - **Phone+OTP login** — deferred pending an SMS provider being set up in the Supabase dashboard (a billing step).
    - **Reputation system** (`reactions`, flags/reports, trust scoring) — referenced throughout as the eventual backbone for auto-publish/verified-announcer status, not started.
 
-## Masjid notices — in progress (spec approved 2026-10-05)
+## Masjid notices — built and tested (spec approved 2026-10-05)
 A masjid volunteer posts the masjid's notice-board content (announcements, ayahs, hadiths, duas, donation appeals) as `posts` rows of `type = 'masjid_notice'`. They're auto-published through the `create_masjid_notice` function, which is the narrow exception to "every post starts `pending`".
 - Notices show on the **masjid page** below its Jamaat board, and in the Feed. The Prayer Times tab shows **no** notice cards, so jamaat times stay on top. It only has a "Notice board →" link on the Jamaat board and a hint line above the masjid list (Syed's call, 2026-10-05).
 - `/post/:id` opens to guests, so shared WhatsApp links work without sign-in. This includes death announcements.
@@ -394,7 +394,9 @@ A masjid volunteer posts the masjid's notice-board content (announcements, ayahs
 
 Built 2026-10-05 (T1–T9): migration `20261005120000_add_masjid_notices.sql` applied; its rules were checked as real roles in a rolled-back transaction. `PostCard` now dispatches to `PostCard.<type>.jsx`; `/post/:id/edit` is `EditPostPage` (picks the form by type); photo upload is shared in `lib/postPhotos.js`.
 
-**Next:** T10, posting the first real notices for the pilot masjids and walking AC1–AC28 on a phone in both languages, then merging the PR.
+Tested 2026-10-09 (T10): Syed walked through AC1–AC28 on a phone; all working.
+
+**Next:** merge PR #10 into `develop`, then promote `develop` to `main`.
 
 ## Notes for whoever picks this up next
 - Open feature branch: `feature/masjid-notices` (off `develop`). Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` was first promoted from `develop` on 2026-09-30 (PR #6) and is what Cloudflare deploys.
