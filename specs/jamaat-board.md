@@ -1,6 +1,6 @@
 # Spec: Jamaat board
 
-**Status:** built (2026-10-02), T1–T10 done, all criteria met; in review (PR #8)
+**Status:** complete — T1–T10 done, all criteria met; merged to `develop` (PR #8) and promoted to `main` (PR #9), 2026-10-02
 **Branch:** `feature/jamaat-board`, rebased onto `develop` after PR #7 (2026-10-01)
 **Builds on:** [prayer-times.md](prayer-times.md) (v1, done), [prayer-begins.md](prayer-begins.md) (must be merged first)
 **Mockup:** three styles reviewed by Syed 2026-10-01 (claude.ai artifact "Jamaat Board Styles"). The mockup shows one column; this spec adds the Begins column.

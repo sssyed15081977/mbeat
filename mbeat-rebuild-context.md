@@ -364,12 +364,12 @@ Chosen as the next module to build, because it gives users (and Syed himself) a 
 - Done 2026-09-30: **T11**. Tamil labels confirmed as drafted (spec §4.4, §7 decision 13), and the English and Tamil key sets match.
 - Done 2026-09-30: **T12**. Syed walked through AC1–AC31 on a phone in both languages; all passed.
 - Done 2026-09-30: **T13**. PR #5 merged into `develop`; `feature/prayer-times` deleted (local + remote).
-- Not yet decided: whether to add a CLAUDE.md rule making a spec mandatory before any feature code.
+- Decided 2026-10-14: a spec is mandatory before code for a new module, table or post type (not for small fixes, copy or styling). Rule added to CLAUDE.md "Working style".
 
 ## Progress log — first launch (done 2026-09-30)
 - `develop` promoted to `main` via PR #6 and deployed on Cloudflare (Node pinned to 24 in `.node-version`; OAuth `redirectTo` set to the current origin so login works on the production domain). Launch confirmed finished by Syed.
 
-## Prayer Begins times — in progress (started 2026-09-30)
+## Prayer Begins times — done (merged 2026-10-01, PR #7)
 Syed wants residents to see when each prayer's time actually **begins**, because masjids' adhan times differ from the times set in Islam (through ignorance or madhab differences). This **partly reverses** the 2026-09-26 "no adhan times, no calculated times" decision: calculated times are now *shown* (label **"Begins"**), but still never *stored*, and masjid adhan times are still not shown. Jamaat times stay manual.
 - Calculated on the phone with the `adhan` library (adhan-js) for fixed Melapalayam coordinates, in Asia/Kolkata time. No migration.
 - A "Today in Melapalayam" card at the top of the Prayer Times tab: Fajr, Sunrise, Dhuhr (Jumu'ah on Fridays), Asr, Maghrib, Isha, with the next prayer highlighted.
@@ -377,15 +377,16 @@ Syed wants residents to see when each prayer's time actually **begins**, because
 - No local printed calendar lists Begins times, so there's no reference check; accuracy is trusted to the library and the chosen method.
 - Full requirements and task checklist: [specs/prayer-begins.md](specs/prayer-begins.md). Branch `feature/prayer-begins-times`.
 
-**Next:** build Prayer Begins times, following its spec's task checklist (T2 onward).
+## Jamaat board — done (merged 2026-10-02, PR #8)
+Two-column Begins + Jamaat board on the Prayer Times tab and the masjid page, in three per-device Board styles (`painted`, `digital`, `wooden`), with Choose masjid and a Display settings sheet. Full requirements: [specs/jamaat-board.md](specs/jamaat-board.md). Promoted to `main` with Begins via PR #9 (2026-10-02).
 
-Other candidates, not started (after Prayer Begins times):
+## Candidates for the next module (none started)
    - **Find Now** (directory/search — `profiles`/`entities`/`entity_members`, its own nav tab) — the other half of the locked push/pull architecture split, currently just a design on paper.
    - **A second post type** (blood request is the most-referenced candidate throughout this doc, and death announcements have already proven out the `posts` + extension-table pattern end to end).
    - **Phone+OTP login** — deferred pending an SMS provider being set up in the Supabase dashboard (a billing step).
    - **Reputation system** (`reactions`, flags/reports, trust scoring) — referenced throughout as the eventual backbone for auto-publish/verified-announcer status, not started.
 
-## Masjid notices — built and tested (spec approved 2026-10-05)
+## Masjid notices — done (merged 2026-10-09, PR #10)
 A masjid volunteer posts the masjid's notice-board content (announcements, ayahs, hadiths, duas, donation appeals) as `posts` rows of `type = 'masjid_notice'`. They're auto-published through the `create_masjid_notice` function, which is the narrow exception to "every post starts `pending`".
 - Notices show on the **masjid page** below its Jamaat board, and in the Feed. The Prayer Times tab shows **no** notice cards, so jamaat times stay on top. It only has a "Notice board →" link on the Jamaat board and a hint line above the masjid list (Syed's call, 2026-10-05).
 - `/post/:id` opens to guests, so shared WhatsApp links work without sign-in. This includes death announcements.
@@ -394,12 +395,15 @@ A masjid volunteer posts the masjid's notice-board content (announcements, ayahs
 
 Built 2026-10-05 (T1–T9): migration `20261005120000_add_masjid_notices.sql` applied; its rules were checked as real roles in a rolled-back transaction. `PostCard` now dispatches to `PostCard.<type>.jsx`; `/post/:id/edit` is `EditPostPage` (picks the form by type); photo upload is shared in `lib/postPhotos.js`.
 
-Tested 2026-10-09 (T10): Syed walked through AC1–AC28 on a phone; all working. AC23 (hiding a notice from the Supabase dashboard) is not yet checked.
+Tested 2026-10-09 (T10): Syed walked through AC1–AC28 on a phone; all working. AC23 (hiding a notice from the Supabase dashboard) passed 2026-10-14. When testing a hidden post, check as a guest: RLS still shows authors their own hidden posts, by design.
 
-**Next:** merge PR #10 into `develop`, then promote `develop` to `main`.
+Merged into `develop` (PR #10) and promoted to `main` (PR #11) on 2026-10-09.
+
+## Current state (2026-10-14)
+`develop` and `main` are identical; no feature branch is open. Everything above is live. **Next:** pick a module from "Candidates for the next module" above and write its spec first.
 
 ## Notes for whoever picks this up next
-- Open feature branch: `feature/masjid-notices` (off `develop`). Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` was first promoted from `develop` on 2026-09-30 (PR #6) and is what Cloudflare deploys.
+- Open feature branch: none (as of 2026-10-14). Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` was first promoted from `develop` on 2026-09-30 (PR #6) and is what Cloudflare deploys.
 - A fresh machine/clone needs `npx supabase login` + `npx supabase link --project-ref slalnatjabrcnjxngqoo` before any `supabase db push`/`migration list` command works, and `gh auth login --web` before `gh pr create` works — neither credential persists in the repo (both are gitignored/local-machine state).
 - Before trusting this doc's "already done" claims, spot-check the actual repo state (folders can exist but be empty, files can exist but be wrong — e.g. we once found `VITE_SUPABASE_URL` had `/rest/v1/` wrongly appended) rather than assuming the doc is authoritative. This doc itself went stale once already (progress log sat several commits behind actual repo state, including an inconsistency where the lifecycle-status naming table had already been updated to 5 stages but the prose above it still described the old 3) — re-verify against `git log`/actual files each session rather than trusting the log at face value.
 - Syed prefers step-by-step confirmation before executing, narrated plans, and one file at a time when debugging — see "Working style / preferences" above.

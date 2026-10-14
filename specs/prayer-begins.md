@@ -1,6 +1,6 @@
 # Spec: Prayer Begins times
 
-**Status:** built and checked on a phone (2026-10-01); in review
+**Status:** complete — all acceptance criteria passed; merged to `develop` (PR #7, 2026-10-01), on `main` since PR #9 (2026-10-02)
 **Next:** after this merges, the "Today in Melapalayam" card is replaced by the two-column Begins + Jamaat board ([jamaat-board.md](jamaat-board.md), decided 2026-10-01). That spec overrides AC4a (Dhuhr stays "Dhuhr" on the board) and AC16, and reverses the §6 exclusion of calculated times on the masjid page / next to jamaat times.
 **Branch:** `feature/prayer-begins-times`
 **Builds on:** [prayer-times.md](prayer-times.md) (v1, done)
@@ -148,4 +148,4 @@ None.
 - [x] T5 Bottom sheet (generic `components/ui/BottomSheet.jsx` if none exists) + method picker. *(2026-10-01: `BottomSheet.jsx` + `CalcMethodPicker.jsx`; checked in Chrome at 360px: pick applies and closes, survives reload, Escape closes, focus returns to the button.)*
 - [x] T6 i18n pass: every key in `en.json` + `ta.json`; Tamil confirmed. *(2026-10-01: key parity checked app-wide, no hardcoded strings; Tamil card and sheet fit at 360px.)*
 - [x] T7 Walk through AC1–AC16 on a phone in both languages; tick the boxes. *(2026-10-01: all passed on Syed's phone.)*
-- [ ] T8 PR `feature/prayer-begins-times` → `develop`, linking this spec.
+- [x] T8 PR `feature/prayer-begins-times` → `develop`, linking this spec. *(PR #7, merged 2026-10-01; promoted to `main` via PR #9, 2026-10-02)*
