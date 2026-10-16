@@ -1,6 +1,6 @@
 # Spec: Masjid notices v1
 
-**Status:** built 2026-10-05 (T1–T9); T10 phone walkthrough passed 2026-10-09; next is merging PR #10
+**Status:** complete — all acceptance criteria passed; merged to `develop` (PR #10) and promoted to `main` (PR #11), 2026-10-09
 **Branch:** `feature/masjid-notices`
 **Builds on:** [prayer-times.md](prayer-times.md), [jamaat-board.md](jamaat-board.md)
 **Schema:** [20261005120000_add_masjid_notices.sql](../supabase/migrations/20261005120000_add_masjid_notices.sql), applied 2026-10-05
@@ -65,7 +65,7 @@ v1 is done when every box is ticked. Each criterion should be checkable by hand 
 - [x] **AC20** The notice's author sees **Edit** and **Remove** on its detail page. Edit reuses the posting form, pre-filled, at `/post/:id/edit`.
 - [x] **AC21** **Remove** asks for confirmation once (it's destructive), then deletes the notice and returns to the masjid page. Only the author can remove it (RLS).
 - [x] **AC22** Every notice's detail page has a **Share** button. It uses the phone's share sheet (`navigator.share`) when available and falls back to a WhatsApp link (`https://wa.me/?text=…`). The shared text is the title (or "Notice from {masjid}") plus the notice's link.
-- [ ] **AC23** Syed can hide a notice by setting `posts.moderation_status = 'hidden'` in the dashboard; it then disappears everywhere (check by hand). *(not yet checked, 2026-10-09)*
+- [x] **AC23** Syed can hide a notice by setting `posts.moderation_status = 'hidden'` in the dashboard; it then disappears everywhere (check by hand). *(checked 2026-10-14, as a guest: the author still sees their own hidden post, by design)*
 
 ### Cross-cutting (standing requirements)
 - [x] **AC24** Every string goes through `useTranslation()`, with keys in both `en.json` and `ta.json`. Notice content itself (title, text, source) is shown as typed and isn't translated.
@@ -213,5 +213,5 @@ Work top to bottom; each task is small enough for one sitting.
 - [x] T7 Edit and Remove: `/post/:id/edit` picks the form by type; delete with one confirmation. *(done 2026-10-05)*
 - [x] T8 Feed: include notices with their masjid name; expired notices filtered out. *(done 2026-10-05)*
 - [x] T9 i18n pass: every key in `en.json` + `ta.json`. *(done 2026-10-05)*
-- [x] T10 Post the first real notices for the 3 pilot masjids; walk through AC1–AC28 on a phone in both languages; tick the boxes above. *(Syed tested on a phone, all working except AC23, which is a dashboard check not yet done, 2026-10-09)*
-- [x] T11 PR `feature/masjid-notices` → `develop`, with the PR description linking this spec. *(opened as draft #10, 2026-10-05)*
+- [x] T10 Post the first real notices for the 3 pilot masjids; walk through AC1–AC28 on a phone in both languages; tick the boxes above. *(Syed tested on a phone, all working, 2026-10-09; AC23 dashboard check passed 2026-10-14)*
+- [x] T11 PR `feature/masjid-notices` → `develop`, with the PR description linking this spec. *(opened as draft #10, 2026-10-05; merged 2026-10-09)*

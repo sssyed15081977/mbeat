@@ -11,6 +11,10 @@ import { JamaatBoard } from '../features/prayerTimes/JamaatBoard'
 import { FreshnessLabel } from '../features/prayerTimes/FreshnessLabel'
 import { PinButton } from '../features/prayerTimes/PinButton'
 import { NoticeBoard, NOTICE_BOARD_ANCHOR } from '../features/masjidNotice/NoticeBoard'
+import { useVolunteerCounts } from '../features/masjidVolunteers/useVolunteerCounts'
+import { useVolunteerRequests } from '../features/masjidVolunteers/useVolunteerRequests'
+import { VolunteerSection } from '../features/masjidVolunteers/VolunteerSection'
+import { VolunteerRequestList } from '../features/masjidVolunteers/VolunteerRequestList'
 
 function DetailSkeleton() {
   return (
@@ -30,13 +34,17 @@ function DetailSkeleton() {
 }
 
 // Open to guests (AC24). Pinning asks guests to sign in; "Update times" is
-// only shown to the masjid's volunteers (AC10).
+// only shown to the masjid's volunteers (AC10). Non-volunteers see the
+// volunteer offer when the masjid needs volunteers; volunteers see pending
+// Volunteer requests (masjid-volunteer-requests.md 4.1).
 export default function MasjidDetailPage() {
   const { id } = useParams()
   const { t } = useTranslation()
   const now = useNow()
-  const { masjid, loading: masjidLoading, error, refetch, isVolunteer } = useMasjid(id)
+  const { masjid, loading: masjidLoading, error, refetch, isVolunteer, volunteerLoading } = useMasjid(id)
   const { savedIds, loading: pinsLoading, togglePin, pinError, canPin } = useSavedMasjids()
+  const { counts } = useVolunteerCounts()
+  const volunteerRequests = useVolunteerRequests(id, isVolunteer)
 
   const loading = masjidLoading || pinsLoading
   const location = useLocation()
@@ -109,6 +117,16 @@ export default function MasjidDetailPage() {
           )}
 
           <NoticeBoard masjidId={masjid.id} />
+
+          {/* Where volunteers' buttons sit (masjid-volunteer-requests.md AC3). */}
+          <VolunteerSection
+            masjid={masjid}
+            counts={counts}
+            isVolunteer={isVolunteer}
+            volunteerLoading={volunteerLoading}
+          />
+
+          {isVolunteer && <VolunteerRequestList {...volunteerRequests} />}
 
           {/* Last on the page, within thumb reach (4.2; masjid-notices.md AC1). */}
           {isVolunteer && (

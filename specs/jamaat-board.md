@@ -1,6 +1,6 @@
 # Spec: Jamaat board
 
-**Status:** built (2026-10-02), T1–T10 done, all criteria met; in review (PR #8)
+**Status:** complete — T1–T10 done, all criteria met; merged to `develop` (PR #8) and promoted to `main` (PR #9), 2026-10-02
 **Branch:** `feature/jamaat-board`, rebased onto `develop` after PR #7 (2026-10-01)
 **Builds on:** [prayer-times.md](prayer-times.md) (v1, done), [prayer-begins.md](prayer-begins.md) (must be merged first)
 **Mockup:** three styles reviewed by Syed 2026-10-01 (claude.ai artifact "Jamaat Board Styles"). The mockup shows one column; this spec adds the Begins column.
@@ -130,6 +130,7 @@ Heading "Choose masjid", then "No masjid", then "My masjids" (if any) and "All m
 - Showing masjid adhan times (unchanged from prayer-times.md).
 - More styles, custom colours, or board photos.
 - Choosing a masjid by GPS or nearest-masjid.
+- Tabs for pinned masjids above the board (tried and rejected, §7 decision 17).
 
 ## 7. Decisions and open questions
 
@@ -151,6 +152,7 @@ Heading "Choose masjid", then "No masjid", then "My masjids" (if any) and "All m
 14. **Next label (2026-10-02):** a short "Next" / அடுத்து on the prayer's line, instead of "Next jamaat" / "Next prayer" on a line of its own (AC5).
 15. **Settings inside the board (2026-10-02):** a gear opens "Display settings"; the note and method name are drawn on the board (AC9).
 16. **Painted board is flat-topped (2026-10-02):** the arch didn't look good; it now has rounded corners like the others (AC18).
+17. **Pinned masjid tabs rejected (2026-10-16):** a row of tabs above the board, one per pinned masjid, replacing "Choose masjid" for signed-in users with pins. It was built on `feature/pinned-masjid-tabs` (2026-10-15), tried by Syed, and dropped as not intuitive; the branch was deleted unmerged. The "Choose masjid" sheet (AC10–AC14) stays the way to switch masjids.
 
 ### Open
 None.
