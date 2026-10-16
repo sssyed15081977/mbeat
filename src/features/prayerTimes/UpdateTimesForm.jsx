@@ -19,8 +19,9 @@ function getChangedTimes(original, edited) {
 
 // Pre-filled with the masjid's current jamaat times (AC11). Either action
 // hands back to the detail page, where the freshness now reads "Confirmed
-// today" (the database triggers stamp it, AC13).
-export function UpdateTimesForm({ masjid, onDone }) {
+// today" (the database triggers stamp it, AC13). `intro` goes under the
+// heading (the volunteer invite, masjid-volunteer-requests.md AC18).
+export function UpdateTimesForm({ masjid, onDone, intro }) {
   const { t } = useTranslation()
   const [original] = useState(() =>
     Object.fromEntries(masjid.prayer_times.map((row) => [row.prayer, toInputTime(row.jamaat_time)])),
@@ -57,6 +58,8 @@ export function UpdateTimesForm({ masjid, onDone }) {
         <h1 className="text-xl font-bold">{t('updateTimes.heading')}</h1>
         <p className="text-sm text-gray-600">{masjid.name}</p>
       </div>
+
+      {intro}
 
       <JamaatTimeFields
         values={jamaatTimes}
