@@ -204,7 +204,7 @@ Work top to bottom; each task is small enough for one sitting.
 
 - [x] T1 Review this spec; resolve §7's open questions; add the locked names to CLAUDE.md and the handoff doc.
 - [x] T2 Migration: `entity_member_requests` + indexes, triggers, RLS, the four functions; `supabase db push`.
-- [ ] T3 `masjidVolunteersApi.js`, `volunteerTarget.js`; move the share helper to `lib/share.js` and switch `MasjidNoticeDetail` to it.
+- [x] T3 `masjidVolunteersApi.js`, `volunteerTarget.js`; move the share helper to `lib/share.js` and switch `MasjidNoticeDetail` to it.
 - [ ] T4 Masjid page: volunteer section, Offer to volunteer sheet, "Request sent" state (AC3–AC10).
 - [ ] T5 Masjid page: volunteer request list with Approve / Decline (AC11–AC14).
 - [ ] T6 Prayer Times tab: dismissible line below the Jamaat board (AC15–AC17).

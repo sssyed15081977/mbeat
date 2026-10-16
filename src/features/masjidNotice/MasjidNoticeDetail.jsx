@@ -5,6 +5,7 @@ import { useAuth } from '../auth/useAuth'
 import { BottomSheet } from '../../components/ui/BottomSheet'
 import { ImageLightbox } from '../../components/ui/ImageLightbox'
 import { formatRelativeTime } from '../../lib/relativeTime'
+import { shareLink } from '../../lib/share'
 import { deleteMasjidNotice, fetchAuthorName } from './masjidNoticeApi'
 import { isNoticeLive, noticeTitle } from './masjidNoticeSchema'
 
@@ -106,17 +107,8 @@ export function MasjidNoticeDetail({ post, onRemoved }) {
     }
   }, [post.author_id])
 
-  async function handleShare() {
-    const url = `${window.location.origin}/post/${post.id}`
-    if (navigator.share) {
-      try {
-        await navigator.share({ title, text: title, url })
-      } catch {
-        // Cancelled by the user; nothing to do.
-      }
-      return
-    }
-    window.open(`https://wa.me/?text=${encodeURIComponent(`${title}\n${url}`)}`, '_blank', 'noopener')
+  function handleShare() {
+    shareLink({ title, text: title, url: `${window.location.origin}/post/${post.id}` })
   }
 
   async function handleRemove() {
