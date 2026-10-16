@@ -1,7 +1,33 @@
-import { useEffect, useId, useRef } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])'
+// How much of the bottom of the screen the on-screen keyboard covers. Phones
+// shrink only the visual viewport when it opens, so a sheet pinned to the
+// bottom would sit under the keyboard while typing in it.
+function useKeyboardInset(open) {
+  const [inset, setInset] = useState(0)
+
+  useEffect(() => {
+    const viewport = window.visualViewport
+    if (!open || !viewport) return
+
+    function update() {
+      setInset(Math.max(0, Math.round(window.innerHeight - viewport.height - viewport.offsetTop)))
+    }
+
+    viewport.addEventListener('resize', update)
+    viewport.addEventListener('scroll', update)
+    return () => {
+      viewport.removeEventListener('resize', update)
+      viewport.removeEventListener('scroll', update)
+      setInset(0)
+    }
+  }, [open])
+
+  return inset
+}
+
+const FOCUSABLE ='a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])'
 
 // A panel that slides up from the bottom for secondary choices (method picker,
 // later post ••• menus). Content-blind: the caller passes the title and body.
@@ -13,6 +39,7 @@ export function BottomSheet({ open, onClose, title, children }) {
   const { t } = useTranslation()
   const titleId = useId()
   const panelRef = useRef(null)
+  const keyboardInset = useKeyboardInset(open)
   // Latest onClose without re-running the open/close effect on every render.
   const onCloseRef = useRef(onClose)
   useEffect(() => {
@@ -61,7 +88,11 @@ export function BottomSheet({ open, onClose, title, children }) {
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/40"
+      style={keyboardInset ? { paddingBottom: keyboardInset } : undefined}
+      onClick={onClose}
+    >
       <div
         ref={panelRef}
         role="dialog"
@@ -69,6 +100,7 @@ export function BottomSheet({ open, onClose, title, children }) {
         aria-labelledby={titleId}
         tabIndex={-1}
         onClick={(event) => event.stopPropagation()}
+        style={keyboardInset ? { maxHeight: `calc(100% - ${keyboardInset}px)` } : undefined}
         className="w-full max-w-sm max-h-[80vh] overflow-y-auto bg-white rounded-t-2xl shadow-lg outline-none animate-sheet-up pb-[env(safe-area-inset-bottom)]"
       >
         <div className="sticky top-0 bg-white flex items-center justify-between gap-2 px-4 pt-3 pb-2">

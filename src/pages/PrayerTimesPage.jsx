@@ -12,6 +12,8 @@ import { JamaatBoard } from '../features/prayerTimes/JamaatBoard'
 import { ChooseMasjidSheet } from '../features/prayerTimes/ChooseMasjidSheet'
 import { FreshnessLabel } from '../features/prayerTimes/FreshnessLabel'
 import { NOTICE_BOARD_ANCHOR } from '../features/masjidNotice/NoticeBoard'
+import { useVolunteerCounts } from '../features/masjidVolunteers/useVolunteerCounts'
+import { VolunteerPrompt } from '../features/masjidVolunteers/VolunteerPrompt'
 
 // Controls drawn on the board use its colours (currentColor) and a visible
 // focus ring in the same colour. Padding keeps the tap target 44px tall
@@ -105,6 +107,7 @@ export default function PrayerTimesPage() {
   const { savedIds, loading: pinsLoading, togglePin, pinError, canPin } = useSavedMasjids()
 
   const { masjid: selected, select } = useSelectedMasjid(masjids, !masjidsLoading && !error)
+  const { counts: volunteerCounts } = useVolunteerCounts()
   const [sheetOpen, setSheetOpen] = useState(false)
 
   const loading = masjidsLoading || pinsLoading
@@ -141,6 +144,7 @@ export default function PrayerTimesPage() {
         subheading={subheading}
         prayerTimes={selected?.prayer_times ?? null}
       />
+      <VolunteerPrompt masjid={selected} counts={volunteerCounts} />
       <ChooseMasjidSheet
         open={sheetOpen}
         onClose={() => setSheetOpen(false)}

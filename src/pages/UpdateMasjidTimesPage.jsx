@@ -5,6 +5,9 @@ import { Skeleton } from '../components/ui/Skeleton'
 import { useMasjid } from '../features/prayerTimes/useMasjid'
 import { UpdateTimesForm } from '../features/prayerTimes/UpdateTimesForm'
 import { PRAYERS } from '../features/prayerTimes/prayers'
+import { useVolunteerCounts } from '../features/masjidVolunteers/useVolunteerCounts'
+import { useVolunteerRequests } from '../features/masjidVolunteers/useVolunteerRequests'
+import { VolunteerInvite } from '../features/masjidVolunteers/VolunteerInvite'
 
 // Signed-in only (the route is protected). The form is shown to the masjid's
 // volunteers; anyone else gets a plain message (AC16), and RLS rejects their
@@ -14,6 +17,8 @@ export default function UpdateMasjidTimesPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { masjid, loading, error, refetch, isVolunteer, volunteerLoading } = useMasjid(id)
+  const { counts } = useVolunteerCounts()
+  const { requests: pendingRequests } = useVolunteerRequests(id, isVolunteer)
 
   const detailPath = `/masjid/${id}`
 
@@ -67,6 +72,7 @@ export default function UpdateMasjidTimesPage() {
         <UpdateTimesForm
           masjid={masjid}
           onDone={() => navigate(detailPath, { replace: true })}
+          intro={<VolunteerInvite masjid={masjid} counts={counts} pendingCount={pendingRequests.length} />}
         />
       )}
     </div>
