@@ -34,59 +34,59 @@ A masjid with a single volunteer goes stale when that person is away, busy or lo
 v1 is done when every box is ticked. Each criterion should be checkable by hand at a **mobile width (360px)** in **both English and Tamil**.
 
 ### Counting volunteers
-- [ ] **AC1** The app can tell how many volunteers each published masjid has, **without** learning who they are. `entity_members` stays readable only by each user for their own rows.
-- [ ] **AC2** A masjid "needs volunteers" when its count is **below `MIN_MASJID_VOLUNTEERS` (2)**. This is one constant in the code, used by every check below.
+- [x] **AC1** The app can tell how many volunteers each published masjid has, **without** learning who they are. `entity_members` stays readable only by each user for their own rows.
+- [x] **AC2** A masjid "needs volunteers" when its count is **below `MIN_MASJID_VOLUNTEERS` (2)**. This is one constant in the code, used by every check below.
 
 ### Masjid page — `/masjid/:id` (non-volunteers)
-- [ ] **AC3** When the masjid needs volunteers, the bottom of the page (where volunteers see **Update times / Add notice**) shows a **volunteer section**:
+- [x] **AC3** When the masjid needs volunteers, the bottom of the page (where volunteers see **Update times / Add notice**) shows a **volunteer section**:
   - one line, e.g. "This masjid has 1 volunteer. Volunteers keep its jamaat times and notices up to date."
   - an **Offer to volunteer** button.
 
   The section has a stable anchor (`#volunteer`) so other screens can link to it.
-- [ ] **AC4** When the masjid has enough volunteers, the section is not shown.
-- [ ] **AC5** A guest who taps **Offer to volunteer** is sent to sign in and comes back to the masjid page (same pattern as pinning).
-- [ ] **AC6** For a signed-in user, **Offer to volunteer** opens a bottom sheet with:
+- [x] **AC4** When the masjid has enough volunteers, the section is not shown.
+- [x] **AC5** A guest who taps **Offer to volunteer** is sent to sign in and comes back to the masjid page (same pattern as pinning).
+- [x] **AC6** For a signed-in user, **Offer to volunteer** opens a bottom sheet with:
   - the masjid's name,
   - one line on what volunteers do,
   - an optional **note** ("Tell the volunteers who you are", max 200 characters),
   - a **Send request** button.
-- [ ] **AC7** Sending creates one `pending` request. The sheet closes, and the section then reads "Request sent. A volunteer will review it." with no button. It reads the same on every later visit while the request is pending.
-- [ ] **AC8** A user can't have **two pending requests** for the same masjid, can't request a masjid they already volunteer for, and can't request an unpublished masjid. The database enforces all three, not only the hidden button.
-- [ ] **AC9** After a **declined** request, the section shows the normal **Offer to volunteer** button again.
-- [ ] **AC10** Send error: the sheet keeps the note and shows "Couldn't send — try again".
+- [x] **AC7** Sending creates one `pending` request. The sheet closes, and the section then reads "Request sent. A volunteer will review it." with no button. It reads the same on every later visit while the request is pending.
+- [x] **AC8** A user can't have **two pending requests** for the same masjid, can't request a masjid they already volunteer for, and can't request an unpublished masjid. The database enforces all three, not only the hidden button.
+- [x] **AC9** After a **declined** request, the section shows the normal **Offer to volunteer** button again.
+- [x] **AC10** Send error: the sheet keeps the note and shows "Couldn't send — try again".
 
 ### Masjid page — `/masjid/:id` (volunteers)
-- [ ] **AC11** When the masjid has pending requests, volunteers see a **Volunteer requests** list above the **Update times / Add notice** buttons. Each row shows:
+- [x] **AC11** When the masjid has pending requests, volunteers see a **Volunteer requests** list above the **Update times / Add notice** buttons. Each row shows:
   - the requester's name,
   - their note, if any,
   - when they asked ("2 days ago"),
   - **Approve** and **Decline** buttons.
-- [ ] **AC12** **Approve** asks for confirmation once ("Let {{name}} update this masjid's times and post notices?"), since it hands over posting rights that can't be removed in the app. On confirm, the requester becomes a `masjid_volunteer` and the row disappears. **Decline** needs no confirmation.
-- [ ] **AC13** Approving or declining is allowed only for **volunteers of that masjid**; the database function checks it. A request is decided only once: if two volunteers act at the same time, the second gets "Already handled", and the list refreshes.
-- [ ] **AC14** The requester's name comes from a function that returns **names only, never phone numbers**, and only to that masjid's volunteers.
+- [x] **AC12** **Approve** asks for confirmation once ("Let {{name}} update this masjid's times and post notices?"), since it hands over posting rights that can't be removed in the app. On confirm, the requester becomes a `masjid_volunteer` and the row disappears. **Decline** needs no confirmation.
+- [x] **AC13** Approving or declining is allowed only for **volunteers of that masjid**; the database function checks it. A request is decided only once: if two volunteers act at the same time, the second gets "Already handled", and the list refreshes.
+- [x] **AC14** The requester's name comes from a function that returns **names only, never phone numbers**, and only to that masjid's volunteers.
 
 ### Prayer Times tab — `/`
-- [ ] **AC15** When a masjid is selected and it needs volunteers, one muted line appears **below the Jamaat board**: "{{masjid}} needs volunteers. Offer to help →". It links to `/masjid/:id#volunteer`, and the masjid page scrolls to the volunteer section.
-- [ ] **AC16** The line has a **✕** to dismiss it, remembered on the device per masjid for **30 days**. It's not shown to that masjid's own volunteers, or while the user has a pending request for it.
-- [ ] **AC17** The line never pushes the Jamaat board down. It appears below the board only after the counts load, and nothing shows when they fail.
+- [x] **AC15** When a masjid is selected and it needs volunteers, one muted line appears **below the Jamaat board**: "{{masjid}} needs volunteers. Offer to help →". It links to `/masjid/:id#volunteer`, and the masjid page scrolls to the volunteer section.
+- [x] **AC16** The line has a **✕** to dismiss it, remembered on the device per masjid for **30 days**. It's not shown to that masjid's own volunteers, or while the user has a pending request for it.
+- [x] **AC17** The line never pushes the Jamaat board down. It appears below the board only after the counts load, and nothing shows when they fail.
 
 ### Update times — `/masjid/:id/update` (volunteers only)
-- [ ] **AC18** When the masjid needs volunteers, a short block above the form reads "You're the only volunteer for this masjid. Invite someone you trust." with an **Invite** button.
-- [ ] **AC19** **Invite** shares a message plus the masjid page link with `#volunteer`, using the phone's share sheet (`navigator.share`). It falls back to a WhatsApp link (`https://wa.me/?text=…`). It uses the **same share helper** as the notice detail page (factored out of `MasjidNoticeDetail.jsx`, not copied).
-- [ ] **AC20** When the masjid has pending requests, the same screen shows "{{count}} volunteer request(s) waiting →", linking to the masjid page's request list.
-- [ ] **AC21** Neither block gets in the way of updating times: both sit above the form, are one or two lines each, and leave the form's primary action within thumb reach.
+- [x] **AC18** When the masjid needs volunteers, a short block above the form reads "You're the only volunteer for this masjid. Invite someone you trust." with an **Invite** button.
+- [x] **AC19** **Invite** shares a message plus the masjid page link with `#volunteer`, using the phone's share sheet (`navigator.share`). It falls back to a WhatsApp link (`https://wa.me/?text=…`). It uses the **same share helper** as the notice detail page (factored out of `MasjidNoticeDetail.jsx`, not copied).
+- [x] **AC20** When the masjid has pending requests, the same screen shows "{{count}} volunteer request(s) waiting →", linking to the masjid page's request list.
+- [x] **AC21** Neither block gets in the way of updating times: both sit above the form, are one or two lines each, and leave the form's primary action within thumb reach.
 
 ### Admin path
-- [ ] **AC22** Syed can approve a request in the dashboard by setting its `status` to `approved`. The membership row is created by the database trigger in the same way as an in-app approval (check by hand).
+- [x] **AC22** Syed can approve a request in the dashboard by setting its `status` to `approved`. The membership row is created by the database trigger in the same way as an in-app approval (check by hand).
 
 ### Cross-cutting (standing requirements)
-- [ ] **AC23** Every string goes through `useTranslation()`, with keys in both `en.json` and `ta.json`. Counts use i18next plurals ("1 volunteer" / "2 volunteers"). The requester's note is shown as typed, with `dir="auto"`.
-- [ ] **AC24** Every new data-loading block handles the following states:
+- [x] **AC23** Every string goes through `useTranslation()`, with keys in both `en.json` and `ta.json`. Counts use i18next plurals ("1 volunteer" / "2 volunteers"). The requester's note is shown as typed, with `dir="auto"`.
+- [x] **AC24** Every new data-loading block handles the following states:
   - **loading:** a skeleton, or nothing for the tab's one-line prompt,
   - **empty:** the section is hidden,
   - **error:** a plain-language message and a retry for the request list; hidden for the prompts,
   - **offline.**
-- [ ] **AC25** The bottom sheet isn't covered by the mobile keyboard while typing the note. Touch targets are at least 44px tall.
+- [x] **AC25** The bottom sheet isn't covered by the mobile keyboard while typing the note. Touch targets are at least 44px tall.
 
 ## 4. Screens
 
@@ -210,6 +210,6 @@ Work top to bottom; each task is small enough for one sitting.
 - [x] T6 Prayer Times tab: dismissible line below the Jamaat board (AC15–AC17).
 - [x] T7 Update times: invite block + waiting-requests link (AC18–AC21).
 - [x] T8 i18n pass: every key in `en.json` + `ta.json`, with plurals.
-- [ ] T9 Walk through AC1–AC25 on a phone in both languages, with a second account as the requester; approve once in the app and once from the dashboard (AC22); tick the boxes above.
+- [x] T9 Walk through AC1–AC25 on a phone in both languages, with a second account as the requester; approve once in the app and once from the dashboard (AC22); tick the boxes above.
 - [ ] T10 PR `feature/masjid-volunteer-requests` → `develop`, with the PR description linking this spec.
 - [ ] T11 After merge: tick T10, update this spec's Status line and the progress log in [mbeat-rebuild-context.md](../mbeat-rebuild-context.md).
