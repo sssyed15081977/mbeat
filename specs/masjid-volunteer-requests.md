@@ -3,7 +3,7 @@
 **Status:** approved 2026-10-16 — in progress
 **Branch:** `feature/masjid-volunteer-requests`
 **Builds on:** [prayer-times.md](prayer-times.md), [jamaat-board.md](jamaat-board.md), [masjid-notices.md](masjid-notices.md)
-**Schema:** not written yet (T2)
+**Schema:** [20261016120000_add_entity_member_requests.sql](../supabase/migrations/20261016120000_add_entity_member_requests.sql) (applied 2026-10-16)
 
 This file says **what v1 must do and how we know it's done**. The *why* lives in the handoff doc; don't repeat it here.
 
@@ -203,7 +203,7 @@ None.
 Work top to bottom; each task is small enough for one sitting.
 
 - [x] T1 Review this spec; resolve §7's open questions; add the locked names to CLAUDE.md and the handoff doc.
-- [ ] T2 Migration: `entity_member_requests` + indexes, triggers, RLS, the four functions; `supabase db push`.
+- [x] T2 Migration: `entity_member_requests` + indexes, triggers, RLS, the four functions; `supabase db push`.
 - [ ] T3 `masjidVolunteersApi.js`, `volunteerTarget.js`; move the share helper to `lib/share.js` and switch `MasjidNoticeDetail` to it.
 - [ ] T4 Masjid page: volunteer section, Offer to volunteer sheet, "Request sent" state (AC3–AC10).
 - [ ] T5 Masjid page: volunteer request list with Approve / Decline (AC11–AC14).
