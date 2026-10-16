@@ -1,6 +1,6 @@
 # Spec: Masjid volunteer requests v1
 
-**Status:** approved 2026-10-16 — in progress
+**Status:** done — merged to `develop` (PR #12) and promoted to `main` 2026-10-16
 **Branch:** `feature/masjid-volunteer-requests`
 **Builds on:** [prayer-times.md](prayer-times.md), [jamaat-board.md](jamaat-board.md), [masjid-notices.md](masjid-notices.md)
 **Schema:** [20261016120000_add_entity_member_requests.sql](../supabase/migrations/20261016120000_add_entity_member_requests.sql) (applied 2026-10-16)
@@ -211,5 +211,5 @@ Work top to bottom; each task is small enough for one sitting.
 - [x] T7 Update times: invite block + waiting-requests link (AC18–AC21).
 - [x] T8 i18n pass: every key in `en.json` + `ta.json`, with plurals.
 - [x] T9 Walk through AC1–AC25 on a phone in both languages, with a second account as the requester; approve once in the app and once from the dashboard (AC22); tick the boxes above.
-- [ ] T10 PR `feature/masjid-volunteer-requests` → `develop`, with the PR description linking this spec.
-- [ ] T11 After merge: tick T10, update this spec's Status line and the progress log in [mbeat-rebuild-context.md](../mbeat-rebuild-context.md).
+- [x] T10 PR `feature/masjid-volunteer-requests` → `develop`, with the PR description linking this spec.
+- [x] T11 After merge: tick T10, update this spec's Status line and the progress log in [mbeat-rebuild-context.md](../mbeat-rebuild-context.md).

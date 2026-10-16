@@ -402,11 +402,30 @@ Tested 2026-10-09 (T10): Syed walked through AC1–AC28 on a phone; all working.
 
 Merged into `develop` (PR #10) and promoted to `main` (PR #11) on 2026-10-09.
 
-## Current state (2026-10-14)
+## Masjid volunteer requests — done (merged 2026-10-16, PR #12)
+A masjid with fewer than `MIN_MASJID_VOLUNTEERS` (2) volunteers asks the people who pray there to help. A signed-in user sends a **Volunteer request** (with an optional note of up to 200 characters). One of that masjid's volunteers approves or declines it in the app, or Syed approves it from the dashboard by setting `status = 'approved'`.
+- **Database:** table `entity_member_requests`, generic so other memberships can reuse it, but v1 only allows `masjid_volunteer`.
+  - Triggers decide a request only once, and create the `entity_members` row on approval, whichever way it was approved.
+  - RLS is select-only; four security-definer functions are the only way to write.
+  - The volunteer counts function says how many volunteers a masjid has, never who.
+- **Where it shows:**
+  - Masjid page: the offer for non-volunteers, the request list for volunteers, both at `#volunteer`.
+  - Prayer Times tab: one dismissible line below the Jamaat board, hidden for 30 days per masjid on the device.
+  - Update times: an Invite share and a waiting-requests link.
+- **Shared code it added:**
+  - `lib/share.js`, which the notice page now uses too;
+  - `useIsMasjidVolunteer`, factored out of `useMasjid`;
+  - `BottomSheet`, which now lifts above the phone keyboard (visualViewport).
+- **Still dashboard-only (spec §6):** removing a volunteer, and notifying volunteers of new requests.
+- Full requirements: [specs/masjid-volunteer-requests.md](specs/masjid-volunteer-requests.md).
+
+Built 2026-10-16 (T1–T8). Migration `20261016120000_add_entity_member_requests.sql` was checked as real roles in a rolled-back transaction (23 checks) and then applied. Syed checked AC1–AC25 on a phone (T9). Merged into `develop` (PR #12) and promoted to `main` the same day.
+
+## Current state (2026-10-16)
 `develop` and `main` are identical; no feature branch is open. Everything above is live. **Next:** pick a module from "Candidates for the next module" above and write its spec first.
 
 ## Notes for whoever picks this up next
-- Open feature branch: none (as of 2026-10-14). Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` was first promoted from `develop` on 2026-09-30 (PR #6) and is what Cloudflare deploys.
+- Open feature branch: none (as of 2026-10-16). Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` was first promoted from `develop` on 2026-09-30 (PR #6) and is what Cloudflare deploys.
 - A fresh machine/clone needs `npx supabase login` + `npx supabase link --project-ref slalnatjabrcnjxngqoo` before any `supabase db push`/`migration list` command works, and `gh auth login --web` before `gh pr create` works — neither credential persists in the repo (both are gitignored/local-machine state).
 - Before trusting this doc's "already done" claims, spot-check the actual repo state (folders can exist but be empty, files can exist but be wrong — e.g. we once found `VITE_SUPABASE_URL` had `/rest/v1/` wrongly appended) rather than assuming the doc is authoritative. This doc itself went stale once already (progress log sat several commits behind actual repo state, including an inconsistency where the lifecycle-status naming table had already been updated to 5 stages but the prose above it still described the old 3) — re-verify against `git log`/actual files each session rather than trusting the log at face value.
 - Syed prefers step-by-step confirmation before executing, narrated plans, and one file at a time when debugging — see "Working style / preferences" above.
