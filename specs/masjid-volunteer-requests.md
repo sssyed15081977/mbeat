@@ -1,6 +1,6 @@
 # Spec: Masjid volunteer requests v1
 
-**Status:** draft — awaiting review (T1)
+**Status:** approved 2026-10-16 — in progress
 **Branch:** `feature/masjid-volunteer-requests`
 **Builds on:** [prayer-times.md](prayer-times.md), [jamaat-board.md](jamaat-board.md), [masjid-notices.md](masjid-notices.md)
 **Schema:** not written yet (T2)
@@ -126,7 +126,7 @@ Drafts for Syed to check. The term "Volunteer request" and its Tamil form were c
 | Decline | நிராகரிக்கவும் | |
 | Let {{name}} update this masjid's times and post notices? | {{name}} இந்த மஸ்ஜிதின் நேரங்களைப் புதுப்பிக்கவும் அறிவிப்புகளைப் பதிவிடவும் அனுமதிக்கவா? | |
 | Already handled | ஏற்கனவே கையாளப்பட்டது | |
-| {{masjid}} needs volunteers. Offer to help → | {{masjid}} மஸ்ஜிதுக்குத் தன்னார்வலர்கள் தேவை. உதவ முன்வாருங்கள் → | |
+| {{masjid}} needs volunteers. Offer to help → | {{masjid}}: தன்னார்வலர்கள் தேவை. உதவ முன்வாருங்கள் → | Name before a colon (§7 decision 10) |
 | You're the only volunteer for this masjid. Invite someone you trust. | இந்த மஸ்ஜிதுக்கு நீங்கள் மட்டுமே தன்னார்வலர். நம்பகமான ஒருவரை அழைக்கவும். | |
 | Invite | அழையுங்கள் | |
 | {{count}} volunteer request(s) waiting → | {{count}} தன்னார்வலர் கோரிக்கை காத்திருக்கிறது → | |
@@ -180,9 +180,9 @@ One new migration. The names below are **proposed** until T1 (§7).
 4. **The invite link on the Update times screen is in v1.**
 5. **Placement:** the masjid page is the main place (full offer + request list); the Prayer Times tab gets one dismissible line; the Update times screen gets the invite and a waiting-requests link, not a join request.
 
-### Open — to confirm in T1
-6. **Proposed names:**
-   - status values: `pending` / `approved` / `declined`;
+### Decided (2026-10-16)
+6. **Names confirmed** (now in CLAUDE.md and the handoff doc):
+   - status values: `pending` / `approved` / `declined` (kept over `rejected`: it matches the Decline button);
    - columns: `note`, `decided_at`, `decided_by`;
    - database functions: `get_masjid_volunteer_counts`, `request_to_volunteer`, `decide_volunteer_request`, `get_volunteer_requests`;
    - folder: `features/masjidVolunteers/`;
@@ -190,16 +190,19 @@ One new migration. The names below are **proposed** until T1 (§7).
    - anchor: `#volunteer`;
    - storage key: `mbeat_volunteer_prompt_dismissed`;
    - UI labels: "Offer to volunteer", "Volunteer requests", "Invite".
-7. **Optional note on a request** (AC6): keep it, so volunteers know who is asking? Or drop it, and show the name only?
-8. **Tab prompt dismissal period:** 30 days (AC16)?
-9. **Approve confirmation** (AC12): keep the one confirmation, given that rights can't be removed in the app?
-10. **Tamil drafts** in §4.5.
+7. **Optional note kept** (AC6): max 200 characters, so volunteers know who is asking.
+8. **Tab prompt dismissal: 30 days** per masjid (AC16).
+9. **Approve keeps one confirmation** (AC12), since posting rights can't be removed in the app.
+10. **Tamil drafts approved**, with two fixes: the tab line puts the masjid name before a colon, so a name that already contains "Masjid" doesn't read "… மஸ்ஜித் மஸ்ஜிதுக்கு"; and every count line has separate one / many (and, for the volunteer count, zero) forms.
+
+### Open
+None.
 
 ## 8. Task checklist
 
 Work top to bottom; each task is small enough for one sitting.
 
-- [ ] T1 Review this spec; resolve §7's open questions; add the locked names to CLAUDE.md and the handoff doc.
+- [x] T1 Review this spec; resolve §7's open questions; add the locked names to CLAUDE.md and the handoff doc.
 - [ ] T2 Migration: `entity_member_requests` + indexes, triggers, RLS, the four functions; `supabase db push`.
 - [ ] T3 `masjidVolunteersApi.js`, `volunteerTarget.js`; move the share helper to `lib/share.js` and switch `MasjidNoticeDetail` to it.
 - [ ] T4 Masjid page: volunteer section, Offer to volunteer sheet, "Request sent" state (AC3–AC10).
