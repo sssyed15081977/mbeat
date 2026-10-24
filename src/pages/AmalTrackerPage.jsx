@@ -1,8 +1,16 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { LanguageToggle } from '../components/ui/LanguageToggle'
+import { Skeleton } from '../components/ui/Skeleton'
 import { useAmalDay } from '../features/amalTracker/useAmalDay'
+import { useAmalEntries } from '../features/amalTracker/useAmalEntries'
+import { useHiddenHabits } from '../features/amalTracker/useHiddenHabits'
 import { isAmalStorePersistent } from '../features/amalTracker/amalStore'
+import { addDays } from '../features/amalTracker/amalDay'
+import { HABIT_GROUPS, PRESET_HABITS, countsAsDone, isDue } from '../features/amalTracker/presetHabits'
+import { HabitRow } from '../features/amalTracker/HabitRow'
+import { LevelPickerSheet } from '../features/amalTracker/LevelPickerSheet'
 
 const NAV_BUTTON =
   'flex items-center justify-center w-11 h-11 rounded-full text-gray-600 hover:bg-gray-100 disabled:text-gray-300 disabled:hover:bg-transparent focus-visible:outline-2 focus-visible:outline-brand'
@@ -50,12 +58,33 @@ function DayNav({ date, daysBack, canGoBack, canGoForward, goBack, goForward }) 
   )
 }
 
+function RowSkeleton() {
+  return (
+    <div className="py-3 px-2 space-y-2">
+      <Skeleton className="h-5 w-1/2" />
+      <Skeleton className="h-2 w-16" />
+    </div>
+  )
+}
+
+// The 7 days ending on `date`, oldest first: true / false, or null when the
+// habit wasn't due that day (AC13).
+function weekDots(habit, date, entries) {
+  return Array.from({ length: 7 }, (_, i) => {
+    const day = addDays(date, i - 6)
+    return isDue(habit, day) ? countsAsDone(habit, entries[day]?.[habit.id]) : null
+  })
+}
+
 // The Amals tab (spec amal-tracker.md §4.1), open to guests: everything is
 // stored on this phone, so there's nothing to sign in for.
 export default function AmalTrackerPage() {
   const { t } = useTranslation()
   const day = useAmalDay()
+  const { entries, loading, error, retry, saveError, setValue } = useAmalEntries(day.today)
+  const { hidden } = useHiddenHabits()
   const [persistent, setPersistent] = useState(true)
+  const [pickerHabitId, setPickerHabitId] = useState(null)
 
   // Opening the store also asks the browser to keep our data (AC16).
   useEffect(() => {
@@ -67,6 +96,14 @@ export default function AmalTrackerPage() {
       cancelled = true
     }
   }, [])
+
+  const entry = entries[day.date] ?? {}
+  const pickerHabit = PRESET_HABITS.find((h) => h.id === pickerHabitId) ?? null
+  const allHidden = hidden !== null && PRESET_HABITS.every((h) => hidden.has(h.id))
+  const groups = HABIT_GROUPS.map((group) => ({
+    group,
+    habits: PRESET_HABITS.filter((h) => h.group === group && !hidden?.has(h.id) && isDue(h, day.date)),
+  })).filter((g) => g.habits.length > 0)
 
   return (
     <div className="p-4 max-w-sm mx-auto space-y-4">
@@ -89,7 +126,72 @@ export default function AmalTrackerPage() {
         </p>
       )}
 
-      {/* Habit groups go here (T4–T5). */}
+      {saveError && (
+        <p className="text-sm text-amber-800 bg-amber-50 rounded px-3 py-2" role="alert">
+          {t('amal.saveError')}
+        </p>
+      )}
+
+      {(loading || hidden === null) && !error && (
+        <div className="divide-y divide-gray-100">
+          <RowSkeleton />
+          <RowSkeleton />
+          <RowSkeleton />
+          <RowSkeleton />
+        </div>
+      )}
+
+      {error && (
+        <div className="mt-8 text-center space-y-3" role="alert">
+          <p className="text-gray-700">{t('amal.loadError')}</p>
+          <button type="button" onClick={retry} className="border rounded px-4 py-2 font-medium hover:bg-gray-50">
+            {t('common.retry')}
+          </button>
+        </div>
+      )}
+
+      {!loading && !error && allHidden && (
+        <Link to="/amal/habits" className="block text-center text-brand font-medium py-6">
+          {t('amal.allHidden')}
+        </Link>
+      )}
+
+      {!loading &&
+        !error &&
+        hidden !== null &&
+        groups.map(({ group, habits }) => (
+          <section key={group}>
+            <h2 className="px-2 text-sm font-semibold text-gray-500 uppercase">{t(`amal.group.${group}`)}</h2>
+            {group === 'sunnah' && <p className="px-2 text-xs text-gray-500">{t('amal.sunnahCaption')}</p>}
+            <ul className="mt-1">
+              {habits.map((habit) => (
+                <HabitRow
+                  key={habit.id}
+                  habit={habit}
+                  date={day.date}
+                  value={entry[habit.id]}
+                  dots={weekDots(habit, day.date, entries)}
+                  onToggle={() => setValue(day.date, habit.id, entry[habit.id] === true ? null : true)}
+                  onOpenLevels={() => setPickerHabitId(habit.id)}
+                />
+              ))}
+            </ul>
+          </section>
+        ))}
+
+      <LevelPickerSheet
+        habit={pickerHabit}
+        date={day.date}
+        value={pickerHabit ? entry[pickerHabit.id] : undefined}
+        onPick={(level) => setValue(day.date, pickerHabit.id, level)}
+        onClose={() => setPickerHabitId(null)}
+      />
+
+      {!allHidden && (
+        <Link to="/amal/habits" className="flex items-center justify-center min-h-11 text-sm text-brand font-medium">
+          {t('amal.manageHabits')}
+        </Link>
+      )}
 
       {/* AC4: privacy note, expanded in place rather than on its own page. */}
       <details className="text-sm text-gray-500">

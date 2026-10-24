@@ -18,8 +18,9 @@ function fard(id, schedule = daily, levels = FARD_LEVELS) {
   return { id, group: 'fard', valueType: 'levels', levels, schedule }
 }
 
-function sunnah(id, anchor, rakahs) {
-  return { id, group: 'sunnah', anchor, rakahs, valueType: 'done', schedule: daily }
+// `position` is 'before' or 'after' the anchor prayer.
+function sunnah(id, anchor, position, rakahs) {
+  return { id, group: 'sunnah', anchor, position, rakahs, valueType: 'done', schedule: daily }
 }
 
 function done(id, group) {
@@ -39,11 +40,11 @@ export const PRESET_HABITS = [
   fard('maghrib'),
   fard('isha'),
 
-  sunnah('fajr_sunnah_before', 'fajr', 2),
-  sunnah('dhuhr_sunnah_before', 'dhuhr', 4),
-  sunnah('dhuhr_sunnah_after', 'dhuhr', 2),
-  sunnah('maghrib_sunnah_after', 'maghrib', 2),
-  sunnah('isha_sunnah_after', 'isha', 2),
+  sunnah('fajr_sunnah_before', 'fajr', 'before', 2),
+  sunnah('dhuhr_sunnah_before', 'dhuhr', 'before', 4),
+  sunnah('dhuhr_sunnah_after', 'dhuhr', 'after', 2),
+  sunnah('maghrib_sunnah_after', 'maghrib', 'after', 2),
+  sunnah('isha_sunnah_after', 'isha', 'after', 2),
 
   done('duha', 'other'),
   done('tahajjud', 'other'),
@@ -56,6 +57,12 @@ export const PRESET_HABITS = [
 // Hidden until the user turns them on in Manage habits, so a beginner's list
 // stays short (AC15).
 export const DEFAULT_HIDDEN_HABITS = ['duha', 'tahajjud']
+
+// The prayer a sunnah row sits under on `dateKey`: on Fridays the Dhuhr
+// sunnah sits under Jumu'ah (AC9).
+export function anchorPrayer(habit, dateKey) {
+  return habit.anchor === 'dhuhr' && weekdayOf(dateKey) === FRIDAY ? 'jumuah' : habit.anchor
+}
 
 // Whether `habit` has a row on the amal date `dateKey`. New schedule types
 // (hijri_days for fasts, spec §6) only need a case here.

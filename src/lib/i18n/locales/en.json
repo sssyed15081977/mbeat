@@ -309,7 +309,43 @@
     "consistentHadithSource": "Bukhari 6464, Muslim 783",
     "notSaving": "Your browser isn't saving — entries will be lost when you close it.",
     "savedOnPhone": "Saved on this phone only",
-    "savedOnPhoneDetail": "Nothing you log here leaves your phone, not even to Sahabi, and nobody else can see it. If you clear the browser's data or change phones, it's gone."
+    "savedOnPhoneDetail": "Nothing you log here leaves your phone, not even to Sahabi, and nobody else can see it. If you clear the browser's data or change phones, it's gone.",
+    "loadError": "Couldn't open your amals — try again",
+    "saveError": "Couldn't save that — try again",
+    "allHidden": "Choose habits to track →",
+    "manageHabits": "Manage habits",
+    "manageHabitsHint": "Hidden habits keep their past entries.",
+    "notLogged": "Not logged",
+    "clear": "Clear",
+    "sunnahBefore": "{{prayer}}: before",
+    "sunnahAfter": "{{prayer}}: after",
+    "rakahs_one": "{{count}} rak'ah",
+    "rakahs_other": "{{count}} rak'ahs",
+    "sunnahCaption": "“12 rak'ahs a day: a house in Jannah” (Muslim 728)",
+    "lastSevenDays_one": "Done on {{count}} of the last 7 days",
+    "lastSevenDays_other": "Done on {{count}} of the last 7 days",
+    "group": {
+      "fard": "Fard prayers",
+      "sunnah": "Sunnah prayers",
+      "other": "Other prayers",
+      "adhkar": "Adhkar"
+    },
+    "habit": {
+      "duha": "Duha",
+      "tahajjud": "Tahajjud",
+      "witr": "Witr",
+      "adhkar_morning": "Morning adhkar",
+      "adhkar_evening": "Evening adhkar"
+    },
+    "level": {
+      "missed": "Missed",
+      "qada": "Made up late (qada)",
+      "alone": "On time, alone",
+      "jamaat_home": "Jamaat at home",
+      "jamaat_masjid": "Jamaat at masjid",
+      "excused": "Excused",
+      "jumuahPrayed": "Prayed at masjid"
+    }
   },
   "nav": {
     "label": "Main",

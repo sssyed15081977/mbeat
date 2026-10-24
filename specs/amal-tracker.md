@@ -215,11 +215,11 @@ Work top to bottom; each task is small enough for one sitting.
 - [ ] T1 Review this spec; resolve §7's open questions; add the locked names to CLAUDE.md and the handoff doc; add the idea to the GitHub Projects Icebox and move it into scope.
 - [x] T2 `amalStore.js` (IndexedDB + in-memory fallback, `storage.persist()`), `amalDay.js`, `presetHabits.js` with `isDue`.
 - [x] T3 `AmalTrackerPage` at `/amal`, plus the bottom-nav tab (AC1–AC5).
-- [ ] T4 Fard rows + `LevelPickerSheet` (AC6–AC8).
-- [ ] T5 Sunnah, other prayers and adhkar rows (AC9–AC12).
-- [ ] T6 7-day dots (AC13).
-- [ ] T7 `ManageHabitsPage` at `/amal/habits` (AC14–AC15).
-- [ ] T8 i18n pass: every key in `en.json` + `ta.json`.
+- [x] T4 Fard rows + `LevelPickerSheet` (AC6–AC8).
+- [x] T5 Sunnah, other prayers and adhkar rows (AC9–AC12).
+- [x] T6 7-day dots (AC13).
+- [x] T7 `ManageHabitsPage` at `/amal/habits` (AC14–AC15).
+- [x] T8 i18n pass: every key in `en.json` + `ta.json`.
 - [x] T9 Check the Tamil wording of the two hadith lines (AC3, AC9a) and the level labels. Rak'ah counts were already confirmed 2026-10-23. Syed approved the drafts on 2026-10-24 ("OK for now"); revisit if anyone reports wording issues.
 - [ ] T10 Walk through AC1–AC21 on a phone in both languages, including logging after midnight, reloading offline and a private window (AC17); tick the boxes above.
 - [ ] T11 PR `feature/amal-tracker` → `develop`, with the PR description linking this spec.
