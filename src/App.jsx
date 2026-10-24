@@ -5,6 +5,7 @@ import { ProfileCompletion } from './features/auth/ProfileCompletion'
 import { TabLayout } from './components/layout/TabLayout'
 import LoginPage from './pages/LoginPage'
 import PrayerTimesPage from './pages/PrayerTimesPage'
+import AmalTrackerPage from './pages/AmalTrackerPage'
 import FeedPage from './pages/FeedPage'
 import NewDeathAnnouncementPage from './pages/NewDeathAnnouncementPage'
 import PostDetailPage from './pages/PostDetailPage'
@@ -27,6 +28,8 @@ function App() {
           <Route element={<TabLayout />}>
             {/* Open to guests (AC24). */}
             <Route path="/" element={<PrayerTimesPage />} />
+            {/* Stored on the device only, so guests can use it (amal-tracker.md AC1). */}
+            <Route path="/amal" element={<AmalTrackerPage />} />
             <Route element={<ProtectedRoute />}>
               <Route
                 path="/feed"

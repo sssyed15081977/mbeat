@@ -214,7 +214,7 @@ Work top to bottom; each task is small enough for one sitting.
 
 - [ ] T1 Review this spec; resolve §7's open questions; add the locked names to CLAUDE.md and the handoff doc; add the idea to the GitHub Projects Icebox and move it into scope.
 - [x] T2 `amalStore.js` (IndexedDB + in-memory fallback, `storage.persist()`), `amalDay.js`, `presetHabits.js` with `isDue`.
-- [ ] T3 `AmalTrackerPage` at `/amal`, plus the bottom-nav tab (AC1–AC5).
+- [x] T3 `AmalTrackerPage` at `/amal`, plus the bottom-nav tab (AC1–AC5).
 - [ ] T4 Fard rows + `LevelPickerSheet` (AC6–AC8).
 - [ ] T5 Sunnah, other prayers and adhkar rows (AC9–AC12).
 - [ ] T6 7-day dots (AC13).
