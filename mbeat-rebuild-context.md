@@ -126,6 +126,10 @@ Naming mistakes are expensive here because a name isn't just a label — it prop
 | A signed-in user asking to become a masjid's volunteer, approved by one of its volunteers (in the app) or Syed (dashboard) (2026-10-14) | Volunteer request; Tamil தன்னார்வலர் கோரிக்கை; UI labels "Offer to volunteer", "Volunteer requests", "Invite" | Table `entity_member_requests` (generic; v1 only `role = 'masjid_volunteer'`), `status` `pending` / `approved` / `declined`, columns `note`, `decided_at`, `decided_by`; folder `features/masjidVolunteers/`; masjid page anchor `#volunteer`; spec [specs/masjid-volunteer-requests.md](specs/masjid-volunteer-requests.md) |
 | How many volunteers a masjid should have before the app stops asking for help (2026-10-14) | `MIN_MASJID_VOLUNTEERS = 2`, a constant in code (not a DB setting) | `features/masjidVolunteers/volunteerTarget.js` |
 | Volunteer request database functions, share helper, tab-prompt dismissal (2026-10-16) | `get_masjid_volunteer_counts`, `request_to_volunteer`, `decide_volunteer_request`, `get_volunteer_requests`; `lib/share.js`; `localStorage` key `mbeat_volunteer_prompt_dismissed` (masjid id → dismissed-at, 30 days) | Supabase functions; client |
+| Private, on-device tracker for a user's amals (fard prayers, sunnah, adhkar, later fasts), generic enough for any habit (2026-10-23) | Amal tracker (Tamil அமல் குறிப்பேடு); tab label "Amals" (அமல்கள்), second tab: Prayer Times · Amals · Feed · Find Now; routes `/amal`, `/amal/habits` ("Manage habits") | folder `features/amalTracker/`; `pages/AmalTrackerPage.jsx`, `pages/ManageHabitsPage.jsx`; spec [specs/amal-tracker.md](specs/amal-tracker.md) |
+| One tracked thing, and what was logged for it on a day | *Habit* (definition: `id`, `group`, `valueType` `done`/`levels`, `schedule` `daily`/`weekdays`) and *entry* | `features/amalTracker/presetHabits.js` |
+| How a fard prayer was prayed | Levels `missed`, `qada`, `alone`, `jamaat_home`, `jamaat_masjid`, `excused`; Jumu'ah (`jumuah`, Fridays) uses only `missed`, `jamaat_masjid` ("Prayed at masjid"), `excused` | Amal tracker entries |
+| Where amal entries are kept (device only, no Supabase tables) | IndexedDB database `mbeat_amal` via `idb-keyval`; stores `entries` (amal date `YYYY-MM-DD` → `{ habitId: value }`) and `settings` (`hiddenHabits`). An amal day runs Fajr to Fajr | `features/amalTracker/amalStore.js`, `amalDay.js` |
 
 ## Working style / preferences (for Claude Code to follow)
 - Syed's background: ~10 years Google Apps Script, prior ASP.NET, Python as primary language, still learning React/modern web frameworks.
@@ -421,8 +425,23 @@ A masjid with fewer than `MIN_MASJID_VOLUNTEERS` (2) volunteers asks the people 
 
 Built 2026-10-16 (T1–T8). Migration `20261016120000_add_entity_member_requests.sql` was checked as real roles in a rolled-back transaction (23 checks) and then applied. Syed checked AC1–AC25 on a phone (T9). Merged into `develop` (PR #12) and promoted to `main` the same day.
 
-## Current state (2026-10-16)
-`develop` and `main` are identical; no feature branch is open. Everything above is live. **Next:** pick a module from "Candidates for the next module" above and write its spec first.
+## Amal tracker — spec approved (2026-10-23), not started
+A private tracker for a user's amals, kept only on the phone (IndexedDB, no Supabase tables), that works for guests. It's generic underneath: a *habit* has a value type and a schedule, and v1 ships only amal presets.
+- **v1 presets:**
+  - the five fard prayers, logged as levels from Missed up to Jamaat at masjid, plus Excused; on Fridays a Jumu'ah row replaces Dhuhr;
+  - the 12 sunnah rak'ahs;
+  - Witr, Duha and Tahajjud (the last two hidden by default);
+  - morning and evening adhkar.
+- **Design principles** (agreed with Syed after weighing the Islamic case for and against tracking deeds):
+  - private, with no gamification or streaks;
+  - consistency over totals;
+  - gentle with misses;
+  - verified content.
+- **Fasting** (Monday/Thursday, the white days) needs Hijri dates with a local moon-sighting adjustment, and comes in v2 together with export/import.
+- Full requirements: [specs/amal-tracker.md](specs/amal-tracker.md). Branch `feature/amal-tracker` (not created yet).
+
+## Current state (2026-10-23)
+`develop` and `main` are identical; no feature branch is open. Everything above is live except the Amal tracker. **Next:** Amal tracker T2 on `feature/amal-tracker`.
 
 ## Notes for whoever picks this up next
 - Open feature branch: none (as of 2026-10-16). Repo cloned at whichever machine's local path (see multi-system note above) — always confirm current branch before assuming `main`. `main` was first promoted from `develop` on 2026-09-30 (PR #6) and is what Cloudflare deploys.
