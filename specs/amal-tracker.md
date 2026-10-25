@@ -43,16 +43,16 @@ Every decision in this spec, and in later versions, is checked against these:
 v1 is done when every box is ticked. Each criterion should be checkable by hand at a **mobile width (360px)** in **both English and Tamil**.
 
 ### Tab and screen
-- [ ] **AC1** The bottom nav gains an **Amals** tab, second in the order **Prayer Times · Amals · Feed · Find Now**, that opens the Amal tracker at `/amal`. It works for guests without signing in.
-- [ ] **AC2** At the top, the screen shows the day it is logging ("Today", "Yesterday" or a date), with **‹ ›** to move back up to **6 days** and forward again. It can't go into the future.
-- [ ] **AC3** One short hadith sits under the date line, small and muted (principle 5): *"The most beloved deeds to Allah are the most consistent, even if small." (Bukhari 6464, Muslim 783)*. v1 has this one fixed; rotating them is out of scope.
-- [ ] **AC4** A one-line note near the bottom reads "Saved on this phone only", linking to a short explanation (principle 1, U6).
+- [x] **AC1** The bottom nav gains an **Amals** tab, second in the order **Prayer Times · Amals · Feed · Find Now**, that opens the Amal tracker at `/amal`. It works for guests without signing in.
+- [x] **AC2** At the top, the screen shows the day it is logging ("Today", "Yesterday" or a date), with **‹ ›** to move back up to **6 days** and forward again. It can't go into the future.
+- [x] **AC3** One short hadith sits under the date line, small and muted (principle 5): *"The most beloved deeds to Allah are the most consistent, even if small." (Bukhari 6464, Muslim 783)*. v1 has this one fixed; rotating them is out of scope.
+- [x] **AC4** A one-line note near the bottom reads "Saved on this phone only", linking to a short explanation (principle 1, U6).
 
 ### Amal day
-- [ ] **AC5** An **amal day** runs from **Fajr to Fajr**, using the Begins time from `getBeginsTimes` at Melapalayam with the user's calculation method. Between midnight and Fajr, "Today" still means the previous date, so tahajjud at 3am counts for that night (U4).
+- [x] **AC5** An **amal day** runs from **Fajr to Fajr**, using the Begins time from `getBeginsTimes` at Melapalayam with the user's calculation method. Between midnight and Fajr, "Today" still means the previous date, so tahajjud at 3am counts for that night (U4).
 
 ### Fard prayers
-- [ ] **AC6** Each of the five fard prayers is one row. Tapping it opens a small picker of **levels**, with one tap to choose:
+- [x] **AC6** Each of the five fard prayers is one row. Tapping it opens a small picker of **levels**, with one tap to choose:
   - Missed
   - Made up late (qada)
   - On time, alone
@@ -61,32 +61,32 @@ v1 is done when every box is ticked. Each criterion should be checkable by hand 
   - Excused
 
   The chosen level shows on the row. Choosing again replaces it; there's also a "Clear" option.
-- [ ] **AC7** A prayer that hasn't been logged shows as neutral (no colour, "Not logged"). Missed and Excused look calm and look different from each other, and neither is red (principle 4).
-- [ ] **AC8** On Fridays a **Jumu'ah** row replaces Dhuhr. Its levels are **Missed**, **Prayed at masjid** and **Excused**. Excused covers anyone not obliged to attend (women, travellers, the ill), who pray Dhuhr instead. It is a separate habit (`jumuah`, Fridays only), while `dhuhr` runs every other day; both use the `weekdays` schedule.
+- [x] **AC7** A prayer that hasn't been logged shows as neutral (no colour, "Not logged"). Missed and Excused look calm and look different from each other, and neither is red (principle 4).
+- [x] **AC8** On Fridays a **Jumu'ah** row replaces Dhuhr. Its levels are **Missed**, **Prayed at masjid** and **Excused**. Excused covers anyone not obliged to attend (women, travellers, the ill), who pray Dhuhr instead. It is a separate habit (`jumuah`, Fridays only), while `dhuhr` runs every other day; both use the `weekdays` schedule.
 
 ### Sunnah and other prayers, adhkar
-- [ ] **AC9** The **sunnah before and after** each prayer appear as **done / not done** rows grouped under their prayer, with the rak'ah count shown, e.g. "Before Fajr · 2". These are the **12 rak'ahs** in §5. On Fridays the Dhuhr sunnah rows stay as they are, grouped under Jumu'ah; Jumu'ah-specific sunnah is out of scope.
-- [ ] **AC9a** The Sunnah prayers group has a one-line muted caption: *"12 rak'ahs a day: a house in Jannah" (Muslim 728)*.
-- [ ] **AC10** **Duha, Tahajjud and Witr** are done / not done rows under "Other prayers".
-- [ ] **AC11** **Morning adhkar** and **Evening adhkar** are done / not done rows under "Adhkar". v1 doesn't show the adhkar text (§6).
-- [ ] **AC12** Tapping a done / not done row toggles it immediately, with no Save button. The change is written in the background, and the row shows its new state straight away.
+- [x] **AC9** The **sunnah before and after** each prayer appear as **done / not done** rows grouped under their prayer, with the rak'ah count shown, e.g. "Before Fajr · 2". These are the **12 rak'ahs** in §5. On Fridays the Dhuhr sunnah rows stay as they are, grouped under Jumu'ah; Jumu'ah-specific sunnah is out of scope.
+- [x] **AC9a** The Sunnah prayers group has a one-line muted caption: *"12 rak'ahs a day: a house in Jannah" (Muslim 728)*.
+- [x] **AC10** **Duha, Tahajjud and Witr** are done / not done rows under "Other prayers".
+- [x] **AC11** **Morning adhkar** and **Evening adhkar** are done / not done rows under "Adhkar". v1 doesn't show the adhkar text (§6).
+- [x] **AC12** Tapping a done / not done row toggles it immediately, with no Save button. The change is written in the background, and the row shows its new state straight away.
 
 ### Patterns (principle 3)
-- [ ] **AC13** Each row shows a quiet **last-7-days strip** of seven small dots, filled for done (for fard: any level from qada up). It has no number, no streak and no percentage.
+- [x] **AC13** Each row shows a quiet **last-7-days strip** of seven small dots, filled for done (for fard: any level from qada up). It has no number, no streak and no percentage.
 
 ### Manage habits
-- [ ] **AC14** A **Manage habits** link at the bottom opens `/amal/habits`, which lists every preset with a show/hide switch. Hidden habits disappear from the daily screen, but their past entries are kept. The page has a `BackButton` to `/amal`.
-- [ ] **AC15** By default all presets are shown, except **Tahajjud and Duha**, which keeps a beginner's list short.
+- [x] **AC14** A **Manage habits** link at the bottom opens `/amal/habits`, which lists every preset with a show/hide switch. Hidden habits disappear from the daily screen, but their past entries are kept. The page has a `BackButton` to `/amal`.
+- [x] **AC15** By default all presets are shown, except **Tahajjud and Duha**, which keeps a beginner's list short.
 
 ### Storage
-- [ ] **AC16** Entries are stored in **IndexedDB** through `idb-keyval` (§5) and survive closing the app, reloading and going offline. On first use the app calls `navigator.storage.persist()` once; it works the same if the browser refuses.
-- [ ] **AC17** If IndexedDB isn't available (some private modes), the screen still works for the session and shows one line: "Your browser isn't saving — entries will be lost when you close it."
-- [ ] **AC18** Habit definitions live in code with fixed ids. Changing a preset's label or rak'ah count never touches stored entries.
+- [x] **AC16** Entries are stored in **IndexedDB** through `idb-keyval` (§5) and survive closing the app, reloading and going offline. On first use the app calls `navigator.storage.persist()` once; it works the same if the browser refuses.
+- [x] **AC17** If IndexedDB isn't available (some private modes), the screen still works for the session and shows one line: "Your browser isn't saving — entries will be lost when you close it."
+- [x] **AC18** Habit definitions live in code with fixed ids. Changing a preset's label or rak'ah count never touches stored entries.
 
 ### Cross-cutting (standing requirements)
-- [ ] **AC19** Every string goes through `useTranslation()`, with keys in both `en.json` and `ta.json`. Prayer names reuse the existing keys.
-- [ ] **AC20** Covers the loading state (a skeleton while IndexedDB opens), the empty state (all habits hidden: "Choose habits to track →") and the error state (AC17). Offline works fully, since nothing is fetched.
-- [ ] **AC21** Touch targets are at least 44px tall. The level picker is a bottom sheet built like `ChooseMasjidSheet`, and it isn't covered by the bottom nav or the safe area.
+- [x] **AC19** Every string goes through `useTranslation()`, with keys in both `en.json` and `ta.json`. Prayer names reuse the existing keys.
+- [x] **AC20** Covers the loading state (a skeleton while IndexedDB opens), the empty state (all habits hidden: "Choose habits to track →") and the error state (AC17). Offline works fully, since nothing is fetched.
+- [x] **AC21** Touch targets are at least 44px tall. The level picker is a bottom sheet built like `ChooseMasjidSheet`, and it isn't covered by the bottom nav or the safe area.
 
 ## 4. Screens
 
@@ -213,14 +213,14 @@ None. The Tamil hadith translations still need checking in T9.
 Work top to bottom; each task is small enough for one sitting.
 
 - [ ] T1 Review this spec; resolve §7's open questions; add the locked names to CLAUDE.md and the handoff doc; add the idea to the GitHub Projects Icebox and move it into scope.
-- [ ] T2 `amalStore.js` (IndexedDB + in-memory fallback, `storage.persist()`), `amalDay.js`, `presetHabits.js` with `isDue`.
-- [ ] T3 `AmalTrackerPage` at `/amal`, plus the bottom-nav tab (AC1–AC5).
-- [ ] T4 Fard rows + `LevelPickerSheet` (AC6–AC8).
-- [ ] T5 Sunnah, other prayers and adhkar rows (AC9–AC12).
-- [ ] T6 7-day dots (AC13).
-- [ ] T7 `ManageHabitsPage` at `/amal/habits` (AC14–AC15).
-- [ ] T8 i18n pass: every key in `en.json` + `ta.json`.
+- [x] T2 `amalStore.js` (IndexedDB + in-memory fallback, `storage.persist()`), `amalDay.js`, `presetHabits.js` with `isDue`.
+- [x] T3 `AmalTrackerPage` at `/amal`, plus the bottom-nav tab (AC1–AC5).
+- [x] T4 Fard rows + `LevelPickerSheet` (AC6–AC8).
+- [x] T5 Sunnah, other prayers and adhkar rows (AC9–AC12).
+- [x] T6 7-day dots (AC13).
+- [x] T7 `ManageHabitsPage` at `/amal/habits` (AC14–AC15).
+- [x] T8 i18n pass: every key in `en.json` + `ta.json`.
 - [x] T9 Check the Tamil wording of the two hadith lines (AC3, AC9a) and the level labels. Rak'ah counts were already confirmed 2026-10-23. Syed approved the drafts on 2026-10-24 ("OK for now"); revisit if anyone reports wording issues.
-- [ ] T10 Walk through AC1–AC21 on a phone in both languages, including logging after midnight, reloading offline and a private window (AC17); tick the boxes above.
+- [x] T10 Walk through AC1–AC21 on a phone in both languages, including logging after midnight, reloading offline and a private window (AC17); tick the boxes above.
 - [ ] T11 PR `feature/amal-tracker` → `develop`, with the PR description linking this spec.
 - [ ] T12 After merge: tick T11, update this spec's Status line and the progress log in [mbeat-rebuild-context.md](../mbeat-rebuild-context.md).

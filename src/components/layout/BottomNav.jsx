@@ -13,6 +13,15 @@ function ClockIcon() {
   )
 }
 
+function CheckIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M8 12.5l2.5 2.5L16 9.5" />
+    </svg>
+  )
+}
+
 function FeedIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" aria-hidden="true">
@@ -37,7 +46,8 @@ function tabLinkClass({ isActive }) {
   return `${tabClass} ${isActive ? 'text-brand font-semibold' : 'text-gray-500'}`
 }
 
-// The app's tabs, in the locked order Prayer Times · Feed · Find Now (AC21).
+// The app's tabs, in the locked order Prayer Times · Amals · Feed · Find Now
+// (AC21; Amals added second by amal-tracker.md AC1).
 // Guests can tap Feed: its route asks them to sign in (AC24).
 export function BottomNav() {
   const { t } = useTranslation()
@@ -65,6 +75,11 @@ export function BottomNav() {
         <NavLink to="/" end className={tabLinkClass}>
           <ClockIcon />
           {t('nav.prayerTimes')}
+        </NavLink>
+
+        <NavLink to="/amal" className={tabLinkClass}>
+          <CheckIcon />
+          {t('nav.amals')}
         </NavLink>
 
         <NavLink to="/feed" className={tabLinkClass}>
